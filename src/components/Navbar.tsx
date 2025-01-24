@@ -1,17 +1,35 @@
+"use client";
+
 import Link from "next/link";
 
 export default function Navbar() {
   return (
-    <nav className="bg-blue-600 text-white p-4">
-      <div className="container mx-auto flex justify-between">
-        <Link href="/" className="text-lg font-bold">Integral Surf</Link>
-        <div className="space-x-4">
-          <Link href="/viajes">Viajes</Link>
-          <Link href="/productos">Productos</Link>
-          <Link href="/about">Quiénes Somos</Link>
-          <Link href="/blog">Blog</Link>
-        </div>
-      </div>
+    <nav className="flex justify-between items-center py-6 px-6">
+      <Link href="/" className="text-2xl font-serif tracking-wide">
+        <span className="text-primary">Integral Surf</span>
+      </Link>
+      <ul className="flex gap-6 text-lg">
+        <li>
+          <Link href="/viajes" className="hover:text-accent">
+            Viajes
+          </Link>
+        </li>
+        <li>
+          <Link href="/productos" className="hover:text-accent">
+            Tienda
+          </Link>
+        </li>
+        <li>
+          <Link href="/blog" className="hover:text-accent">
+            Blog
+          </Link>
+        </li>
+        <li>
+          <Link href="/about" className="hover:text-accent">
+            Nosotros
+          </Link>
+        </li>
+      </ul>
     </nav>
   );
 }

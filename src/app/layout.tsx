@@ -11,9 +11,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <body className="bg-gray-100 text-gray-900">
+      <body className="flex flex-col min-h-screen bg-background text-textPrimary font-sans">
         <Navbar />
-        <main className="container mx-auto p-4">{children}</main>
+        <main className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20">
+          {children}
+        </main>
         <Footer />
       </body>
       <GoogleTagManager gtmId="GTM-P874N777" />

@@ -3,7 +3,7 @@ const team = [
   {
     id: 1,
     name: "Leandro Gallo",
-    role: "Fundador y Surfista",
+    role: "Intructor y Surfista",
     bio: "Le encanta conectar personas con el surf.",
   },
   {
@@ -15,7 +15,7 @@ const team = [
   {
     id: 3,
     name: "Romina Rissotto",
-    role: "Fotografía y Surfista",
+    role: "Fotógrafa y Surfista",
     bio: "Caputarndo los mejores momentos en la mejor calidad.",
   },
 ];
