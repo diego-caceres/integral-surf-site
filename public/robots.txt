@@ -1,0 +1,13 @@
+# *
+User-agent: *
+Allow: /
+
+# Googlebot
+User-agent: Googlebot
+Disallow: /private/
+
+# Host
+Host: https://integral-surf-site.vercel.app/
+
+# Sitemaps
+Sitemap: https://integral-surf-site.vercel.app/sitemap.xml
