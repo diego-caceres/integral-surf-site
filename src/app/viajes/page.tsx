@@ -1,4 +1,4 @@
-import { NextSeo } from "next-seo";
+"use client";
 
 const trips = [
   { id: 1, title: "Bali Surf Trip", date: "Julio 2025" },
@@ -8,15 +8,6 @@ const trips = [
 export default function Viajes() {
   return (
     <>
-      <NextSeo
-        title="Viajes de Surf - Explora destinos"
-        description="Los mejores destinos para tu próxima aventura de surf."
-        openGraph={{
-          url: "https://my-surf-site.vercel.app/viajes",
-          title: "Viajes de Surf",
-          description: "Descubre nuestros increíbles destinos.",
-        }}
-      />
       <div>
         <h1 className="text-3xl font-bold mb-4">Nuestros Viajes</h1>
         <ul>

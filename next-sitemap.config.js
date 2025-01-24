@@ -2,7 +2,7 @@
 module.exports = {
   siteUrl: "https://integral-surf-site.vercel.app/",
   generateRobotsTxt: true,
-  exclude: ["/admin/*"], // Excluir páginas privadas si es necesario
+  exclude: ["/admin/*", "/_not-found"], // Excluir páginas privadas si es necesario
   robotsTxtOptions: {
     policies: [
       { userAgent: "*", allow: "/" },
