@@ -1,4 +1,4 @@
-import AnimatedSection from "@/components/AnimatedSection";
+import AnimatedTripsSection from "@/components/AnimatedTripsSection";
 
 export default function HomePage() {
   return (
@@ -16,7 +16,7 @@ export default function HomePage() {
         </a>
       </div>
       {/* Sección animada de destinos */}
-      <AnimatedSection />
+      <AnimatedTripsSection />
     </section>
   );
 }
