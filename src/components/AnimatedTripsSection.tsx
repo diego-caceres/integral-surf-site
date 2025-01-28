@@ -26,7 +26,7 @@ export default function AnimatedTripsSection() {
               key={trip.id}
               className="bg-secondary p-6 rounded-lg shadow-md"
             >
-              <Link href={`/viajes/${trip.id}`} passHref>
+              <Link href={`/viajes/${trip.slug}`} passHref>
                 <p className="mb-2 bg-black text-white uppercase p-2 rounded text-[11px]">
                   {trip.destiny}
                 </p>

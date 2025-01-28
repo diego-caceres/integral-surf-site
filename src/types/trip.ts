@@ -1,5 +1,6 @@
 export type Trip = {
   id: string; // Unique identifier for the trip
+  slug: string; // URL slug for the trip
   title: string; // Name of the trip
   destiny: string; // Start date
   date: string; // Start date
