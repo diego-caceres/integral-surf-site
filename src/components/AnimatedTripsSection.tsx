@@ -1,5 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
+import Link from "next/link";
+
 import { trips } from "@/constants";
 
 export default function AnimatedTripsSection() {
@@ -24,13 +26,20 @@ export default function AnimatedTripsSection() {
               key={trip.id}
               className="bg-secondary p-6 rounded-lg shadow-md"
             >
-              <h3 className="text-xl font-serif text-primary">{trip.title}</h3>
-              <p className="mt-2 text-sm">
-                {trip.date} {trip.date2}
-              </p>
-              <p className="mt-2 bg-red-600 text-white uppercase p-2 rounded text-[10px]">
-                {trip.seats} cupos disponibles
-              </p>
+              <Link href={`/viajes/${trip.id}`} passHref>
+                <p className="mb-2 bg-black text-white uppercase p-2 rounded text-[11px]">
+                  {trip.destiny}
+                </p>
+                <h3 className="text-xl font-serif text-primary">
+                  {trip.title}
+                </h3>
+                <p className="mt-2 text-sm">
+                  {trip.date} {trip.date2}
+                </p>
+                <p className="mt-2 bg-red-600 text-white uppercase p-2 rounded text-[10px]">
+                  {trip.seats} cupos disponibles
+                </p>
+              </Link>
             </div>
           );
         })}
