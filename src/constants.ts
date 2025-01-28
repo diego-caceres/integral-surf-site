@@ -4,6 +4,7 @@ export const trips: Trip[] = [
   {
     id: "1",
     title: "Un fin de semana en La Paloma",
+    slug: "la-paloma-marzo",
     destiny: "La Paloma, Uy",
     date: "Marzo",
     date2: "7 al 9",
@@ -27,6 +28,7 @@ export const trips: Trip[] = [
   {
     id: "2",
     title: "Un fin de semana en el Cabo Polonio",
+    slug: "cabo-polonio-abril",
     destiny: "Cabo Polonio, Uy",
     date: "Abril",
     date2: "4, 5 y 6",
@@ -50,6 +52,7 @@ export const trips: Trip[] = [
   {
     id: "3",
     title: "7 días en Garopaba, Brasil",
+    slug: "garopaba-abril",
     destiny: "Garopaba, Brasil",
     date: "Abril",
     date2: "12 al 20",
@@ -73,6 +76,7 @@ export const trips: Trip[] = [
   {
     id: "4",
     title: "Un fin de semana en Punta del Diablo",
+    slug: "punta-del-diablo-mayo",
     destiny: "Punta del Diablo, Uy",
     date: "Mayo",
     date2: "9, 10 y 11",
@@ -96,6 +100,7 @@ export const trips: Trip[] = [
   {
     id: "5",
     title: "7 días en Santa Teresa, Costa Rica",
+    slug: "costa-rica-junio",
     destiny: "Santa Teresa, Costa Rica",
     date: "Junio",
     date2: "16 al 24",
@@ -119,6 +124,7 @@ export const trips: Trip[] = [
   {
     id: "6",
     title: "8 días en Lobitos, Perú",
+    slug: "lobitos-peru-agosto",
     destiny: "Lobitos, Perú",
     date: "Agosto",
     date2: "21 al 30",
@@ -143,6 +149,7 @@ export const trips: Trip[] = [
   {
     id: "7",
     title: "Un fin de semana en el Cabo Polonio",
+    slug: "cabo-polonio-setiembre",
     destiny: "Cabo Polonio, Uy",
     date: "Setiembre",
     date2: "26, 27 y 28",
@@ -166,6 +173,7 @@ export const trips: Trip[] = [
   {
     id: "8",
     title: "7 días en Garopaba, Brasil",
+    slug: "garopaba-octubre",
     destiny: "Garopaba, Brasil",
     date: "Octubre",
     date2: "4 al 12",

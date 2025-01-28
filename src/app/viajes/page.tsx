@@ -13,7 +13,7 @@ export default function Viajes() {
               key={trip.id}
               className="p-6 bg-white shadow-lg rounded-lg hover:shadow-xl transition-shadow duration-300"
             >
-              <Link href={`/viajes/${trip.id}`} passHref>
+              <Link href={`/viajes/${trip.slug}`} passHref>
                 <div className="mb-4 flex items-center justify-center bg-secondary text-black text-xl font-semibold rounded-lg py-2 px-4 mx-auto">
                   {trip.date}
                 </div>
