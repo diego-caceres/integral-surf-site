@@ -13,9 +13,7 @@ export default function RootLayout({
     <html lang="es">
       <body className="flex flex-col min-h-screen bg-background text-textPrimary font-sans">
         <Navbar />
-        <main className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20">
-          {children}
-        </main>
+        <main>{children}</main>
         <Footer />
       </body>
       <GoogleTagManager gtmId="GTM-P874N777" />
