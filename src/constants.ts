@@ -20,9 +20,9 @@ export const trips: Trip[] = [
       "/images/paloma4.jpg",
     ],
     headerImage: "/images/tripHeader.jpg",
-    promoPrice: 50000, // Optional
+    promoPrice: 50000,
     finalPrice: 70000,
-    promoEndDate: "2025-02-01", // Optional
+    promoEndDate: "2025-02-01",
     location: { lat: -4.4550094, lng: -81.2816191 },
   },
   {
@@ -44,9 +44,9 @@ export const trips: Trip[] = [
       "/images/cabo4.jpg",
     ],
     headerImage: "/images/tripHeader.jpg",
-    promoPrice: 50000, // Optional
+    promoPrice: 50000,
     finalPrice: 70000,
-    promoEndDate: "2025-02-01", // Optional
+    promoEndDate: "2025-02-01",
     location: { lat: -4.4550094, lng: -81.2816191 },
   },
   {

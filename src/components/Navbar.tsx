@@ -5,6 +5,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -29,6 +30,14 @@ export default function NavBar() {
           isOpen ? "block" : "hidden"
         } md:hidden`}
       >
+        <div className="absolute left-2.5 top-2.5">
+          <Image
+            src="/images/icons/logo.png"
+            alt="Logo Integral Surf"
+            width={65}
+            height={65}
+          />
+        </div>
         <button
           onClick={toggleMenu}
           className="self-end mb-8"
@@ -40,35 +49,35 @@ export default function NavBar() {
         <nav className="flex flex-col gap-6 items-start">
           <Link
             href="/"
-            className="text-xl font-semibold hover:text-accent transition"
+            className="text-3xl font-serif tracking-wide"
             onClick={toggleMenu}
             prefetch
           >
-            Integral Surf
+            <span className="text-primary font-[Eckmannpsych] font-size">
+              INTEGRAL SURF
+            </span>
           </Link>
+
           <Link
             href="/viajes"
-            className="text-xl font-semibold hover:text-accent transition"
-            onClick={toggleMenu}
             prefetch
+            className="text-xl font-semibold hover:text-accent transition"
           >
-            Viajes
+            VIAJES AL MAR
           </Link>
           <Link
             href="/productos"
             className="text-xl font-semibold hover:text-accent transition"
-            onClick={toggleMenu}
             prefetch
           >
-            Productos
+            TIENDA
           </Link>
           <Link
             href="/blog"
             className="text-xl font-semibold hover:text-accent transition"
-            onClick={toggleMenu}
             prefetch
           >
-            Blog
+            BLOG
           </Link>
           <Link
             href="/about"
@@ -76,35 +85,46 @@ export default function NavBar() {
             onClick={toggleMenu}
             prefetch
           >
-            Quiénes Somos
+            NOSOTROS
           </Link>
         </nav>
       </motion.div>
 
       {/* Navbar para desktop */}
-      <nav className="hidden md:flex justify-between items-center py-6 px-6">
-        <Link href="/" className="text-2xl font-serif tracking-wide">
-          <span className="text-primary">Integral Surf</span>
+      <nav className="hidden md:flex justify-between items-center py-10 px-10">
+        <Link href="/" className="text-4xl font-serif tracking-wide">
+          <span className="text-primary font-[Eckmannpsych] font-size">
+            INTEGRAL SURF
+          </span>
         </Link>
-        <ul className="flex gap-6 text-lg">
+        <div className="absolute left-1/2">
+          <Image
+            src="/images/icons/logo.png"
+            alt="Logo Integral Surf"
+            width={100}
+            height={100}
+            className="pos"
+          />
+        </div>
+        <ul className="flex gap-6 text-xl">
           <li>
             <Link href="/viajes" className="hover:text-accent">
-              Viajes
+              VIAJES AL MAR
             </Link>
           </li>
           <li>
             <Link href="/productos" className="hover:text-accent">
-              Tienda
+              TIENDA
             </Link>
           </li>
           <li>
             <Link href="/blog" className="hover:text-accent">
-              Blog
+              BLOG
             </Link>
           </li>
           <li>
             <Link href="/about" className="hover:text-accent">
-              Nosotros
+              NOSOTROS
             </Link>
           </li>
         </ul>
