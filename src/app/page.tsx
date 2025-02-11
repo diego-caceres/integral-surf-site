@@ -1,6 +1,8 @@
 "use client";
 import SectionOurPurpose from "@/components/SectionOurPurpose";
 import SectionCalendar from "@/components/SectionCalendar";
+import SectionTheRoad from "@/components/SectionTheRoad";
+
 import Image from "next/image";
 
 export default function HomePage() {
@@ -33,6 +35,8 @@ export default function HomePage() {
       <SectionOurPurpose />
 
       <SectionCalendar />
+
+      <SectionTheRoad />
 
       {/* <div className="mt-10">
         <Link href="/viajes" className="btn-primary">
