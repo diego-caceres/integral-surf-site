@@ -5,7 +5,8 @@ export const trips: Trip[] = [
     id: "1",
     title: "Un fin de semana en La Paloma",
     slug: "la-paloma-marzo",
-    destiny: "La Paloma, Uy",
+    destiny: "La Paloma, Uy.",
+    coachingSubtitle: "Coaching por integral surf",
     date: "Marzo",
     date2: "7 al 9",
     shortDescription:
@@ -29,7 +30,8 @@ export const trips: Trip[] = [
     id: "2",
     title: "Un fin de semana en el Cabo Polonio",
     slug: "cabo-polonio-abril",
-    destiny: "Cabo Polonio, Uy",
+    destiny: "Cabo Polonio, Uy.",
+    coachingSubtitle: "Coaching por integral surf",
     date: "Abril",
     date2: "4, 5 y 6",
     shortDescription:
@@ -53,7 +55,8 @@ export const trips: Trip[] = [
     id: "3",
     title: "7 días en Garopaba, Brasil",
     slug: "garopaba-abril",
-    destiny: "Garopaba, Brasil",
+    destiny: "Garopaba, Br.",
+    coachingSubtitle: "Coaching por Marco Giorgi",
     date: "Abril",
     date2: "12 al 20",
     shortDescription:
@@ -77,7 +80,8 @@ export const trips: Trip[] = [
     id: "4",
     title: "Un fin de semana en Punta del Diablo",
     slug: "punta-del-diablo-mayo",
-    destiny: "Punta del Diablo, Uy",
+    destiny: "Punta del Diablo, Uy.",
+    coachingSubtitle: "Coaching por integral surf",
     date: "Mayo",
     date2: "9, 10 y 11",
     shortDescription:
@@ -101,7 +105,8 @@ export const trips: Trip[] = [
     id: "5",
     title: "7 días en Santa Teresa, Costa Rica",
     slug: "costa-rica-junio",
-    destiny: "Santa Teresa, Costa Rica",
+    destiny: "Santa Teresa, CR.",
+    coachingSubtitle: "Coaching por integral surf + Zeneidas",
     date: "Junio",
     date2: "16 al 24",
     shortDescription:
@@ -125,7 +130,8 @@ export const trips: Trip[] = [
     id: "6",
     title: "8 días en Lobitos, Perú",
     slug: "lobitos-peru-agosto",
-    destiny: "Lobitos, Perú",
+    destiny: "Lobitos, Pe.",
+    coachingSubtitle: "Coaching por Henry Espinosa",
     date: "Agosto",
     date2: "21 al 30",
     shortDescription:
@@ -150,7 +156,8 @@ export const trips: Trip[] = [
     id: "7",
     title: "Un fin de semana en el Cabo Polonio",
     slug: "cabo-polonio-setiembre",
-    destiny: "Cabo Polonio, Uy",
+    destiny: "Cabo Polonio, Uy.",
+    coachingSubtitle: "Coaching por integral surf",
     date: "Setiembre",
     date2: "26, 27 y 28",
     shortDescription:
@@ -174,7 +181,8 @@ export const trips: Trip[] = [
     id: "8",
     title: "7 días en Garopaba, Brasil",
     slug: "garopaba-octubre",
-    destiny: "Garopaba, Brasil",
+    destiny: "Garopaba, Br.",
+    coachingSubtitle: "Coaching por Marco Giorgi",
     date: "Octubre",
     date2: "4 al 12",
     shortDescription:
@@ -187,6 +195,31 @@ export const trips: Trip[] = [
       "/images/garopaba2.jpg",
       "/images/garopaba3.jpg",
       "/images/garopaba4.jpg",
+    ],
+    headerImage: "/images/tripHeader.jpg",
+    promoPrice: 50000, // Optional
+    finalPrice: 70000,
+    promoEndDate: "2025-02-01", // Optional
+    location: { lat: -4.4550094, lng: -81.2816191 },
+  },
+  {
+    id: "9",
+    title: "Un fin de semana en Punta del Diablo",
+    slug: "punta-del-diablo-mayo",
+    destiny: "Punta del Diablo, Uy.",
+    coachingSubtitle: "Coaching por integral surf",
+    date: "Noviembre",
+    date2: "14, 15 y 16",
+    shortDescription:
+      "Descubre el encanto rústico de Punta del Diablo, un pequeño pueblo pesquero convertido en un paraíso del surf. Sus potentes olas, vibrante cultura local y atardeceres inolvidables hacen de este un destino ideal para quienes buscan surf y disfrutar junto al mar.",
+    description:
+      "Un viaje increíble para disfrutar de las olas de Chapadmalal. Incluye hospedaje frente al mar, transporte, y clases de surf para todos los niveles.",
+    seats: 9,
+    images: [
+      "/images/pdd1.jpg",
+      "/images/pdd2.jpg",
+      "/images/pdd3.jpg",
+      "/images/pdd4.jpg",
     ],
     headerImage: "/images/tripHeader.jpg",
     promoPrice: 50000, // Optional

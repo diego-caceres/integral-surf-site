@@ -3,6 +3,7 @@ export type Trip = {
   slug: string; // URL slug for the trip
   title: string; // Name of the trip
   destiny: string; // Start date
+  coachingSubtitle: string;
   date: string; // Start date
   date2: string; // End date
   description: string; // Detailed description of the trip

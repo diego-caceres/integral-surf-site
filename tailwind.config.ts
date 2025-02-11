@@ -14,11 +14,13 @@ export default {
         accent: "#E4572E", // Naranja terroso
         background: "#FFFFFF", // Fondo claro "#F9F6F1",
         textPrimary: "#0E1A1B", // Texto principal
+        redColor: "#FF3131", // Rojo
       },
       fontFamily: {
         serif: ['"Playfair Display"', "serif"],
         poppins: ["var(--font-poppins)"],
         librefranklin: ["var(--font-libre-franklin)"],
+        bebasNeue: ["var(--font-bebas-neue)"],
       },
       spacing: {
         18: "4.5rem",
