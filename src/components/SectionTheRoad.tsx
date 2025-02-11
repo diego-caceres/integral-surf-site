@@ -33,7 +33,7 @@ export default function SectionTheRoad() {
           </div>
 
           {/* Right Column (Shown first on mobile) */}
-          <div className="md:max-w-[450px] flex flex-col items-center md:items-start justify-center  gap-4 order-1 md:order-2 ">
+          <div className="mt-10 md:mt-0 md:max-w-[450px] flex flex-col items-center md:items-start justify-center  gap-4 order-1 md:order-2 ">
             <h2 className="uppercase font-[Eckmannpsych] md:text-left text-white ">
               El camino del surf no es solitario
             </h2>
