@@ -15,6 +15,7 @@ const nextConfig: NextConfig = {
         hostname: "**.cdninstagram.com",
       },
     ],
+    domains: ["instagram.com", "scontent.cdninstagram.com"],
   },
 };
 
