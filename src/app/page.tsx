@@ -1,9 +1,13 @@
 "use client";
+import Image from "next/image";
+
 import SectionOurPurpose from "@/components/SectionOurPurpose";
 import SectionCalendar from "@/components/SectionCalendar";
 import SectionTheRoad from "@/components/SectionTheRoad";
-
-import Image from "next/image";
+import SectionCoaching from "@/components/SectionCoaching";
+import SectionExperiences from "@/components/SectionExperiences";
+import SectionInstagram from "@/components/SectionInstagram";
+import WhatsAppButton from "@/components/WhatsAppButton";
 
 export default function HomePage() {
   return (
@@ -33,22 +37,30 @@ export default function HomePage() {
       </section>
 
       <SectionOurPurpose />
-
       <SectionCalendar />
-
       <SectionTheRoad />
+      <SectionCoaching />
+      <SectionExperiences />
+      <SectionInstagram />
 
-      {/* <div className="mt-10">
-        <Link href="/viajes" className="btn-primary">
-          Ver Viajes
-        </Link>
-      </div> */}
-      {/* Sección animada de destinos */}
-      {/* <AnimatedTripsSection /> */}
+      <WhatsAppButton onlyBubble />
     </section>
   );
 }
 
+{
+  /* <div className="mt-10">
+  <Link href="/viajes" className="btn-primary">
+    Ver Viajes
+  </Link>
+</div> */
+}
+{
+  /* Sección animada de destinos */
+}
+{
+  /* <AnimatedTripsSection /> */
+}
 // 5. Agregar imágenes con estilo retro
 // Puedes aprovechar las utilidades de Tailwind para aplicar un estilo a imágenes:
 // <img

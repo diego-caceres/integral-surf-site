@@ -11,7 +11,7 @@ const SectionCalendar: React.FC = () => {
         </h2>
 
         <div className="container mx-auto px-4 py-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 md:gap-4">
             {/* Left and right columns */}
             <div>
               {trips.slice(0, 4).map((trip) => (
@@ -37,7 +37,7 @@ const SectionCalendar: React.FC = () => {
           </div>
 
           {/* Last trip centered below the columns */}
-          <div className="flex justify-center mt-4">
+          <div className="flex justify-center md:mt-4">
             {trips.slice(8, 9).map((trip) => (
               <div
                 key={trip.id}
