@@ -6,9 +6,9 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "instagram.com",
+        hostname: "**",
         port: "",
-        pathname: "/integralsurf/**",
+        pathname: "**",
       },
     ],
   },
