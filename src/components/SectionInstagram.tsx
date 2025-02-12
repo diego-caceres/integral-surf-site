@@ -5,32 +5,38 @@ import Image from "next/image";
 const instagramPosts = [
   {
     id: "1",
-    media_url: "https://instagram.com/p/DFwAP2ism-m/media/?size=l",
+    media_url:
+      "/api/proxy?url=https://instagram.com/p/DFwAP2ism-m/media/?size=l",
     permalink: "https://www.instagram.com/p/DFwAP2ism-m/",
   },
   {
     id: "2",
-    media_url: "https://instagram.com/p/DFlqzTCO75G/media/?size=l",
+    media_url:
+      "/api/proxy?url=https://instagram.com/p/DFlqzTCO75G/media/?size=l",
     permalink: "https://www.instagram.com/p/DFlqzTCO75G/",
   },
   {
     id: "3",
-    media_url: "https://instagram.com/p/DFbd1tyulLN/media/?size=l",
+    media_url:
+      "/api/proxy?url=https://instagram.com/p/DFbd1tyulLN/media/?size=l",
     permalink: "https://www.instagram.com/p/DFbd1tyulLN/",
   },
   {
     id: "4",
-    media_url: "https://instagram.com/p/DE582QwODkb/media/?size=l",
+    media_url:
+      "/api/proxy?url=https://instagram.com/p/DE582QwODkb/media/?size=l",
     permalink: "https://www.instagram.com/p/DE582QwODkb/",
   },
   {
     id: "5",
-    media_url: "https://instagram.com/p/DEyOQMDORYj/media/?size=l",
+    media_url:
+      "/api/proxy?url=https://instagram.com/p/DEyOQMDORYj/media/?size=l",
     permalink: "https://www.instagram.com/p/DEyOQMDORYj/",
   },
   {
     id: "6",
-    media_url: "https://instagram.com/p/DEQpLeWpGEt/media/?size=l",
+    media_url:
+      "/api/proxy?url=https://instagram.com/p/DEQpLeWpGEt/media/?size=l",
     permalink: "https://www.instagram.com/p/DEQpLeWpGEt/",
   },
 ];
