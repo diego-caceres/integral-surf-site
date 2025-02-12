@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image, { ImageLoader, ImageLoaderProps } from "next/image";
 
 const instagramPosts = [
   {
@@ -35,6 +35,13 @@ const instagramPosts = [
   },
 ];
 
+const contentfulImageLoader: ImageLoader = ({
+  src,
+  width,
+}: ImageLoaderProps) => {
+  return `${src}?w=${width}`;
+};
+
 export default function SectionInstagram() {
   return (
     <div className="w-full p-4">
@@ -48,10 +55,11 @@ export default function SectionInstagram() {
           >
             <div className="relative w-full aspect-square">
               <Image
+                loader={contentfulImageLoader}
                 src={post.media_url}
                 alt="Instagram Post"
-                layout="fill"
-                objectFit="cover"
+                fill
+                style={{ objectFit: "cover" }}
                 className="rounded-lg hover:opacity-80 transition-opacity"
               />
             </div>
