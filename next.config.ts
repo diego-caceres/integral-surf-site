@@ -7,6 +7,8 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "instagram.com",
+        port: "",
+        pathname: "/integralsurf/**",
       },
     ],
   },
