@@ -1,6 +1,5 @@
 "use client";
 import Image from "next/image";
-import { useEffect, useState } from "react";
 
 const instagramPosts = [
   {
@@ -41,29 +40,7 @@ const instagramPosts = [
   },
 ];
 
-interface InstagramPost {
-  id: string;
-  media_url: string;
-  permalink: string;
-}
-
 export default function SectionInstagram() {
-  const [posts, setPosts] = useState<InstagramPost[]>([]);
-
-  useEffect(() => {
-    const fetchInstagramPosts = async () => {
-      try {
-        const response = await fetch("/api/instagram");
-        const data = await response.json();
-        setPosts(data);
-      } catch (error) {
-        console.error("Error fetching Instagram posts:", error);
-      }
-    };
-
-    fetchInstagramPosts();
-  }, []);
-
   return (
     <div className="w-full p-4">
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4">
