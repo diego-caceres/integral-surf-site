@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 // const instagramPosts = [
@@ -74,7 +75,7 @@ export default function SectionInstagram() {
             rel="noopener noreferrer"
           >
             <div className="relative w-full aspect-square">
-              <img
+              <Image
                 src={`/api/instagram/image?postUrl=${encodeURIComponent(
                   post.media_url
                 )}`}
