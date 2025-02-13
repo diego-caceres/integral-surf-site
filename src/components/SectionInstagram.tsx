@@ -75,11 +75,10 @@ export default function SectionInstagram() {
             rel="noopener noreferrer"
           >
             <div className="relative w-full aspect-square">
-              <Image
+              <img
                 src={post.media_url}
                 alt="Instagram post"
-                fill
-                className="rounded-lg object-cover"
+                className="w-full h-full rounded-lg object-cover"
               />
             </div>
           </a>
