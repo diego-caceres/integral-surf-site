@@ -8,33 +8,13 @@ import SectionCoaching from "@/components/SectionCoaching";
 import SectionExperiences from "@/components/SectionExperiences";
 import SectionInstagram from "@/components/SectionInstagram";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import SectionHeader from "@/components/SectionHeader";
 
 export default function HomePage() {
   return (
     <section className="mx-auto text-center">
       {/* Hero Image Section */}
-      <section className="relative w-full h-[75vh]">
-        {/* Desktop */}
-        <Image
-          src="/images/home/header.jpg"
-          alt="Viajes al Mar"
-          fill
-          className="hidden md:flex absolute inset-0"
-        />
-        {/* Mobile */}
-        <Image
-          src="/images/home/header-mobile.png"
-          alt="Viajes al Mar"
-          fill
-          style={{ objectFit: "cover" }}
-          className="md:hidden md:flex absolute inset-0"
-        />
-        <div className="absolute inset-0 flex items-end md:items-center justify-center">
-          <h1 className="text-white text-7xl drop-shadow-lg font-[Eckmannpsych] mb-20 md:mb-0">
-            VIAJES AL MAR
-          </h1>
-        </div>
-      </section>
+      <SectionHeader title="Viajes al mar" />
 
       <SectionOurPurpose />
       <SectionCalendar />
