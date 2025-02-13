@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 
 import SectionOurPurpose from "@/components/SectionOurPurpose";
 import SectionCalendar from "@/components/SectionCalendar";
