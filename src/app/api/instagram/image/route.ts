@@ -2,10 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const imageUrl = searchParams.get("url");
+  const imageUrl = searchParams.get("postUrl");
 
   if (!imageUrl) {
-    return NextResponse.json({ error: "Missing image URL" }, { status: 400 });
+    return NextResponse.json({ error: "Missing postUrl" }, { status: 400 });
   }
 
   try {
