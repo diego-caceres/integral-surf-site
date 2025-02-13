@@ -75,7 +75,9 @@ export default function SectionInstagram() {
           >
             <div className="relative w-full aspect-square">
               <img
-                src={post.media_url}
+                src={`/api/instagram/image?postUrl=${encodeURIComponent(
+                  post.media_url
+                )}`}
                 alt="Instagram post"
                 className="w-full h-full rounded-lg object-cover"
               />
