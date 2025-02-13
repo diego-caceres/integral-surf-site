@@ -2,32 +2,32 @@ import { NextResponse } from "next/server";
 
 const INSTAGRAM_POSTS = [
   {
-    id: "1",
+    id: "DFwAP2ism-m",
     media_url: "https://www.instagram.com/p/DFwAP2ism-m/media/",
     permalink: "https://www.instagram.com/p/DFwAP2ism-m/",
   },
   {
-    id: "2",
+    id: "DFlqzTCO75G",
     media_url: "https://www.instagram.com/p/DFlqzTCO75G/media/",
     permalink: "https://www.instagram.com/p/DFlqzTCO75G/",
   },
   {
-    id: "3",
+    id: "DFbd1tyulLN",
     media_url: "https://www.instagram.com/p/DFbd1tyulLN/media/",
     permalink: "https://www.instagram.com/p/DFbd1tyulLN/",
   },
   {
-    id: "4",
+    id: "DE582QwODkb",
     media_url: "https://www.instagram.com/p/DE582QwODkb/media/",
     permalink: "https://www.instagram.com/p/DE582QwODkb/",
   },
   {
-    id: "5",
+    id: "DEyOQMDORYj",
     media_url: "https://www.instagram.com/p/DEyOQMDORYj/media/",
     permalink: "https://www.instagram.com/p/DEyOQMDORYj/",
   },
   {
-    id: "6",
+    id: "DEQpLeWpGEt",
     media_url: "https://www.instagram.com/p/DEQpLeWpGEt/media/",
     permalink: "https://www.instagram.com/p/DEQpLeWpGEt/",
   },

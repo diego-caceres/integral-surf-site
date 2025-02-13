@@ -2,72 +2,69 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const imageUrl = searchParams.get("postUrl");
+  const postId = searchParams.get("postId");
 
-  if (!imageUrl) {
-    return NextResponse.json({ error: "Missing postUrl" }, { status: 400 });
+  if (!postId) {
+    return NextResponse.json({ error: "Missing postId" }, { status: 400 });
   }
 
   try {
-    const response = await fetch(imageUrl, {
+    const postUrl = `https://www.instagram.com/p/${postId}/`;
+    const response = await fetch(postUrl, {
       headers: {
         "User-Agent": "Mozilla/5.0",
         Referer: "https://www.instagram.com/",
       },
     });
 
-    const contentType = response.headers.get("content-type");
-    if (!contentType?.startsWith("image/")) {
+    if (!response.ok) {
+      throw new Error(`Failed to fetch Instagram post: ${response.status}`);
+    }
+
+    const html = await response.text();
+
+    // Extract JSON from Instagram's HTML
+    const jsonMatch = html.match(/window\._sharedData\s*=\s*(\{.+?\});/);
+    if (!jsonMatch) {
+      throw new Error("Could not extract JSON data from Instagram");
+    }
+
+    const jsonData = JSON.parse(jsonMatch[1]);
+
+    // Navigate the JSON structure to find the display URL
+    const imageUrl =
+      jsonData.entry_data?.PostPage?.[0]?.graphql?.shortcode_media?.display_url;
+
+    if (!imageUrl) {
       return NextResponse.json(
-        { error: "Invalid image response" },
-        { status: 400 }
+        { error: "Image URL not found" },
+        { status: 404 }
       );
     }
 
-    return new NextResponse(response.body, {
-      headers: { "Content-Type": contentType },
+    // Fetch the actual image
+    const imageResponse = await fetch(imageUrl, {
+      headers: {
+        "User-Agent": "Mozilla/5.0",
+      },
+    });
+
+    if (!imageResponse.ok) {
+      throw new Error("Failed to fetch Instagram image");
+    }
+
+    return new NextResponse(imageResponse.body, {
+      status: 200,
+      headers: {
+        "Content-Type":
+          imageResponse.headers.get("Content-Type") || "image/jpeg",
+        "Cache-Control": "s-maxage=86400, stale-while-revalidate",
+      },
     });
   } catch (error) {
     return NextResponse.json(
-      { error: "Failed to fetch image", errorOriginal: error },
+      { error: "Failed to fetch image", details: error },
       { status: 500 }
     );
   }
 }
-
-// import { NextRequest, NextResponse } from "next/server";
-
-// export async function GET(req: NextRequest) {
-//   const postUrl = req.nextUrl.searchParams.get("postUrl");
-//   if (!postUrl) {
-//     return NextResponse.json({ error: "Missing post URL" }, { status: 400 });
-//   }
-
-//   try {
-//     // Fetch image from Instagram
-//     const response = await fetch(postUrl, {
-//       headers: {
-//         "User-Agent": "Mozilla/5.0", // Spoof user-agent to avoid bot detection
-//       },
-//     });
-
-//     if (!response.ok) {
-//       throw new Error("Failed to fetch Instagram image");
-//     }
-
-//     const buffer = await response.arrayBuffer();
-
-//     return new NextResponse(buffer, {
-//       status: 200,
-//       headers: {
-//         "Content-Type": "image/jpeg",
-//         "Cache-Control": "s-maxage=86400, stale-while-revalidate",
-//       },
-//     });
-//   } catch (error) {
-//     return NextResponse.json(
-//       { error: "Image fetch failed", original: error },
-//       { status: 500 }
-//     );
-//   }
-// }

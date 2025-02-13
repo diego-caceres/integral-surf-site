@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 
 // const instagramPosts = [
@@ -67,26 +66,7 @@ export default function SectionInstagram() {
   return (
     <div className="w-full p-4">
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4">
-        {posts.slice(0, 3).map((post) => (
-          <a
-            key={post.id}
-            href={post.permalink}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <div className="relative w-full aspect-square">
-              <Image
-                src={`/api/instagram/image?postUrl=${encodeURIComponent(
-                  post.media_url
-                )}`}
-                alt="Instagram post"
-                className="w-full h-full rounded-lg object-cover"
-              />
-            </div>
-          </a>
-        ))}
-
-        {posts.slice(3, 6).map((post) => (
+        {posts.map((post) => (
           <a
             key={post.id}
             href={post.permalink}
@@ -95,9 +75,8 @@ export default function SectionInstagram() {
           >
             <div className="relative w-full aspect-square">
               <img
-                src={`/api/instagram/image?postUrl=${encodeURIComponent(
-                  post.media_url
-                )}`}
+                key={post.id}
+                src={`/api/instagram/image?postId=${post.id}`}
                 alt="Instagram post"
                 className="w-full h-full rounded-lg object-cover"
               />
