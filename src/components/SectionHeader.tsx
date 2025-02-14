@@ -1,44 +1,7 @@
-// "use client";
-
-// import Image from "next/image";
-
-// interface SectionHeaderProps {
-//   title: string;
-// }
-
-// const SectionHeader: React.FC<SectionHeaderProps> = ({ title }) => {
-//   return (
-//     <section className="relative w-full h-[75vh]">
-//       {/* Desktop */}
-//       <Image
-//         src="/images/home/header.jpg"
-//         alt="Viajes al Mar"
-//         fill
-//         className="hidden md:flex absolute inset-0"
-//       />
-//       {/* Mobile */}
-//       <Image
-//         src="/images/home/header-mobile.png"
-//         alt="Viajes al Mar"
-//         fill
-//         style={{ objectFit: "cover" }}
-//         className="md:hidden md:flex absolute inset-0"
-//       />
-//       <div className="absolute inset-0 flex items-end md:items-center justify-center">
-//         <h1 className="uppercase text-white text-7xl drop-shadow-lg font-[Eckmannpsych] mb-20 md:mb-0">
-//           {title}
-//         </h1>
-//       </div>
-//     </section>
-//   );
-// };
-
-// export default SectionHeader;
-
 "use client";
 
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 interface SectionHeaderProps {
   title: string;
@@ -53,6 +16,8 @@ const images = [
 
 const SectionHeader: React.FC<SectionHeaderProps> = ({ title }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const touchStartX = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -62,8 +27,38 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({ title }) => {
     return () => clearInterval(interval);
   }, []);
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStartX.current !== null && touchEndX.current !== null) {
+      const deltaX = touchStartX.current - touchEndX.current;
+      if (deltaX > 50) {
+        // Swipe left
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+      } else if (deltaX < -50) {
+        // Swipe right
+        setCurrentIndex(
+          (prevIndex) => (prevIndex - 1 + images.length) % images.length
+        );
+      }
+    }
+    touchStartX.current = null;
+    touchEndX.current = null;
+  };
+
   return (
-    <section className="relative w-full h-[75vh] overflow-hidden">
+    <section
+      className="relative w-full h-[75vh] overflow-hidden"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
       {/* Background Images */}
       {images.map((src, index) => (
         <Image

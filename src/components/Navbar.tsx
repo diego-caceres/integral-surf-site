@@ -15,10 +15,22 @@ export default function NavBar() {
   return (
     <>
       {/* Botón de menú para móviles */}
-      <div className="md:hidden p-4">
+      <div className="md:hidden p-4  items-center grid grid-cols-[15%_70%_15%]">
         <button onClick={toggleMenu} aria-label="Abrir menú">
           <Bars3Icon className="h-8 w-8 text-primary" />
         </button>
+
+        <span className="text-primary font-[Eckmannpsych] text-2xl text-center">
+          INTEGRAL SURF
+        </span>
+
+        <Image
+          src="/images/icons/logo.png"
+          alt="Logo Integral Surf"
+          width={65}
+          height={65}
+          className="self-end"
+        />
       </div>
 
       {/* Menú lateral deslizante */}

@@ -20,7 +20,7 @@ const SectionOurPurpose: React.FC = () => {
           ser. El surfing, el yoga y el arte son las experiencias que nos
           permiten reencontrarnos”.
         </p>
-        <Button className="mt-8">Sobre Nosotros</Button>
+        <Button className="mt-8 text-xl">Sobre Nosotros</Button>
       </div>
       <div className="flex flex-row justify-center items-start md:items-center">
         <Image
