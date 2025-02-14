@@ -3,7 +3,7 @@ import Button from "@/components/ui/Button";
 
 export default function SectionTheRoad() {
   return (
-    <div className="relative w-full h-screen overflow-hidden pt-20">
+    <div className="relative w-full min-h-screen overflow-hidden pt-20">
       {/* Background Image */}
       <Image
         src="/images/home/sea-background.jpeg"
@@ -14,7 +14,7 @@ export default function SectionTheRoad() {
       />
 
       {/* Content Overlay */}
-      <div className="absolute inset-0 flex items-center justify-center p-6 pb-10">
+      <div className="absolute inset-0 flex items-start justify-center p-6 pb-10">
         <div className="flex flex-col md:grid md:grid-cols-2 md:pl-[100px] w-full gap-6 text-white">
           {/* Left Column (Shown below on mobile) */}
           <div className="flex flex-col gap-4 md:gap-8 justify-center order-2 md:order-1 ">

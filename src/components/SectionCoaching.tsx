@@ -3,9 +3,9 @@ import Button from "@/components/ui/Button";
 
 export default function SectionCoaching() {
   return (
-    <div className="relative w-full h-screen overflow-hidden pt-20">
+    <div className="relative w-full min-h-screen overflow-hidden pt-20">
       {/* Content Overlay */}
-      <div className="absolute inset-0 flex items-center justify-center p-6 pb-10">
+      <div className="absolute inset-0 flex items-start justify-center p-6 pb-10">
         <div className="flex flex-col md:grid md:grid-cols-2 md:pl-[100px] w-full gap-6 ">
           {/* Left Column (Shown below on mobile) */}
           <div className="flex flex-col gap-4 md:gap-8 justify-center order-2 md:order-1 ">
