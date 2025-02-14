@@ -3,7 +3,7 @@ import Image from "next/image";
 export default function Footer() {
   return (
     <footer className="py-4 bg-primary text-white mt-auto">
-      <div className="flex flex-row justify-between mx-auto px-10">
+      <div className="flex flex-row justify-between items-center mx-auto px-10">
         <h2 className="uppercase font-[Eckmannpsych] text-white">
           Integral Surf
         </h2>
