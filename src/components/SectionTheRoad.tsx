@@ -35,16 +35,14 @@ export default function SectionTheRoad() {
           </div>
 
           {/* Right Column (Shown first on mobile) */}
-          <div className="mt-10 md:mt-0 md:max-w-[450px] flex flex-col items-center md:items-start justify-center  gap-4 order-1 md:order-2 ">
-            <h2 className="uppercase font-[Eckmannpsych] md:text-left text-white text-3xl md:text-5xl">
+          <div className="md:max-w-[450px] flex flex-col items-center md:items-start justify-center gap-4 order-1 md:order-2 py-10 md:py-20 text-left">
+            <h2 className="uppercase font-[Eckmannpsych] text-white text-3xl md:text-5xl">
               El camino del surf no es solitario
             </h2>
-            <p className="text-white md:text-left text-lg md:text-xl">
-              juntos aprendemos más y mejor, <br />
-              compartir es un principio básico del surf <br />
-              desde sus orígenes, y es una <br />
-              oportunidad acompañarnos frente a los <br />
-              desafíos que el mar nos propone.
+            <p className="text-white text-lg md:text-xl">
+              juntos aprendemos más y mejor, compartir es un principio básico
+              del surf desde sus orígenes, y es una oportunidad acompañarnos
+              frente a los desafíos que el mar nos propone.
             </p>
             <Button className="mt-4 text-lg md:text-xl">Descubre más</Button>
           </div>

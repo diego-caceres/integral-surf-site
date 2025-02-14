@@ -20,16 +20,14 @@ export default function SectionCoaching() {
           </div>
 
           {/* Right Column (Shown first on mobile) */}
-          <div className="mt-10 md:mt-0 md:max-w-[450px] flex flex-col items-center md:items-start justify-center gap-4 order-1 md:order-2 ">
-            <h2 className="uppercase font-[Eckmannpsych] md:text-left text-3xl md:text-5xl">
+          <div className="md:max-w-[450px] flex flex-col items-center md:items-start justify-center gap-4 order-1 md:order-2 py-10 md:py-20 text-left">
+            <h2 className="uppercase font-[Eckmannpsych]  text-3xl md:text-5xl">
               La importancia del coaching
             </h2>
-            <p className=" md:text-left text-lg md:text-xl">
-              surf coachs profesionales y experientes <br />
-              nos acompañan compartiéndonos este <br />
-              deporte desde sus raíces. buscamos <br />
-              aprender la técnica y teoría del surf en <br />
-              profundidad.
+            <p className="text-lg md:text-xl">
+              surf coachs profesionales y experientes nos acompañan
+              compartiéndonos este deporte desde sus raíces. buscamos aprender
+              la técnica y teoría del surf en profundidad.
             </p>
             <Button className="mt-4 text-lg md:text-xl">Descubre más</Button>
           </div>
