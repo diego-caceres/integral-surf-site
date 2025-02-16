@@ -1,3 +1,4 @@
+import { libreFranklinFont } from "@/styles/fonts";
 import Image from "next/image";
 
 export default function SectionExperiences() {
@@ -20,7 +21,9 @@ export default function SectionExperiences() {
             <h2 className="uppercase font-[Eckmannpsych]">
               Experiencias Integrales
             </h2>
-            <p className="mt-6 text-xl ">
+            <p
+              className={`${libreFranklinFont.className} tracking-[0.1rem] text-lg`}
+            >
               En este ciclo de entrevistas a viajeros, Federico García nos
               cuenta sobre su experiencia aprendiendo a surfear con Integral en
               Perú
