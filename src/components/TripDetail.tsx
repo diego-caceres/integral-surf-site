@@ -4,7 +4,7 @@ import { Trip } from "@/types/trip";
 import { bebasNeuelFont } from "@/styles/fonts";
 import { libreFranklinFont } from "@/styles/fonts";
 
-// import PriceComponent from "@/components/PriceComponent";
+import PriceComponent from "@/components/PriceComponent";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
 interface TripContentSectionProps {
@@ -36,7 +36,14 @@ const TripDetail = ({ trip }: { trip: Trip }) => {
     date,
     date2,
     contentSections,
+    finalImage1,
+    finalImage2,
   } = trip;
+
+  const classesIfVideo = headerVideo ? "pt-[400px]" : "";
+  const fontIfVideo = headerVideo
+    ? "text-4xl md:text-5xl"
+    : "text-6xl md:text-7xl";
 
   return (
     <div>
@@ -71,14 +78,18 @@ const TripDetail = ({ trip }: { trip: Trip }) => {
         )}
 
         {/* Title */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <div
+          className={`${classesIfVideo} absolute inset-0 flex flex-col items-center justify-center`}
+        >
           <span
             className={`${bebasNeuelFont.className} tracking-[0.2rem] uppercase text-redColor text-2xl md:text-3xl`}
           >
             Viaje al mar
           </span>
           {title2 && (
-            <h2 className="uppercase text-white text-6xl md:text-7xl drop-shadow-2xl font-[Eckmannpsych] mb-0">
+            <h2
+              className={`uppercase text-white ${fontIfVideo} drop-shadow-2xl font-[Eckmannpsych] mb-0`}
+            >
               {title2}
             </h2>
           )}
@@ -120,6 +131,23 @@ const TripDetail = ({ trip }: { trip: Trip }) => {
             imageLeft={index % 2 === 0}
           />
         ))}
+
+      {trip.sectionVideoUrl && (
+        <TripVideoDetailSection
+          title={trip.sectionVideoTitle}
+          description={trip.sectionVideoDescription}
+          videoUrl={trip.sectionVideoUrl}
+        />
+      )}
+
+      <PriceComponent
+        promotionalPrice={trip.promoPrice}
+        finalPrice={trip.finalPrice}
+        promoEndMessage={trip.promoEndMessage}
+        finalPriceMessage={trip.finalPriceMessage}
+      />
+
+      <FinalImagesSection finalImage1={finalImage1} finalImage2={finalImage2} />
 
       <div className="p-6 sm:p-8 max-w-7xl mx-auto">
         {/* Contact Button */}
@@ -290,6 +318,85 @@ const TripContentSection: React.FC<TripContentSectionProps> = ({
           />
         </div>
       )}
+    </section>
+  );
+};
+
+const TripVideoDetailSection = ({
+  title = "",
+  description = "",
+  videoUrl = "",
+}: {
+  title?: string;
+  description?: string;
+  videoUrl: string;
+}) => {
+  return (
+    <section className="min-h-[75vh] md:flex items-center gap-4 p-6 md:p-12 md:px-20 shadow-lg shadow-gray-100">
+      {/* Left Column */}
+      <div className="md:w-[40%] w-full mb-5 md:mb-0">
+        <h3 className="font-[Eckmannpsych] tracking-[0.1rem] uppercase text-xl font-semibold mb-4">
+          {title}
+        </h3>
+
+        <div className="relative w-full min-h-[270px]  md:h-[300px] overflow-hidden rounded-xl">
+          <iframe
+            className="absolute top-0 left-0 w-full h-full"
+            src={`https://www.youtube.com/embed/${extractVideoId(
+              videoUrl
+            )}?autoplay=1&mute=1`}
+            title="YouTube video player"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+          ></iframe>
+        </div>
+      </div>
+
+      {/* Right Column */}
+      <div className="md:w-[60%] w-full flex justify-center items-center p-10">
+        <p
+          className={`${libreFranklinFont.className} tracking-[0.2rem] text-lg`}
+        >
+          {parse(description)}
+        </p>
+      </div>
+    </section>
+  );
+};
+
+const FinalImagesSection = ({
+  finalImage1,
+  finalImage2,
+}: {
+  finalImage1?: string;
+  finalImage2?: string;
+}) => {
+  return (
+    <section className="h-[700px] md:min-h-[75vh] w-full flex flex-col md:flex-row items-center justify-center">
+      <div className="w-full h-[700px] overflow-hidden">
+        {finalImage1 && (
+          <Image
+            src={finalImage1}
+            alt="Final Image 1"
+            width={1920}
+            height={700}
+            className="w-full h-full object-cover"
+          />
+        )}
+      </div>
+      <div className="w-full h-[700px] overflow-hidden">
+        {finalImage2 && (
+          <Image
+            src={finalImage2}
+            alt="Final Image 2"
+            width={1920}
+            height={700}
+            className="w-full h-full object-cover"
+          />
+        )}
+      </div>
     </section>
   );
 };

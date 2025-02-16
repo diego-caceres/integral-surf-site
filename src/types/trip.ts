@@ -26,6 +26,11 @@ export type Trip = {
   section2Description?: string;
   section2Image?: string;
   contentSections?: ContentSection[];
+  sectionVideoTitle?: string;
+  sectionVideoDescription?: string;
+  sectionVideoUrl?: string;
+  finalImage1?: string;
+  finalImage2?: string;
 };
 
 export type ContentSection = {

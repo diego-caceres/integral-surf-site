@@ -1,57 +1,45 @@
+import { libreFranklinFont } from "@/styles/fonts";
+
 interface PriceProps {
   promotionalPrice: number;
   finalPrice: number;
-  promotionalPriceValidUntil: string;
+  promoEndMessage?: string;
+  finalPriceMessage?: string;
 }
 
 const PriceComponent: React.FC<PriceProps> = ({
   promotionalPrice,
   finalPrice,
-  promotionalPriceValidUntil,
+  promoEndMessage,
+  finalPriceMessage,
 }) => {
   return (
-    <>
-      <div className="flex flex-col sm:flex-row sm:justify-evenly sm:items-center text-center font-bold">
+    <div className="flex flex-col gap-8 items-center px-10 py-20">
+      <h2 className="font-[Eckmannpsych] tracking-[0.1rem] uppercase text-redColor text-3xl font-bold mb-4">
+        Reserva tu lugar
+      </h2>
+      <div
+        className={`${libreFranklinFont.className} flex flex-col sm:flex-row justify-center gap-8 sm:items-center justify-center text-center`}
+      >
         {/* Precio Promocional */}
-        <div>
-          <div className="border rounded-[2vw] p-4 bg-white">
-            <div className="text-black uppercase font-bold">
-              Precio Promocional
-            </div>
-            <div className="bg-yellow-300 text-black p-2 rounded mt-2  ">
-              USD {promotionalPrice}
-            </div>
-            <div className="text-black m-2 ">
-              Válido hasta {promotionalPriceValidUntil}
-            </div>
+        <div className="border rounded-3xl p-5 bg-redColor text-white flex flex-col">
+          <span className="uppercase font-bold text-xl ">Promo</span>
+          <span className="uppercase font-bold text-xl">Reserva con 50%</span>
+          <div className="font-bold p-2 rounded mt-2 text-5xl ">
+            USD {promotionalPrice}
           </div>
-          {/* Información de reserva */}
-          <div className="bg-yellow-300 text-black p-4 rounded-[2vw] font-bold mt-5">
-            Reserva 50% USD {promotionalPrice / 2}
-          </div>
+          <div className=" ">{promoEndMessage}</div>
         </div>
-
-        {/* Precio Final */}
-        <div className="mt-4 sm:mt-0">
-          <div className="border rounded-[2vw] p-4 bg-white">
-            <div className="text-black uppercase font-bold">Precio Final</div>
-            <div className="bg-yellow-300 text-black p-2 rounded mt-2 font-bold">
-              ${finalPrice}
-            </div>
-            <div className="text-black m-2">A partir del día siguiente</div>
+        <div className="border rounded-3xl p-5 bg-redColor text-white flex flex-col">
+          <span className=" uppercase font-bold text-xl">Precio Final</span>
+          <span className=" uppercase font-bold text-xl">Reserva con 50%</span>
+          <div className="font-bold p-2 rounded mt-2 text-5xl  ">
+            USD {finalPrice}
           </div>
-          {/* Información de reserva */}
-          <div className="bg-yellow-300 text-black p-4 rounded-[2vw] font-bold mt-5">
-            Reserva 50% USD {finalPrice / 2}
-          </div>
+          <div className="">{finalPriceMessage}</div>
         </div>
       </div>
-      {/* Aviso de Mercado Pago */}
-      <div className="bg-red-300 text-black p-4 rounded-[2vw] mt-10 text-center">
-        Mercado pago hasta 12 cuotas sin interés (Considerar comisión de Mercado
-        Pago 10% adicional)
-      </div>
-    </>
+    </div>
   );
 };
 
