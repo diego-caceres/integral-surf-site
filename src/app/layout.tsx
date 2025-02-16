@@ -3,14 +3,7 @@ import { GoogleTagManager } from "@next/third-parties/google";
 import "../styles/globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Libre_Franklin } from "next/font/google";
-
-const libreFranklinFont = Libre_Franklin({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-libre-franklin",
-  weight: ["400", "500", "600", "700"],
-});
+import { libreFranklinFont } from "@/styles/fonts";
 
 export default function RootLayout({
   children,

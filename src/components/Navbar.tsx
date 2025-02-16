@@ -103,7 +103,7 @@ export default function NavBar() {
       </motion.div>
 
       {/* Navbar para desktop */}
-      <nav className="hidden md:flex justify-between items-center py-10 px-10">
+      <nav className="hidden md:flex justify-between items-center py-8 px-10">
         <Link href="/" className="text-4xl font-serif tracking-wide">
           <span className="text-primary font-[Eckmannpsych] font-size">
             INTEGRAL SURF

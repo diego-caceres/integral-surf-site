@@ -2,6 +2,7 @@ export type Trip = {
   id: string; // Unique identifier for the trip
   slug: string; // URL slug for the trip
   title: string; // Name of the trip
+  title2?: string; // Name of the trip
   destiny: string; // Start date
   coachingSubtitle: string;
   date: string; // Start date
@@ -14,6 +15,24 @@ export type Trip = {
   images: string[]; // Array of image paths for the trip gallery
   promoPrice: number;
   finalPrice: number;
-  promoEndDate: string; // Format: YYYY-MM-DD
+  promoEndMessage?: string;
+  finalPriceMessage?: string;
   location: { lat: number; lng: number };
+  section1Title?: string;
+  section1Description?: string;
+  section1Description2?: string;
+  section1Image?: string;
+  section2Title?: string;
+  section2Description?: string;
+  section2Image?: string;
+  contentSections?: ContentSection[];
+};
+
+export type ContentSection = {
+  title: string;
+  subtitle?: string;
+  description: string;
+  subtitle2?: string;
+  description2?: string;
+  imageUrl: string;
 };

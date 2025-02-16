@@ -1,13 +1,6 @@
 import Link from "next/link";
-import { Bebas_Neue } from "next/font/google";
 import { Trip } from "@/types/trip";
-
-const bebasNeuelFont = Bebas_Neue({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-bebas-neue",
-  weight: ["400"],
-});
+import { bebasNeuelFont } from "@/styles/fonts";
 
 const TripCard = ({ trip }: { trip: Trip }) => {
   return (
