@@ -41,9 +41,12 @@ const TripDetail = ({ trip }: { trip: Trip }) => {
   } = trip;
 
   const classesIfVideo = headerVideo ? "pt-[400px]" : "";
-  const fontIfVideo = headerVideo
-    ? "text-3xl md:text-5xl"
+  const fontTitle2IfVideo = headerVideo
+    ? "text-xl md:text-5xl"
     : "text-4xl md:text-7xl";
+  const fontTitleIfVideo = headerVideo
+    ? "text-2xl md:text-6xl"
+    : "text-5xl md:text-[150px]";
 
   return (
     <div>
@@ -88,12 +91,14 @@ const TripDetail = ({ trip }: { trip: Trip }) => {
           </span>
           {title2 && (
             <h2
-              className={`font-[Eckmannpsych] uppercase text-white ${fontIfVideo} drop-shadow-2xl  mb-0`}
+              className={`font-[Eckmannpsych] uppercase text-white ${fontTitle2IfVideo} drop-shadow-2xl  mb-0`}
             >
               {title2}
             </h2>
           )}
-          <h2 className="font-[Eckmannpsych] drop-shadow-2xl uppercase text-white text-[110px] md:text-[150px] leading-[0.5] mb-10 md:mb-[50px]">
+          <h2
+            className={`font-[Eckmannpsych] drop-shadow-2xl uppercase text-white ${fontTitleIfVideo} leading-[0.5] mb-5 md:mb-[50px]`}
+          >
             {title}
           </h2>
           <span

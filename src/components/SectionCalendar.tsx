@@ -5,7 +5,7 @@ import TripCard from "@/components/TripCard";
 const SectionCalendar: React.FC = () => {
   return (
     <section className="w-full md:h-[90vh] md:px-20 pt-10 md:py-20">
-      <div className="px-10">
+      <div className="px-2 md:px-5">
         <h2 className="font-[Eckmannpsych] text-redColor tracking-[0.1rem]">
           CALENDARIO 2025
         </h2>

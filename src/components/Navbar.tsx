@@ -12,6 +12,9 @@ export default function NavBar() {
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
+  const storeDisabled = true;
+  const blogDisabled = true;
+
   return (
     <>
       {/* Botón de menú para móviles */}
@@ -20,9 +23,11 @@ export default function NavBar() {
           <Bars3Icon className="h-8 w-8 text-primary" />
         </button>
 
-        <span className="text-primary font-[Eckmannpsych] text-2xl text-center">
-          INTEGRAL SURF
-        </span>
+        <Link href="/" className="text-center">
+          <span className="text-primary font-[Eckmannpsych] text-2xl">
+            INTEGRAL SURF
+          </span>
+        </Link>
 
         <Image
           src="/images/icons/logo.png"
@@ -72,6 +77,7 @@ export default function NavBar() {
 
           <Link
             href="/viajes"
+            onClick={toggleMenu}
             prefetch
             className="text-xl font-semibold hover:text-accent transition"
           >
@@ -79,15 +85,23 @@ export default function NavBar() {
           </Link>
           <Link
             href="/productos"
-            className="text-xl font-semibold hover:text-accent transition"
             prefetch
+            onClick={toggleMenu}
+            className={`text-xl font-semibold hover:text-accent transition ${
+              storeDisabled ? "pointer-events-none" : ""
+            }`}
+            aria-disabled={storeDisabled}
           >
             TIENDA
           </Link>
           <Link
             href="/blog"
-            className="text-xl font-semibold hover:text-accent transition"
+            className={`text-xl font-semibold hover:text-accent transition ${
+              blogDisabled ? "pointer-events-none" : ""
+            }`}
+            aria-disabled={blogDisabled}
             prefetch
+            onClick={toggleMenu}
           >
             BLOG
           </Link>
