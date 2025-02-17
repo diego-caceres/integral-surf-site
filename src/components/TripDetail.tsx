@@ -337,9 +337,9 @@ const TripVideoDetailSection = ({
   videoUrl: string;
 }) => {
   return (
-    <section className="min-h-[75vh] md:flex items-center gap-4 p-6 md:p-12 md:px-20 shadow-lg shadow-gray-100">
+    <section className="min-h-[75vh] md:flex items-center gap-4  md:px-20 shadow-lg shadow-gray-100">
       {/* Left Column */}
-      <div className="md:w-[40%] w-full mb-5 md:mb-0">
+      <div className="md:w-[40%] w-full mb-5 md:mb-0 p-12">
         <h3 className="font-[Eckmannpsych] tracking-[0.1rem] uppercase text-xl font-semibold mb-4">
           {title}
         </h3>
@@ -360,7 +360,7 @@ const TripVideoDetailSection = ({
       </div>
 
       {/* Right Column */}
-      <div className="md:w-[60%] w-full flex justify-center items-center p-10">
+      <div className="md:w-[60%] w-full flex justify-center items-center p-12">
         <p
           className={`${libreFranklinFont.className} tracking-[0.2rem] text-lg`}
         >
