@@ -1,5 +1,4 @@
 "use client";
-import { supabase } from "@/lib/supabaseClient";
 
 import SectionOurPurpose from "@/components/SectionOurPurpose";
 import SectionCalendar from "@/components/SectionCalendar";
@@ -21,15 +20,9 @@ export default function HomePage() {
 
   useEffect(() => {
     const fetchViajes = async () => {
-      const { data, error } = await supabase
-        .from("trips")
-        .select("*, trip_contents(*)");
-
-      if (error) {
-        console.error("Error obteniendo los viajes:", error);
-      } else {
-        setViajes(data || []);
-      }
+      const res = await fetch("/api/trips"); // 🔐 Ahora consultamos nuestra API segura
+      const data = await res.json();
+      setViajes(data);
     };
 
     fetchViajes();

@@ -1,13 +1,9 @@
 "use client";
 import { useState } from "react";
-import { supabase } from "@/lib/supabaseClient";
-// import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
 
 export default function NuevoViaje() {
-  const notify = () => toast.info("Wow so easy!");
-
   const [form, setForm] = useState({
     slug: "",
     title: "",
@@ -99,36 +95,26 @@ export default function NuevoViaje() {
     const viajeId = uuidv4(); // Generar un ID manualmente
 
     // Insertar el viaje
-    const { error: viajeError } = await supabase
-      .from("trips")
-      .insert([{ id: viajeId, ...form }]);
+    const response = await fetch("/api/trips", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: viajeId, contents, ...form }),
+    });
 
-    if (viajeError) {
-      console.error("Error al agregar viaje:", viajeError);
+    const result = await response.json();
+
+    if (!result.success) {
+      console.error("Error al agregar viaje:", result.error);
       return;
     }
 
-    // Insertar los contenidos relacionados con el viaje
-    const formattedContents = contents.map((content) => ({
-      ...content,
-      trip_id: viajeId,
-    }));
-    const { error: contentError } = await supabase
-      .from("trip_contents")
-      .insert(formattedContents);
-
-    if (contentError) {
-      console.error("Error al agregar contenidos:", contentError);
-    } else {
-      toast.success("Viaje agregado correctamente");
-      // router.push("/");
-    }
+    toast.success("Viaje agregado correctamente");
+    // router.push("/");
   };
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg">
       <h1 className="text-2xl font-bold mb-6">Agregar Nuevo Viaje</h1>
-      <button onClick={notify}>Notify!</button>
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Información general */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

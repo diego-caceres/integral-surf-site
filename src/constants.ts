@@ -632,7 +632,7 @@ Junto a Marco Giorgi, quién es parte de nuestro equipo, hemos desarrollado una 
   },
   {
     id: "9",
-    slug: "punta-del-diablo-nooviembre",
+    slug: "punta-del-diablo-noviembre",
     title: "Punta del Diablo",
     destiny: "Punta del Diablo, Uy.",
     coachingSubtitle: "Coaching por integral surf",
