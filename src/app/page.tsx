@@ -1,4 +1,5 @@
 "use client";
+import { supabase } from "@/lib/supabaseClient";
 
 import SectionOurPurpose from "@/components/SectionOurPurpose";
 import SectionCalendar from "@/components/SectionCalendar";
@@ -8,8 +9,34 @@ import SectionExperiences from "@/components/SectionExperiences";
 import SectionInstagram from "@/components/SectionInstagram";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import SectionHeader from "@/components/SectionHeader";
+import { useEffect, useState } from "react";
 
 export default function HomePage() {
+  // const { data: trips, error } = await supabase.from("trips").select("*");
+  // console.log("trips", trips);
+  // console.log("error", error);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [viajes, setViajes] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchViajes = async () => {
+      const { data, error } = await supabase
+        .from("trips")
+        .select("*, trip_contents(*)");
+
+      if (error) {
+        console.error("Error obteniendo los viajes:", error);
+      } else {
+        setViajes(data || []);
+      }
+    };
+
+    fetchViajes();
+  }, []);
+
+  console.log("viajes", viajes);
+
   return (
     <section className="mx-auto text-center">
       {/* Hero Image Section */}
