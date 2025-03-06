@@ -1,21 +1,33 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabaseServer";
 
-export async function GET() {
-  const { data, error } = await supabaseServer
-    .from("trips")
-    .select("*, trip_contents(*)")
-    .order("order", { ascending: true });
+export async function GET(request: NextRequest) {
+  const searchParams = request.nextUrl.searchParams;
+  const includeContents = searchParams.get("includeContents") === "true";
 
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  try {
+    let query = supabaseServer
+      .from("trips")
+      .select(includeContents ? "*, trip_contents(*)" : "*")
+      .order("order", { ascending: true });
+
+    const { data, error } = await query;
+
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    return NextResponse.json(data);
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Error processing request", details: error },
+      { status: 500 }
+    );
   }
-
-  return NextResponse.json(data);
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     const formData = await req.json();
     const { contents, ...viajeData } = formData; // Extraemos contents del objeto principal
@@ -34,7 +46,7 @@ export async function POST(req: Request) {
     // 2️⃣ Insertar los contenidos relacionados (si existen)
     if (contents && contents.length > 0) {
       const contentsData = contents.map((content: any) => ({
-        viaje_id: viaje.id, // Relaciona con el viaje creado
+        trip_id: viaje.id, // Relaciona con el viaje creado
         ...content,
       }));
 

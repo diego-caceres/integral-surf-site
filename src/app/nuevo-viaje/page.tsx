@@ -128,10 +128,27 @@ export default function NuevoViaje() {
             required
           />
           <input
+            type="number"
+            name="order"
+            placeholder="Order"
+            value={form.order}
+            onChange={handleChange}
+            className="p-2 border rounded"
+          />
+          <input
             type="text"
             name="title"
             placeholder="Título"
             value={form.title}
+            onChange={handleChange}
+            className="p-2 border rounded"
+            required
+          />
+          <input
+            type="text"
+            name="title_2"
+            placeholder="Título 2"
+            value={form.title_2}
             onChange={handleChange}
             className="p-2 border rounded"
             required

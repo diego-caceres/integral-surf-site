@@ -113,6 +113,14 @@ export default function NavBar() {
           >
             NOSOTROS
           </Link>
+          {/* <Link
+            href="/admin/trips"
+            className="text-xl font-semibold hover:text-accent transition"
+            onClick={toggleMenu}
+            prefetch
+          >
+            ADMIN
+          </Link> */}
         </nav>
       </motion.div>
 
@@ -153,6 +161,11 @@ export default function NavBar() {
               NOSOTROS
             </Link>
           </li>
+          {/* <li>
+            <Link href="/admin/trips" className="hover:text-accent">
+              ADMIN
+            </Link>
+          </li> */}
         </ul>
       </nav>
     </>

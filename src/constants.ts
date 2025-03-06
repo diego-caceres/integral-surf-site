@@ -323,7 +323,7 @@ Junto a Marco Giorgi, quién es parte de nuestro equipo, hemos desarrollado una 
     coachingSubtitle: "Coaching por integral surf + Zeneidas",
     date: "Junio",
     date2: "16 al 24",
-    headerImage: "/images/tripHeader.jpg",
+    headerImage: "/images/costa-rica/tripHeader.jpeg",
     shortDescription:
       "Experimenta el paraíso tropical en Santa Teresa, donde la selva se encuentra con el océano para ofrecerte olas constantes y un ambiente relajado. Con su combinación de surf de clase mundial, vida nocturna animada y paisajes espectaculares, es el destino perfecto para surfistas de todos los niveles.",
     description:
@@ -348,12 +348,12 @@ Merecemos <strong>tiempo de calidad</strong> en una <strong>energía cuidada y p
 ¡Celebremos la vida juntos!`,
     section1Description2:
       "Elegimos la naturaleza para interpretar lo más profundo de nuestro ser. El surfing, el yoga y el arte son las experiencias que nos permiten reencontrarnos.",
-    section1Image: "/images/trips/garopabaSection1.png",
+    section1Image: "/images/costa-rica/section1.jpg",
     section2Title: "Una semana entre la selva y el mar.",
     section2Description: `Serán 6 noches y 7 días entre el morro y el mar, junto a un referente internacional del surfing, que nos recibe de brazos abiertos, donde ha desarrollado su carrera como surfista profesional
     <br/><br/>
 Juntos a iremos en busca de los mejores olas de la región, conoceremos la cultura local y nos adentraremos en senderos subtropicales.  `,
-    section2Image: "/images/trips/garopabaSection2.jpg",
+    section2Image: "/images/costa-rica/section2.jpg",
     contentSections: [
       {
         title: "Surf",
@@ -363,25 +363,25 @@ Juntos a iremos en busca de los mejores olas de la región, conoceremos la cultu
         subtitle2: "Video analisis & coaching",
         description2:
           "Utilizaremos la herramienta del video análisis para visualizar y corregir tu surfing de manera que puedas mejorar tu curva de aprendizaje.",
-        imageUrl: "/images/trips/garopabaContent1.jpg",
+        imageUrl: "/images/costa-rica/content1.jpg",
       },
       {
         title: "Aventuras",
         description:
           "Durante la semana, nos regalamos momentos conectar con la naturaleza en todos sus sentidos, haremos trilhas e iremos a cascadas y miradores, para conocer Garopaba desde diferentes lugares.",
-        imageUrl: "/images/trips/garopabaContent2.jpg",
+        imageUrl: "/images/costa-rica/content2.jpg",
       },
       {
         title: "Yoga",
         description:
           "El yoga es una disciplina que nos acompaña en cada viaje, habilitando una percepción consciente sobre nuestro cuerpo, mente y espíritu. A nivel fisico, actúa de manera directa en lo que será tu experiencia dentro del agua.",
-        imageUrl: "/images/trips/garopabaContent3.jpg",
+        imageUrl: "/images/costa-rica/content3.jpg",
       },
       {
         title: "Hospedaje",
         description:
           "La Pousada Pé na Areia está situada en Praia da Ferrugem, en Garopaba. Localizada a 30 metros del mar. La conexión Wi-Fi es gratuita en todas partes y el desayuno es buffet. Los apartamento están equipados con TV, cocina y baño y  son compartidos con los participantes del surf trip.",
-        imageUrl: "/images/trips/garopabaContent4.jpg",
+        imageUrl: "/images/costa-rica/content4.jpg",
       },
     ],
     sectionVideoTitle: "Mirá nuestro último viaje a Brasil",
@@ -390,8 +390,8 @@ Comenzamos en semana de turismo, acortamos en invierno en agosto y cerramos en o
 
 Junto a Marco Giorgi, quién es parte de nuestro equipo, hemos desarrollado una experiencia que va desde vivencias gastronómicas, paseos por la naturaleza y un abordaje técnico sobre el surf de cada participante. `,
     sectionVideoUrl: "https://www.youtube.com/watch?v=MZenGpwdJnM",
-    finalImage1: "/images/trips/garopabaFinal1.jpg",
-    finalImage2: "/images/trips/garopabaFinal2.jpg",
+    finalImage1: "/images/costa-rica/final1.jpg",
+    finalImage2: "/images/costa-rica/final2.jpg",
   },
   {
     id: "6",
@@ -413,13 +413,13 @@ Junto a Marco Giorgi, quién es parte de nuestro equipo, hemos desarrollado una 
       "/images/lobitos3.jpg",
       "/images/lobitos4.jpg",
     ],
-    headerImage: "/images/tripHeader.jpg",
+    headerImage: "/images/lobitos/headerImage.jpg",
     promoPrice: 1500, // Optional
     finalPrice: 1750,
     promoEndMessage: "Válido hasta Junio", // Optional
     finalPriceMessage: "Válido desde Julio", // Optional
     location: { lat: -4.4550094, lng: -81.2816191 },
-    headerVideo: "https://www.youtube.com/watch?v=AvBeRsj1YkM",
+    headerVideo: "",
     section1Title: "¡Nos vamos al mar!",
     section1Description: `El propósito es ayudarte a <strong>lograr tus objetivos</strong> de manera consciente, ya sea <strong>conectar</strong> por primera vez con el surf o a mejorar tu <strong>performance</strong> sobre las olas.<br/><br/>
 
@@ -428,12 +428,12 @@ Merecemos <strong>tiempo de calidad</strong> en una <strong>energía cuidada y p
 ¡Celebremos la vida juntos!`,
     section1Description2:
       "Elegimos la naturaleza para interpretar lo más profundo de nuestro ser. El surfing, el yoga y el arte son las experiencias que nos permiten reencontrarnos.",
-    section1Image: "/images/trips/garopabaSection1.png",
+    section1Image: "/images/lobitos/section1.jpg",
     section2Title: "Una semana entre la selva y el mar.",
     section2Description: `Serán 6 noches y 7 días entre el morro y el mar, junto a un referente internacional del surfing, que nos recibe de brazos abiertos, donde ha desarrollado su carrera como surfista profesional
     <br/><br/>
 Juntos a iremos en busca de los mejores olas de la región, conoceremos la cultura local y nos adentraremos en senderos subtropicales.  `,
-    section2Image: "/images/trips/garopabaSection2.jpg",
+    section2Image: "/images/lobitos/section2.jpg",
     contentSections: [
       {
         title: "Surf",
@@ -443,35 +443,35 @@ Juntos a iremos en busca de los mejores olas de la región, conoceremos la cultu
         subtitle2: "Video analisis & coaching",
         description2:
           "Utilizaremos la herramienta del video análisis para visualizar y corregir tu surfing de manera que puedas mejorar tu curva de aprendizaje.",
-        imageUrl: "/images/trips/garopabaContent1.jpg",
+        imageUrl: "/images/lobitos/content1.jpg",
       },
       {
         title: "Aventuras",
         description:
           "Durante la semana, nos regalamos momentos conectar con la naturaleza en todos sus sentidos, haremos trilhas e iremos a cascadas y miradores, para conocer Garopaba desde diferentes lugares.",
-        imageUrl: "/images/trips/garopabaContent2.jpg",
+        imageUrl: "/images/lobitos/content2.jpg",
       },
       {
         title: "Yoga",
         description:
           "El yoga es una disciplina que nos acompaña en cada viaje, habilitando una percepción consciente sobre nuestro cuerpo, mente y espíritu. A nivel fisico, actúa de manera directa en lo que será tu experiencia dentro del agua.",
-        imageUrl: "/images/trips/garopabaContent3.jpg",
+        imageUrl: "/images/lobitos/content3.jpg",
       },
       {
         title: "Hospedaje",
         description:
           "La Pousada Pé na Areia está situada en Praia da Ferrugem, en Garopaba. Localizada a 30 metros del mar. La conexión Wi-Fi es gratuita en todas partes y el desayuno es buffet. Los apartamento están equipados con TV, cocina y baño y  son compartidos con los participantes del surf trip.",
-        imageUrl: "/images/trips/garopabaContent4.jpg",
+        imageUrl: "/images/lobitos/content4.jpg",
       },
     ],
-    sectionVideoTitle: "Mirá nuestro último viaje a Brasil",
+    sectionVideoTitle: "Mirá nuestro último viaje a Lobitos",
     sectionVideoDescription: `Los Surftrips a Garopaba son un destino asegurado en nuestro calendario anual.
 Comenzamos en semana de turismo, acortamos en invierno en agosto y cerramos en octubre con calorcito y aguas azules. <br/><br/>
 
 Junto a Marco Giorgi, quién es parte de nuestro equipo, hemos desarrollado una experiencia que va desde vivencias gastronómicas, paseos por la naturaleza y un abordaje técnico sobre el surf de cada participante. `,
-    sectionVideoUrl: "https://www.youtube.com/watch?v=MZenGpwdJnM",
-    finalImage1: "/images/trips/garopabaFinal1.jpg",
-    finalImage2: "/images/trips/garopabaFinal2.jpg",
+    sectionVideoUrl: "https://www.youtube.com/watch?v=AvBeRsj1YkM",
+    finalImage1: "/images/lobitos/final1.jpg",
+    finalImage2: "/images/lobitos/final2.jpg",
   },
   {
     id: "7",
