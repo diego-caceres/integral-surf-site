@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { toast } from "react-toastify";
-import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
+import { FaEdit, FaTrash, FaPlus, FaCopy } from "react-icons/fa";
 
 type Trip = {
   id: string;
@@ -63,6 +63,30 @@ export default function TripsManagement() {
     } catch (err) {
       console.error("Error deleting trip:", err);
       toast.error("Error al eliminar el viaje");
+    }
+  };
+
+  const handleCloneTrip = async (id: string) => {
+    try {
+      setIsLoading(true);
+      const res = await fetch(`/api/trips/${id}/clone`, {
+        method: "POST",
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to clone trip");
+      }
+
+      const data = await res.json();
+
+      // Add the newly cloned trip to the list
+      setTrips([...trips, data.trip]);
+      toast.success("Viaje clonado correctamente");
+    } catch (err) {
+      console.error("Error cloning trip:", err);
+      toast.error("Error al clonar el viaje");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -191,6 +215,13 @@ export default function TripsManagement() {
                       >
                         <FaEdit />
                       </Link>
+                      <button
+                        onClick={() => handleCloneTrip(trip.id)}
+                        className="text-green-600 hover:text-green-900 p-2"
+                        title="Clonar viaje"
+                      >
+                        <FaCopy />
+                      </button>
                       <button
                         onClick={() => handleDeleteTrip(trip.id)}
                         className="text-red-600 hover:text-red-900 p-2"

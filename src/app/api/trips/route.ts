@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
   const includeContents = searchParams.get("includeContents") === "true";
 
   try {
-    let query = supabaseServer
+    const query = supabaseServer
       .from("trips")
       .select(includeContents ? "*, trip_contents(*)" : "*")
       .order("order", { ascending: true });
