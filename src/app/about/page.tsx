@@ -87,7 +87,7 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {team.map((member, index) => (
               <div key={index} className="text-center space-y-4">
-                <div className="relative h-64 w-64 mx-auto rounded-full overflow-hidden">
+                <div className="relative h-64 w-64 mx-auto rounded-md overflow-hidden">
                   <Image
                     src={member.image}
                     alt={member.name}
@@ -165,7 +165,7 @@ const team = [
     name: "Juan Ignacio Perez",
     role: "Intructor y Surfista",
     image: "/images/team/rulo.jpg",
-    bio: "Experto en llevarte a los mejores spots.",
+    bio: "Experto en llevarte a los mejores spots, y ayudarte a leer las olas.",
   },
   {
     name: "Romina Rissotto",
