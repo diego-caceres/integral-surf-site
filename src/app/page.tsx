@@ -11,10 +11,6 @@ import SectionHeader from "@/components/SectionHeader";
 import { useEffect, useState } from "react";
 
 export default function HomePage() {
-  // const { data: trips, error } = await supabase.from("trips").select("*");
-  // console.log("trips", trips);
-  // console.log("error", error);
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [viajes, setViajes] = useState<any[]>([]);
 
@@ -47,19 +43,6 @@ export default function HomePage() {
   );
 }
 
-{
-  /* <div className="mt-10">
-  <Link href="/viajes" className="btn-primary">
-    Ver Viajes
-  </Link>
-</div> */
-}
-{
-  /* Sección animada de destinos */
-}
-{
-  /* <AnimatedTripsSection /> */
-}
 // 5. Agregar imágenes con estilo retro
 // Puedes aprovechar las utilidades de Tailwind para aplicar un estilo a imágenes:
 // <img

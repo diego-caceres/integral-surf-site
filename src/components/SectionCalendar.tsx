@@ -86,10 +86,7 @@ const SectionCalendar: React.FC = () => {
             {/* Left column */}
             <div>
               {firstHalf.map((trip) => (
-                <div
-                  key={trip.id}
-                  className="bg-red-500 p-3 mb-4 uppercase text-white"
-                >
+                <div key={trip.id}>
                   <TripCard trip={trip} />
                 </div>
               ))}
@@ -98,10 +95,7 @@ const SectionCalendar: React.FC = () => {
             {/* Right column */}
             <div>
               {secondHalf.map((trip) => (
-                <div
-                  key={trip.id}
-                  className="bg-red-500 p-3 mb-4 uppercase text-white"
-                >
+                <div key={trip.id}>
                   <TripCard trip={trip} />
                 </div>
               ))}
@@ -111,7 +105,7 @@ const SectionCalendar: React.FC = () => {
           {/* Last trip centered below the columns */}
           {lastTrip && (
             <div className="flex justify-center md:mt-4">
-              <div className="bg-red-500 p-2 mb-4 w-full max-w-xl uppercase text-white">
+              <div>
                 <TripCard trip={lastTrip} />
               </div>
             </div>
