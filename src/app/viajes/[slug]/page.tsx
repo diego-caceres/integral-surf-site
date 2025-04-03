@@ -1,11 +1,4 @@
-import { trips } from "@/constants";
-import TripDetail from "@/components/TripDetail";
-
-export async function generateStaticParams() {
-  return trips.map((trip) => ({
-    id: trip.id,
-  }));
-}
+import TripDetailFetcher from "@/components/TripDetailFetcher";
 
 export default async function TripPage({
   params,
@@ -13,15 +6,15 @@ export default async function TripPage({
   params: Promise<{ slug: string }>;
 }) {
   const slug = (await params).slug;
-  const trip = trips.find((trip) => trip.slug === slug);
 
-  if (!trip) {
+  console.log("Slug:", slug);
+  if (!slug) {
     return <div className="text-center text-red-500">Viaje no encontrado.</div>;
   }
 
   return (
     <div>
-      <TripDetail trip={trip} />
+      <TripDetailFetcher slug={slug} />
     </div>
   );
 }

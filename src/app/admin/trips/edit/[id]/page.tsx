@@ -2,53 +2,13 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-
-type ContentSection = {
-  id?: string;
-  title: string;
-  subtitle?: string;
-  description: string;
-  subtitle_2?: string;
-  description_2?: string;
-  image_url: string;
-  trip_id?: string;
-};
-
-type TripForm = {
-  id: string;
-  slug: string;
-  title: string;
-  title_2: string;
-  destiny: string;
-  coaching_subtitle: string;
-  date_month: string;
-  date_days: string;
-  header_image: string;
-  header_video: string;
-  price_promo: number;
-  price_final: number;
-  price_promo_message: string;
-  price_final_message: string;
-  section_1_title: string;
-  section_1_description: string;
-  section_1_subdescription: string;
-  section_1_image: string;
-  section_2_title: string;
-  section_2_description: string;
-  section_2_image: string;
-  section_video_title: string;
-  section_video_description: string;
-  section_video_url: string;
-  final_img_1: string;
-  final_img_2: string;
-  order: number;
-};
+import { Trip, TripContent } from "@/types/trip";
 
 export default function EditTrip({ params }: { params: { id: string } }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [form, setForm] = useState<TripForm>({
+  const [form, setForm] = useState<Trip>({
     id: "",
     slug: "",
     title: "",
@@ -78,7 +38,7 @@ export default function EditTrip({ params }: { params: { id: string } }) {
     order: 0,
   });
 
-  const [contents, setContents] = useState<ContentSection[]>([]);
+  const [contents, setContents] = useState<TripContent[]>([]);
 
   useEffect(() => {
     const fetchTrip = async () => {

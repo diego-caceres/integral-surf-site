@@ -45,8 +45,6 @@ export default function NuevoViaje() {
     },
   ]);
 
-  // const router = useRouter();
-
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {

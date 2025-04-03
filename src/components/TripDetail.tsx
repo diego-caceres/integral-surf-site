@@ -11,7 +11,7 @@ interface TripContentSectionProps {
   title: string;
   subtitle?: string;
   description: string;
-  subtitle2?: string;
+  subtitle_2?: string;
   description2?: string;
   imageUrl: string;
   imageLeft?: boolean;
@@ -30,21 +30,21 @@ const TripDetail = ({ trip }: { trip: Trip }) => {
 
   const {
     title,
-    title2,
-    headerImage,
-    headerVideo,
-    date,
-    date2,
-    contentSections,
-    finalImage1,
-    finalImage2,
+    title_2,
+    header_image,
+    header_video,
+    date_days,
+    date_month,
+    trip_contents,
+    final_img_1,
+    final_img_2,
   } = trip;
 
-  const classesIfVideo = headerVideo ? "pt-[400px]" : "";
-  const fontTitle2IfVideo = headerVideo
+  const classesIfVideo = header_video ? "pt-[400px]" : "";
+  const fonttitle_2IfVideo = header_video
     ? "text-xl md:text-5xl"
     : "text-4xl md:text-7xl";
-  const fontTitleIfVideo = headerVideo
+  const fontTitleIfVideo = header_video
     ? "text-2xl md:text-6xl"
     : "text-5xl md:text-[150px]";
 
@@ -53,12 +53,12 @@ const TripDetail = ({ trip }: { trip: Trip }) => {
       {/* Header Section */}
       <section className="relative w-full h-[80vh] overflow-hidden">
         {/* Background Video o Image */}
-        {headerVideo ? (
+        {header_video ? (
           <div className="relative w-full h-[80vh] overflow-hidden">
             <iframe
               className="absolute top-0 left-0 w-full h-full"
               src={`https://www.youtube.com/embed/${extractVideoId(
-                headerVideo
+                header_video
               )}?autoplay=1&mute=1`}
               title="YouTube video player"
               frameBorder="0"
@@ -70,7 +70,7 @@ const TripDetail = ({ trip }: { trip: Trip }) => {
         ) : (
           <div className="relative w-full h-[80vh]">
             <Image
-              src={headerImage || "/images/placeholder.jpg"}
+              src={header_image || "/images/placeholder.jpg"}
               alt={`${title} - Header`}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -89,11 +89,11 @@ const TripDetail = ({ trip }: { trip: Trip }) => {
           >
             Viaje al mar
           </span>
-          {title2 && (
+          {title_2 && (
             <h2
-              className={`font-[Eckmannpsych] uppercase text-white ${fontTitle2IfVideo} drop-shadow-2xl  mb-0`}
+              className={`font-[Eckmannpsych] uppercase text-white ${fonttitle_2IfVideo} drop-shadow-2xl  mb-0`}
             >
-              {title2}
+              {title_2}
             </h2>
           )}
           <h2
@@ -104,55 +104,55 @@ const TripDetail = ({ trip }: { trip: Trip }) => {
           <span
             className={`${bebasNeuelFont.className} tracking-[0.2rem] uppercase text-redColor text-2xl md:text-3xl`}
           >
-            {date} {date2}
+            {date_days} {date_month}
           </span>
         </div>
       </section>
 
       {/* Main Content */}
       <TripDetailSection
-        title={trip.section1Title}
-        description={trip.section1Description}
-        secondDescription={trip.section1Description2}
-        imageUrl={trip.section1Image}
+        title={trip.section_1_title}
+        description={trip.section_1_description}
+        secondDescription={trip.section_1_subdescription}
+        imageUrl={trip.section_1_image}
       />
 
       <TripDetailImageSection
-        title={trip.section2Title}
-        description={trip.section2Description}
-        imageUrl={trip.section2Image}
+        title={trip.section_2_title}
+        description={trip.section_2_description}
+        imageUrl={trip.section_2_image}
       />
 
-      {contentSections &&
-        contentSections.map((section, index) => (
+      {trip_contents &&
+        trip_contents.map((section, index) => (
           <TripContentSection
             key={index}
             title={section.title}
             description={section.description}
-            imageUrl={section.imageUrl}
+            imageUrl={section.image_url}
             subtitle={section.subtitle}
-            subtitle2={section.subtitle2}
-            description2={section.description2}
+            subtitle_2={section.subtitle_2}
+            description2={section.description_2}
             imageLeft={index % 2 === 0}
           />
         ))}
 
-      {trip.sectionVideoUrl && (
+      {trip.section_video_url && (
         <TripVideoDetailSection
-          title={trip.sectionVideoTitle}
-          description={trip.sectionVideoDescription}
-          videoUrl={trip.sectionVideoUrl}
+          title={trip.section_video_title}
+          description={trip.section_video_description}
+          videoUrl={trip.section_video_url}
         />
       )}
 
       <PriceComponent
-        promotionalPrice={trip.promoPrice}
-        finalPrice={trip.finalPrice}
-        promoEndMessage={trip.promoEndMessage}
-        finalPriceMessage={trip.finalPriceMessage}
+        promotionalPrice={trip.price_promo}
+        finalPrice={trip.price_final}
+        promoEndMessage={trip.price_promo_message}
+        finalPriceMessage={trip.price_final_message}
       />
 
-      <FinalImagesSection finalImage1={finalImage1} finalImage2={finalImage2} />
+      <FinalImagesSection final_img_1={final_img_1} final_img_2={final_img_2} />
 
       <div className="p-6 sm:p-8 max-w-7xl mx-auto">
         {/* Contact Button */}
@@ -254,7 +254,7 @@ const TripContentSection: React.FC<TripContentSectionProps> = ({
   imageUrl,
   imageLeft = true,
   subtitle = "",
-  subtitle2 = "",
+  subtitle_2 = "",
   description2 = "",
 }) => {
   return (
@@ -297,9 +297,9 @@ const TripContentSection: React.FC<TripContentSectionProps> = ({
           </p>
         </div>
         <div className="mt-10">
-          {subtitle2 && (
+          {subtitle_2 && (
             <h3 className="font-[Eckmannpsych] tracking-[0.1rem] uppercase text-xl font-semibold mb-4">
-              {subtitle2}
+              {subtitle_2}
             </h3>
           )}
           {description2 && (
@@ -372,18 +372,18 @@ const TripVideoDetailSection = ({
 };
 
 const FinalImagesSection = ({
-  finalImage1,
-  finalImage2,
+  final_img_1,
+  final_img_2,
 }: {
-  finalImage1?: string;
-  finalImage2?: string;
+  final_img_1?: string;
+  final_img_2?: string;
 }) => {
   return (
     <section className="h-[700px] md:min-h-[75vh] w-full flex flex-col md:flex-row items-center justify-center">
       <div className="w-full h-[700px] overflow-hidden">
-        {finalImage1 && (
+        {final_img_1 && (
           <Image
-            src={finalImage1}
+            src={final_img_1}
             alt="Final Image 1"
             width={1920}
             height={700}
@@ -392,9 +392,9 @@ const FinalImagesSection = ({
         )}
       </div>
       <div className="w-full h-[700px] overflow-hidden">
-        {finalImage2 && (
+        {final_img_2 && (
           <Image
-            src={finalImage2}
+            src={final_img_2}
             alt="Final Image 2"
             width={1920}
             height={700}
