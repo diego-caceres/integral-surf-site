@@ -34,10 +34,10 @@ export default function AnimatedTripsSection() {
                   {trip.title}
                 </h3>
                 <p className="mt-2 text-sm">
-                  {trip.date} {trip.date2}
+                  {trip.date_days} {trip.date_month}
                 </p>
                 <p className="mt-2 bg-red-600 text-white uppercase p-2 rounded text-[10px]">
-                  {trip.seats} cupos disponibles
+                  X cupos disponibles
                 </p>
               </Link>
             </div>

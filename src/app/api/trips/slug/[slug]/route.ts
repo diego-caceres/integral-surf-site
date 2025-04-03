@@ -5,7 +5,7 @@ import { Trip } from "@/types/trip";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
     // Ensure params is properly awaited if needed

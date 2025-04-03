@@ -40,6 +40,7 @@ const WhatsAppButton: React.FC<WhatsAppButtonProps> = ({
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
