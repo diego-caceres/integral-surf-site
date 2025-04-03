@@ -1,5 +1,3 @@
-import { bebasNeuelFont } from "@/styles/fonts";
-
 export default function TripDetailSkeleton() {
   return (
     <div className="animate-pulse">

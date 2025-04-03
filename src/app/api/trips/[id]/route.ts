@@ -31,7 +31,7 @@ export async function GET(
       .from("trip_contents")
       .select("*")
       .eq("trip_id", id)
-      .order("id", { ascending: true });
+      .order("order", { ascending: true });
 
     if (contentsError) {
       return NextResponse.json(
