@@ -74,7 +74,7 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({ title }) => {
 
       {/* Title */}
       <div className="absolute inset-0 flex items-end md:items-center justify-center">
-        <h1 className="uppercase text-white text-7xl drop-shadow-2xl font-[Eckmannpsych] mb-20 md:mb-0 text-center">
+        <h1 className="uppercase text-white text-7xl drop-shadow-2xl font-[Eckmannpsych] mb-20 md:mb-0">
           {title}
         </h1>
       </div>

@@ -18,17 +18,13 @@ export default function NavBar() {
   return (
     <>
       {/* Botón de menú para móviles */}
-      <div className="md:hidden p-4 items-center grid grid-cols-[15%_70%_15%] sticky top-0 z-40 bg-background/80 backdrop-blur-sm">
-        <button
-          onClick={toggleMenu}
-          aria-label="Abrir menú"
-          className="p-2 hover:bg-accent/10 rounded-full transition-colors"
-        >
+      <div className="md:hidden p-4  items-center grid grid-cols-[15%_70%_15%]">
+        <button onClick={toggleMenu} aria-label="Abrir menú">
           <Bars3Icon className="h-8 w-8 text-primary" />
         </button>
 
         <Link href="/" className="text-center">
-          <span className="text-primary font-[Eckmannpsych] text-2xl hover:text-accent transition-colors">
+          <span className="text-primary font-[Eckmannpsych] text-2xl">
             INTEGRAL SURF
           </span>
         </Link>
@@ -38,24 +34,16 @@ export default function NavBar() {
           alt="Logo Integral Surf"
           width={65}
           height={65}
-          className="self-end hover:scale-105 transition-transform"
+          className="self-end"
         />
       </div>
-
-      {/* Overlay for mobile menu */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 md:hidden"
-          onClick={toggleMenu}
-        />
-      )}
 
       {/* Menú lateral deslizante */}
       <motion.div
         initial={{ x: "-100%" }}
         animate={{ x: isOpen ? "0%" : "-100%" }}
         transition={{ duration: 0.4, ease: "easeInOut" }}
-        className={`fixed inset-y-0 left-0 z-50 bg-background text-primary w-64 shadow-lg flex flex-col p-6 ${
+        className={`fixed inset-0 z-50 bg-background text-primary w-64 shadow-lg flex flex-col p-6 ${
           isOpen ? "block" : "hidden"
         } md:hidden`}
       >
@@ -137,48 +125,39 @@ export default function NavBar() {
       </motion.div>
 
       {/* Navbar para desktop */}
-      <nav className="hidden md:flex justify-between items-center py-8 px-10 sticky top-0 z-40 bg-background/80 backdrop-blur-sm">
-        <Link
-          href="/"
-          className="text-4xl font-serif tracking-wide hover:text-accent transition-colors"
-        >
+      <nav className="hidden md:flex justify-between items-center py-8 px-10">
+        <Link href="/" className="text-4xl font-serif tracking-wide">
           <span className="text-primary font-[Eckmannpsych] font-size">
             INTEGRAL SURF
           </span>
         </Link>
-        <div className="absolute left-1/2 transform -translate-x-1/2">
+        <div className="absolute left-1/2">
           <Image
             src="/images/icons/logo.png"
             alt="Logo Integral Surf"
             width={100}
             height={100}
-            className="hover:scale-105 transition-transform"
+            className="pos"
           />
         </div>
         <ul className="flex gap-6 text-xl">
           <li>
-            <Link
-              href="/viajes"
-              className="hover:text-accent transition-colors"
-            >
+            <Link href="/viajes" className="hover:text-accent">
               VIAJES AL MAR
             </Link>
           </li>
           <li>
-            <Link
-              href="/productos"
-              className="hover:text-accent transition-colors"
-            >
+            <Link href="/productos" className="hover:text-accent">
               TIENDA
             </Link>
           </li>
           <li>
-            <Link href="/blog" className="hover:text-accent transition-colors">
+            <Link href="/blog" className="hover:text-accent">
               BLOG
             </Link>
           </li>
           <li>
-            <Link href="/about" className="hover:text-accent transition-colors">
+            <Link href="/about" className="hover:text-accent">
               NOSOTROS
             </Link>
           </li>
