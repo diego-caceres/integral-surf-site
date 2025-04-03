@@ -3,6 +3,7 @@
 import { Trip } from "@/types/trip";
 import { useEffect, useState } from "react";
 import TripDetail from "./TripDetail";
+import TripDetailSkeleton from "./TripDetailSkeleton";
 
 interface TripDataFetcherProps {
   slug: string;
@@ -47,9 +48,10 @@ export default function TripDetailFetcher({ slug }: TripDataFetcherProps) {
   //   return <div className="text-center text-red-500">Viaje no encontrado.</div>;
   // }
 
-  if (loading) return <div>Loading</div>;
-  if (error) return <div>{error}</div>;
-  if (!trip) return <div>No trip found</div>;
+  if (loading) return <TripDetailSkeleton />;
+  if (error) return <div className="text-center text-red-500 p-8">{error}</div>;
+  if (!trip)
+    return <div className="text-center text-gray-500 p-8">No trip found</div>;
 
   return (
     <div>
