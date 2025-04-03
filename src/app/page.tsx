@@ -31,19 +31,21 @@ export default function HomePage() {
   console.log("viajes", viajes);
 
   return (
-    <section className="mx-auto text-center">
+    <div className="flex flex-col min-h-screen">
       {/* Hero Image Section */}
       <SectionHeader title="Viajes al mar" />
 
-      <SectionOurPurpose />
-      <SectionCalendar />
-      <SectionTheRoad />
-      <SectionCoaching />
-      <SectionExperiences />
-      <SectionInstagram />
+      <div className="container">
+        <SectionOurPurpose />
+        <SectionCalendar />
+        <SectionTheRoad />
+        <SectionCoaching />
+        <SectionExperiences />
+        <SectionInstagram />
+      </div>
 
       <WhatsAppButton onlyBubble />
-    </section>
+    </div>
   );
 }
 
