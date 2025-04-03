@@ -33,7 +33,8 @@ export async function GET(
     const { data: contentData, error: contentError } = await supabaseServer
       .from("trip_contents")
       .select("*")
-      .eq("trip_id", tripData.id);
+      .eq("trip_id", tripData.id)
+      .order("order", { ascending: true });
 
     if (contentError) throw contentError;
 

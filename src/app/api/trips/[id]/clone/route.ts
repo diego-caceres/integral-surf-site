@@ -35,7 +35,8 @@ export async function POST(
       await supabaseServer
         .from("trip_contents")
         .select("*")
-        .eq("trip_id", sourceId);
+        .eq("trip_id", sourceId)
+        .order("order", { ascending: true });
 
     if (sourceContentsError) {
       return NextResponse.json(

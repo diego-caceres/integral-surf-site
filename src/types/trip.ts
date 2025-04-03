@@ -7,6 +7,7 @@ export type TripContent = {
   description_2?: string;
   image_url: string;
   trip_id?: string;
+  order?: number;
 };
 
 export type Trip = {

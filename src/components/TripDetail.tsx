@@ -82,7 +82,7 @@ const TripDetail = ({ trip }: { trip: Trip }) => {
 
         {/* Title */}
         <div
-          className={`${classesIfVideo} absolute inset-0 flex flex-col items-center justify-center`}
+          className={`${classesIfVideo} absolute inset-0 flex flex-col items-center justify-center md:pb-[100px]`}
         >
           <span
             className={`${bebasNeuelFont.className} tracking-[0.2rem] uppercase text-redColor text-2xl md:text-3xl`}
@@ -133,7 +133,7 @@ const TripDetail = ({ trip }: { trip: Trip }) => {
             subtitle={section.subtitle}
             subtitle_2={section.subtitle_2}
             description2={section.description_2}
-            imageLeft={index % 2 === 0}
+            imageLeft={index % 2 !== 0}
           />
         ))}
 
