@@ -1,0 +1,32 @@
+name: Ping Supabase Database
+
+on:
+  schedule:
+    # Runs every 5 days at midnight UTC
+    - cron: "0 0 */5 * *"
+  workflow_dispatch: # This allows you to run the workflow manually from the GitHub UI
+
+jobs:
+  ping-database:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install ts-node (if not already in your dependencies)
+        run: npm install -g ts-node
+
+      - name: Run database ping script
+        run: ts-node scripts/ping-database.ts
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE: ${{ secrets.SUPABASE_SERVICE_ROLE }}
