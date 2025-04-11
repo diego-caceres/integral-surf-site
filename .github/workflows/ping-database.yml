@@ -26,7 +26,7 @@ jobs:
         run: npm install -g ts-node
 
       - name: Run database ping script
-        run: ts-node scripts/ping-database.ts
+        run: ts-node scripts/ping-database.js
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE: ${{ secrets.SUPABASE_SERVICE_ROLE }}

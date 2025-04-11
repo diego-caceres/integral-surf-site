@@ -1,9 +1,10 @@
-import { createClient } from "@supabase/supabase-js";
+/* eslint-disable @typescript-eslint/no-require-imports */
+const { createClient } = require("@supabase/supabase-js");
 
 async function pingDatabase() {
   // Check if environment variables are set
-  const supabaseUrl = process.env.SUPABASE_URL!;
-  const supabaseServiceRole = process.env.SUPABASE_SERVICE_ROLE!;
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const supabaseServiceRole = process.env.SUPABASE_SERVICE_ROLE;
 
   if (!supabaseUrl || !supabaseServiceRole) {
     console.error(
@@ -18,9 +19,9 @@ async function pingDatabase() {
   try {
     // Simple query to wake up the database
     const { error } = await supabase
-      .from("trips")
-      .select("*")
-      .order("order", { ascending: true });
+      .from("trips") // Replace with an actual table in your database
+      .select("count(*)")
+      .limit(1);
 
     if (error) {
       console.error("Database ping failed:", error);
