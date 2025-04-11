@@ -20,8 +20,8 @@ async function pingDatabase() {
     // Simple query to wake up the database
     const { error } = await supabase
       .from("trips") // Replace with an actual table in your database
-      .select("count(*)")
-      .limit(1);
+      .select("*")
+      .order("order", { ascending: true });
 
     if (error) {
       console.error("Database ping failed:", error);
