@@ -15,11 +15,13 @@ export type Trip = {
   slug: string;
   title: string;
   title_2?: string;
+  top_subtitle?: string;
   destiny: string;
   coaching_subtitle: string;
   date_month: string;
   date_days: string;
   header_image: string;
+  header_mobile_image?: string;
   header_video?: string;
   price_promo: number;
   price_final: number;

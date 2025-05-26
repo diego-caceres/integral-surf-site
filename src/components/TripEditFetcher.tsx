@@ -16,12 +16,14 @@ export default function TripEditFetcher(params: TripEditFetcherProps) {
     slug: "",
     title: "",
     title_2: "",
+    top_subtitle: "",
     destiny: "",
     coaching_subtitle: "",
     date_month: "",
     date_days: "",
     header_image: "",
     header_video: "",
+    header_mobile_image: "",
     price_promo: 0,
     price_final: 0,
     price_promo_message: "",
@@ -273,6 +275,19 @@ export default function TripEditFetcher(params: TripEditFetcherProps) {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
+                Subtítulo Superior (opcional)
+              </label>
+              <input
+                type="text"
+                name="top_subtitle"
+                placeholder="Subtítulo encima del título principal"
+                value={form.top_subtitle || ""}
+                onChange={handleChange}
+                className="w-full p-2 border rounded"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Subtítulo Coaching
               </label>
               <input
@@ -352,6 +367,19 @@ export default function TripEditFetcher(params: TripEditFetcherProps) {
                 name="header_video"
                 placeholder="URL del Video Principal"
                 value={form.header_video}
+                onChange={handleChange}
+                className="w-full p-2 border rounded"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Imagen Principal (Móvil)
+              </label>
+              <input
+                type="text"
+                name="header_mobile_image"
+                placeholder="URL de la Imagen Principal para Móvil (opcional)"
+                value={form.header_mobile_image || ""}
                 onChange={handleChange}
                 className="w-full p-2 border rounded"
               />

@@ -31,7 +31,7 @@ const TripDetail = ({ trip }: { trip: Trip }) => {
   const {
     title,
     title_2,
-    header_image,
+    top_subtitle,
     header_video,
     date_days,
     date_month,
@@ -69,14 +69,26 @@ const TripDetail = ({ trip }: { trip: Trip }) => {
           </div>
         ) : (
           <div className="relative w-full h-[80vh]">
-            <Image
-              src={header_image || "/images/placeholder.jpg"}
-              alt={`${title} - Header`}
-              fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              className="object-cover"
-              priority
-            />
+            <picture>
+              {trip.header_mobile_image && (
+                <source
+                  media="(max-width: 768px)"
+                  srcSet={trip.header_mobile_image}
+                />
+              )}
+              <source
+                media="(min-width: 769px)"
+                srcSet={trip.header_image || "/images/placeholder.jpg"}
+              />
+              <Image
+                src={trip.header_image || "/images/placeholder.jpg"}
+                alt={`${title} - Header`}
+                fill
+                sizes="100vw"
+                className="object-cover"
+                priority
+              />
+            </picture>
           </div>
         )}
 
@@ -87,7 +99,7 @@ const TripDetail = ({ trip }: { trip: Trip }) => {
           <span
             className={`${bebasNeuelFont.className} tracking-[0.2rem] uppercase text-redColor text-2xl md:text-3xl`}
           >
-            Viaje al mar
+            {top_subtitle}
           </span>
           {title_2 && (
             <h2
