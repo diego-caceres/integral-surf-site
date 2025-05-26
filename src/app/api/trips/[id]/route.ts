@@ -147,22 +147,35 @@ export async function DELETE(
   try {
     const { id } = await params;
 
-    // Delete associated contents first (to maintain referential integrity)
-    await supabaseServer.from("trip_contents").delete().eq("trip_id", id);
+    // Do NOT delete associated contents for a soft delete
+    // await supabaseServer.from("trip_contents").delete().eq("trip_id", id);
 
-    // Then delete the trip
-    const { error } = await supabaseServer.from("trips").delete().eq("id", id);
+    // Update the trip to mark it as deleted
+    const { data: updatedTrip, error } = await supabaseServer
+      .from("trips")
+      .update({ is_deleted: true })
+      .eq("id", id)
+      .select()
+      .single();
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
+    if (!updatedTrip) {
+      return NextResponse.json(
+        { error: "Trip not found or could not be updated" },
+        { status: 404 }
+      );
+    }
+
     return NextResponse.json({
       success: true,
-      message: "Trip deleted successfully",
+      message: "Trip marked as deleted successfully",
+      trip: updatedTrip, // Return the updated trip
     });
   } catch (error) {
-    console.error("Error deleting trip:", error);
+    console.error("Error soft deleting trip:", error); // Updated log message
     return NextResponse.json(
       { error: "Error processing request", details: String(error) },
       { status: 500 }

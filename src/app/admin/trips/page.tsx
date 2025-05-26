@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { toast } from "react-toastify";
-import { FaEdit, FaTrash, FaPlus, FaCopy } from "react-icons/fa";
+import { FaEdit, FaTrash, FaPlus, FaCopy, FaUndo } from "react-icons/fa";
 
 type Trip = {
   id: string;
@@ -13,12 +13,14 @@ type Trip = {
   date_month: string;
   date_days: string;
   order: number;
+  is_deleted?: boolean;
 };
 
 export default function TripsManagement() {
   const [trips, setTrips] = useState<Trip[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showDeletedTrips, setShowDeletedTrips] = useState(false);
 
   useEffect(() => {
     const fetchTrips = async () => {
@@ -58,8 +60,12 @@ export default function TripsManagement() {
       }
 
       // Update the trips list after deletion
-      setTrips(trips.filter((trip) => trip.id !== id));
-      toast.success("Viaje eliminado correctamente");
+      setTrips(
+        trips.map((trip) =>
+          trip.id === id ? { ...trip, is_deleted: true } : trip
+        )
+      );
+      toast.success("Viaje eliminado correctamente (marcado como eliminado)");
     } catch (err) {
       console.error("Error deleting trip:", err);
       toast.error("Error al eliminar el viaje");
@@ -90,6 +96,33 @@ export default function TripsManagement() {
     }
   };
 
+  const handleRestoreTrip = async (id: string) => {
+    if (!window.confirm("¿Estás seguro de que quieres restaurar este viaje?")) {
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/trips/${id}/restore`, {
+        method: "POST",
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to restore trip");
+      }
+
+      // Update the trips list after restoration
+      setTrips(
+        trips.map((trip) =>
+          trip.id === id ? { ...trip, is_deleted: false } : trip
+        )
+      );
+      toast.success("Viaje restaurado correctamente");
+    } catch (err) {
+      console.error("Error restoring trip:", err);
+      toast.error("Error al restaurar el viaje");
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -117,25 +150,44 @@ export default function TripsManagement() {
     <div className="container mx-auto p-6">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Administración de Viajes</h1>
-        <Link
-          href="/nuevo-viaje"
-          className="flex items-center bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
-        >
-          <FaPlus className="mr-2" /> Nuevo Viaje
-        </Link>
-      </div>
-
-      {trips.length === 0 ? (
-        <div className="text-center py-12 bg-gray-100 rounded-lg">
-          <p className="text-xl text-gray-600 mb-4">
-            No hay viajes disponibles
-          </p>
+        <div className="flex items-center space-x-4">
+          <label className="flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              checked={showDeletedTrips}
+              onChange={() => setShowDeletedTrips(!showDeletedTrips)}
+              className="form-checkbox h-5 w-5 text-primary rounded"
+            />
+            <span className="ml-2 text-sm text-gray-700">
+              Mostrar Eliminados
+            </span>
+          </label>
           <Link
             href="/nuevo-viaje"
-            className="inline-flex items-center bg-primary text-white px-6 py-2 rounded-md hover:bg-opacity-90"
+            className="flex items-center bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
           >
-            <FaPlus className="mr-2" /> Crear tu primer viaje
+            <FaPlus className="mr-2" /> Nuevo Viaje
           </Link>
+        </div>
+      </div>
+
+      {trips.filter((trip) =>
+        showDeletedTrips ? trip.is_deleted : !trip.is_deleted
+      ).length === 0 ? (
+        <div className="text-center py-12 bg-gray-100 rounded-lg">
+          <p className="text-xl text-gray-600 mb-4">
+            {showDeletedTrips
+              ? "No hay viajes eliminados"
+              : "No hay viajes disponibles"}
+          </p>
+          {!showDeletedTrips && (
+            <Link
+              href="/nuevo-viaje"
+              className="inline-flex items-center bg-primary text-white px-6 py-2 rounded-md hover:bg-opacity-90"
+            >
+              <FaPlus className="mr-2" /> Crear tu primer viaje
+            </Link>
+          )}
         </div>
       ) : (
         <div className="overflow-x-auto bg-white shadow-md rounded-lg">
@@ -181,57 +233,79 @@ export default function TripsManagement() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {trips.map((trip) => (
-                <tr key={trip.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">
-                      {trip.destiny}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{trip.title}</div>
-                    {trip.title_2 && (
-                      <div className="text-sm text-gray-500">
-                        {trip.title_2}
+              {trips
+                .filter((trip) =>
+                  showDeletedTrips ? trip.is_deleted : !trip.is_deleted
+                )
+                .map((trip) => (
+                  <tr
+                    key={trip.id}
+                    className={`hover:bg-gray-50 ${
+                      trip.is_deleted ? "bg-red-50 opacity-70" : ""
+                    }`}
+                  >
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm font-medium text-gray-900">
+                        {trip.destiny}
                       </div>
-                    )}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">
-                      {trip.date_month} {trip.date_days}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{trip.order}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-500">{trip.slug}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <div className="flex justify-end space-x-2">
-                      <Link
-                        href={`/admin/trips/edit/${trip.id}`}
-                        className="text-blue-600 hover:text-blue-900 p-2"
-                      >
-                        <FaEdit />
-                      </Link>
-                      <button
-                        onClick={() => handleCloneTrip(trip.id)}
-                        className="text-green-600 hover:text-green-900 p-2"
-                        title="Clonar viaje"
-                      >
-                        <FaCopy />
-                      </button>
-                      <button
-                        onClick={() => handleDeleteTrip(trip.id)}
-                        className="text-red-600 hover:text-red-900 p-2"
-                      >
-                        <FaTrash />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-900">{trip.title}</div>
+                      {trip.title_2 && (
+                        <div className="text-sm text-gray-500">
+                          {trip.title_2}
+                        </div>
+                      )}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-900">
+                        {trip.date_month} {trip.date_days}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-900">{trip.order}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-500">{trip.slug}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <div className="flex justify-end space-x-2">
+                        {trip.is_deleted ? (
+                          <button
+                            onClick={() => handleRestoreTrip(trip.id)}
+                            className="text-yellow-600 hover:text-yellow-900 p-2"
+                            title="Restaurar viaje"
+                          >
+                            <FaUndo />
+                          </button>
+                        ) : (
+                          <>
+                            <Link
+                              href={`/admin/trips/edit/${trip.id}`}
+                              className="text-blue-600 hover:text-blue-900 p-2"
+                            >
+                              <FaEdit />
+                            </Link>
+                            <button
+                              onClick={() => handleCloneTrip(trip.id)}
+                              className="text-green-600 hover:text-green-900 p-2"
+                              title="Clonar viaje"
+                            >
+                              <FaCopy />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteTrip(trip.id)}
+                              className="text-red-600 hover:text-red-900 p-2"
+                              title="Eliminar viaje"
+                            >
+                              <FaTrash />
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>

@@ -54,6 +54,7 @@ export async function POST(
       id: newTripId,
       title: `${sourceTrip.title} (Copia)`,
       slug: `${sourceTrip.slug}-copy-${Date.now().toString().slice(-6)}`, // Ensure unique slug
+      is_deleted: false, // Ensure cloned trip is not deleted
     };
 
     // 5. Insert the cloned trip
