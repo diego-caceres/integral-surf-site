@@ -1,23 +1,22 @@
 "use client";
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react"; // No longer needed
 
 import SectionCalendar from "@/components/SectionCalendar";
 
 export default function Viajes() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [viajes, setViajes] = useState<any[]>([]);
+  // const [viajes, setViajes] = useState<any[]>([]); // No longer needed
 
-  useEffect(() => {
-    const fetchViajes = async () => {
-      const res = await fetch("/api/trips"); // 🔐 Ahora consultamos nuestra API segura
-      const data = await res.json();
-      setViajes(data);
-    };
+  // useEffect(() => { // No longer needed
+  //   const fetchViajes = async () => {
+  //     const res = await fetch("/api/trips");
+  //     const data = await res.json();
+  //     setViajes(data);
+  //   };
+  //   fetchViajes();
+  // }, []);
 
-    fetchViajes();
-  }, []);
-
-  console.log("Viajes en el servidor", viajes);
+  // console.log("Viajes en el servidor", viajes); // No longer needed
 
   return (
     <>

@@ -20,7 +20,9 @@ const SectionCalendar: React.FC = () => {
         }
 
         const data = await res.json();
-        setTrips(data);
+        // Filter out soft-deleted trips
+        const activeTrips = data.filter((trip: Trip) => !trip.is_deleted);
+        setTrips(activeTrips);
       } catch (err) {
         console.error("Error fetching trips:", err);
         setError(err instanceof Error ? err.message : "An error occurred");
@@ -67,12 +69,15 @@ const SectionCalendar: React.FC = () => {
   }
 
   // Split trips into two groups for the grid layout
-  const firstHalf = trips.slice(0, Math.floor(trips.length / 2));
-  const secondHalf = trips.slice(
-    Math.floor(trips.length / 2),
-    trips.length - 1
+  const activeTrips = trips; // Assuming 'trips' state already contains only active ones
+
+  const firstHalf = activeTrips.slice(0, Math.floor(activeTrips.length / 2));
+  const secondHalf = activeTrips.slice(
+    Math.floor(activeTrips.length / 2),
+    activeTrips.length - 1 // Corrected to activeTrips.length -1
   );
-  const lastTrip = trips.length > 0 ? trips[trips.length - 1] : null;
+  const lastTrip =
+    activeTrips.length > 0 ? activeTrips[activeTrips.length - 1] : null;
 
   return (
     <section className="w-full md:h-[90vh] md:px-20 pt-10 md:py-20">

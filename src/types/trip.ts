@@ -41,6 +41,7 @@ export type Trip = {
   final_img_2: string;
   order: number;
   trip_contents?: TripContent[];
+  is_deleted?: boolean;
 };
 
 // export interface TripContent {

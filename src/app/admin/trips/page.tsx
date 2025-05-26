@@ -2,7 +2,14 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { toast } from "react-toastify";
-import { FaEdit, FaTrash, FaPlus, FaCopy, FaUndo } from "react-icons/fa";
+import {
+  FaEdit,
+  FaTrash,
+  FaPlus,
+  FaCopy,
+  FaUndo,
+  FaExternalLinkAlt,
+} from "react-icons/fa";
 
 type Trip = {
   id: string;
@@ -270,6 +277,16 @@ export default function TripsManagement() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <div className="flex justify-end space-x-2">
+                        <Link
+                          href={`/viajes/${trip.slug}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-gray-500 hover:text-gray-800 p-2"
+                          title="Ver página pública"
+                        >
+                          <FaExternalLinkAlt />
+                        </Link>
+
                         {trip.is_deleted ? (
                           <button
                             onClick={() => handleRestoreTrip(trip.id)}
