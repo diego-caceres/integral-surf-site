@@ -6,14 +6,21 @@ import { motion } from "framer-motion";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import Image from "next/image";
+import MegaMenuItem from "./MegaMenuItem";
 
 export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
-  const storeDisabled = true;
-  const blogDisabled = true;
+  const storeDisabled = false;
+  const blogDisabled = false;
+
+  const placeholderImages = [
+    "/images/menu/placeholder_1.jpg",
+    "/images/menu/placeholder_2.jpg",
+    "/images/menu/placeholder_3.jpg",
+  ];
 
   return (
     <>
@@ -125,13 +132,13 @@ export default function NavBar() {
       </motion.div>
 
       {/* Navbar para desktop */}
-      <nav className="hidden md:flex justify-between items-center py-8 px-10">
+      <nav className="hidden md:flex justify-between items-center py-8 px-10 relative">
         <Link href="/" className="text-4xl font-serif tracking-wide">
           <span className="text-primary font-[Eckmannpsych] font-size">
             INTEGRAL SURF
           </span>
         </Link>
-        <div className="absolute left-1/2">
+        <div className="absolute left-1/2 transform -translate-x-1/2">
           <Image
             src="/images/icons/logo.png"
             alt="Logo Integral Surf"
@@ -140,27 +147,72 @@ export default function NavBar() {
             className="pos"
           />
         </div>
-        <ul className="flex gap-6 text-xl">
-          <li>
-            <Link href="/viajes" className="hover:text-accent">
-              VIAJES AL MAR
-            </Link>
-          </li>
-          <li>
-            <Link href="/productos" className="hover:text-accent">
-              TIENDA
-            </Link>
-          </li>
-          <li>
-            <Link href="/blog" className="hover:text-accent">
-              BLOG
-            </Link>
-          </li>
-          <li>
-            <Link href="/about" className="hover:text-accent">
-              NOSOTROS
-            </Link>
-          </li>
+        <ul className="flex gap-x-8 text-xl items-center">
+          <MegaMenuItem
+            title="VIAJES AL MAR"
+            href="/viajes"
+            images={placeholderImages}
+          >
+            <div className="grid grid-cols-2 gap-x-8">
+              <div>
+                <h3 className="font-semibold text-lg mb-3 text-primary">
+                  DESTINOS 2025
+                </h3>
+                <ul className="space-y-2">
+                  {[
+                    "La Paloma, Uruguay",
+                    "Cabo Polonio, Uruguay",
+                    "Garopaba, Brasil",
+                    "Punta del Diablo, Uruguay",
+                    "Santa Teresa, Costa Rica",
+                  ].map((destino) => (
+                    <li key={destino}>
+                      <Link href="#" className="hover:text-accent text-sm">
+                        {destino}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <h3 className="font-semibold text-lg mb-3 text-primary">
+                  QUÉ APRENDERÁS
+                </h3>
+                <ul className="space-y-2">
+                  {["Coaching", "Yoga", "Naturaleza"].map((item) => (
+                    <li key={item}>
+                      <Link href="#" className="hover:text-accent text-sm">
+                        {item}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </MegaMenuItem>
+
+          <MegaMenuItem
+            title="TIENDA"
+            href="/productos"
+            images={placeholderImages}
+          >
+            <p className="text-primary">Próximamente...</p>
+          </MegaMenuItem>
+
+          <MegaMenuItem title="BLOG" href="/blog" images={placeholderImages}>
+            <p className="text-primary">Próximamente...</p>
+          </MegaMenuItem>
+
+          <MegaMenuItem
+            title="NOSOTROS"
+            href="/about"
+            images={placeholderImages}
+          >
+            <p className="text-center text-primary font-semibold mt-2">
+              Conoce al equipo
+            </p>
+          </MegaMenuItem>
+
           {/* <li>
             <Link href="/admin/trips" className="hover:text-accent">
               ADMIN

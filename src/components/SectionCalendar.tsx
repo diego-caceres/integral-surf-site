@@ -37,7 +37,7 @@ const SectionCalendar: React.FC = () => {
   if (isLoading) {
     return (
       <section className="w-full md:h-[90vh] md:px-20 pt-10 md:py-20">
-        <LogoLoader size={60} />;
+        <LogoLoader size={60} />
       </section>
     );
   }
@@ -71,13 +71,23 @@ const SectionCalendar: React.FC = () => {
   // Split trips into two groups for the grid layout
   const activeTrips = trips; // Assuming 'trips' state already contains only active ones
 
-  const firstHalf = activeTrips.slice(0, Math.floor(activeTrips.length / 2));
-  const secondHalf = activeTrips.slice(
-    Math.floor(activeTrips.length / 2),
-    activeTrips.length - 1 // Corrected to activeTrips.length -1
-  );
-  const lastTrip =
-    activeTrips.length > 0 ? activeTrips[activeTrips.length - 1] : null;
+  let firstHalf: Trip[];
+  let secondHalf: Trip[];
+  let lastTrip: Trip | null = null;
+
+  if (activeTrips.length % 2 !== 0 && activeTrips.length > 0) {
+    // Odd number of trips: save the last one for the center
+    lastTrip = activeTrips[activeTrips.length - 1];
+    const remainingTrips = activeTrips.slice(0, activeTrips.length - 1);
+    firstHalf = remainingTrips.slice(0, remainingTrips.length / 2);
+    secondHalf = remainingTrips.slice(remainingTrips.length / 2);
+  } else {
+    // Even number of trips (or zero): split them into two columns
+    firstHalf = activeTrips.slice(0, activeTrips.length / 2);
+    secondHalf = activeTrips.slice(activeTrips.length / 2);
+    // Ensure lastTrip is null if it's an even number, so it doesn't render
+    lastTrip = null;
+  }
 
   return (
     <section className="w-full md:h-[90vh] md:px-20 pt-10 md:py-20">
