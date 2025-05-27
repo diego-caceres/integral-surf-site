@@ -3,10 +3,10 @@ import { supabaseServer } from "@/lib/supabaseServer";
 
 export async function POST(
   request: NextRequest, // Added request parameter, even if not used, to match convention
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params; // Direct access, no need to await params if passed like this by Next.js file routing
+    const { id } = await params;
 
     const { data: restoredTrip, error } = await supabaseServer
       .from("trips")
