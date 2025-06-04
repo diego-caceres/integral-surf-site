@@ -7,7 +7,7 @@ interface MegaMenuItemProps {
   title: string;
   href: string;
   children?: ReactNode; // Content for the dropdown's main section
-  images?: string[]; // Array of image URLs for the dropdown
+  images?: { url: string; alt: string }[]; // Array of image objects for the dropdown
   disabled?: boolean;
   className?: string;
 }
@@ -94,11 +94,11 @@ const MegaMenuItem = ({
             >
               {images && images.length > 0 && (
                 <div className="flex gap-x-4 w-[60%] flex-shrink-0">
-                  {images.slice(0, 3).map((src, index) => (
+                  {images.slice(0, 3).map((image, index) => (
                     <div key={index} className="w-1/3">
                       <Image
-                        src={src}
-                        alt={`${title} promotional image ${index + 1}`}
+                        src={image.url}
+                        alt={image.alt}
                         width={200}
                         height={150}
                         className="object-cover rounded-md w-full h-40"

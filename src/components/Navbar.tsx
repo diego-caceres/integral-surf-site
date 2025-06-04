@@ -1,26 +1,49 @@
-// "use client";
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import Image from "next/image";
 import MegaMenuItem from "./MegaMenuItem";
 
+// Define the expected structure for image objects
+interface MenuItemImage {
+  url: string;
+  alt: string;
+}
+
+// Define the structure for the fetched data: an object where keys are menu titles
+interface MenuImagesData {
+  [key: string]: MenuItemImage[];
+}
+
 export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [menuItemImages, setMenuItemImages] = useState<MenuImagesData>({}); // State for images
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
   const storeDisabled = false;
   const blogDisabled = false;
 
-  const placeholderImages = [
-    "/images/menu/placeholder_1.jpg",
-    "/images/menu/placeholder_2.jpg",
-    "/images/menu/placeholder_3.jpg",
-  ];
+  useEffect(() => {
+    const fetchMenuItems = async () => {
+      try {
+        const response = await fetch("/api/menu-images");
+        if (!response.ok) {
+          throw new Error("Failed to fetch menu images");
+        }
+        const data: MenuImagesData = await response.json();
+        setMenuItemImages(data);
+      } catch (error) {
+        console.error("Error fetching menu images:", error);
+        // Optionally, set some default/fallback images or handle error state
+      }
+    };
+
+    fetchMenuItems();
+  }, []);
 
   return (
     <>
@@ -151,7 +174,7 @@ export default function NavBar() {
           <MegaMenuItem
             title="VIAJES AL MAR"
             href="/viajes"
-            images={placeholderImages}
+            images={menuItemImages["VIAJES AL MAR"]}
           >
             <div className="grid grid-cols-2 gap-x-8">
               <div>
@@ -194,19 +217,23 @@ export default function NavBar() {
           <MegaMenuItem
             title="TIENDA"
             href="/productos"
-            images={placeholderImages}
+            images={menuItemImages["TIENDA"]}
           >
             <p className="text-primary">Próximamente...</p>
           </MegaMenuItem>
 
-          <MegaMenuItem title="BLOG" href="/blog" images={placeholderImages}>
+          <MegaMenuItem
+            title="BLOG"
+            href="/blog"
+            images={menuItemImages["BLOG"]}
+          >
             <p className="text-primary">Próximamente...</p>
           </MegaMenuItem>
 
           <MegaMenuItem
             title="NOSOTROS"
             href="/about"
-            images={placeholderImages}
+            images={menuItemImages["NOSOTROS"]}
           ></MegaMenuItem>
 
           {/* <li>
