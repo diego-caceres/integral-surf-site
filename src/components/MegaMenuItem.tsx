@@ -60,14 +60,18 @@ const MegaMenuItem = ({
   return (
     <li
       ref={liRef}
-      className={`relative ${className || ""}`}
+      className={`relative py-2 ${className || ""}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       <Link
         href={href}
-        className={`hover:text-accent transition-colors duration-200 ${
-          disabled ? "pointer-events-none text-gray-400" : "text-primary"
+        className={`transition-colors duration-200 pb-1 ${
+          disabled
+            ? "pointer-events-none text-gray-400"
+            : isHovered
+            ? "text-primary border-b-2 border-black cursor-default"
+            : "text-primary hover:text-accent"
         }`}
         aria-disabled={disabled}
       >
@@ -83,9 +87,11 @@ const MegaMenuItem = ({
             variants={dropdownVariants}
             className="absolute top-full left-0 mt-5 p-6 bg-white shadow-xl z-30 text-sm text-primary w-screen min-h-[250px]" // Full width and min height
           >
-            <div className="flex gap-x-6 mx-auto w-full">
-              {" "}
-              {/* Added container to center content within full-width dropdown */}
+            <div
+              className={`flex ${
+                children ? "gap-x-6" : "justify-center"
+              } mx-auto w-full`}
+            >
               {images && images.length > 0 && (
                 <div className="flex gap-x-4 w-[60%] flex-shrink-0">
                   {images.slice(0, 3).map((src, index) => (
@@ -101,7 +107,9 @@ const MegaMenuItem = ({
                   ))}
                 </div>
               )}
-              <div className="flex-1 min-w-0 pl-16">{children}</div>
+              {children && (
+                <div className="flex-1 min-w-0 pl-16">{children}</div>
+              )}
             </div>
           </motion.div>
         )}

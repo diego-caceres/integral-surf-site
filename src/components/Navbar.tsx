@@ -207,11 +207,7 @@ export default function NavBar() {
             title="NOSOTROS"
             href="/about"
             images={placeholderImages}
-          >
-            <p className="text-center text-primary font-semibold mt-2">
-              Conoce al equipo
-            </p>
-          </MegaMenuItem>
+          ></MegaMenuItem>
 
           {/* <li>
             <Link href="/admin/trips" className="hover:text-accent">
