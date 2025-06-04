@@ -19,6 +19,12 @@ const adminSections: AdminSection[] = [
     icon: PhotoIcon,
   },
   {
+    href: "/admin/section-header-images",
+    title: "Administrar Imágenes del Encabezado",
+    description: "Gestiona las imágenes del carrusel principal (web y móvil).",
+    icon: PhotoIcon,
+  },
+  {
     href: "/admin/trips",
     title: "Administra los Trips",
     description: "Añade, edita o elimina viajes.",
