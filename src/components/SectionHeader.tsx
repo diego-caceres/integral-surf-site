@@ -15,10 +15,6 @@ interface ApiImageData {
   mobile: SectionImage[];
 }
 
-interface SectionHeaderProps {
-  title: string;
-}
-
 // Define default images to display while loading
 const defaultImageUrls = [
   "/images/home/header1.jpg",
@@ -34,43 +30,68 @@ const defaultSectionImages: SectionImage[] = defaultImageUrls.map(
   })
 );
 
-const SectionHeader: React.FC<SectionHeaderProps> = ({ title }) => {
+// Adjust to not expect title prop
+const SectionHeader: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [activeImages, setActiveImages] =
     useState<SectionImage[]>(defaultSectionImages);
   const [webImages, setWebImages] = useState<SectionImage[]>([]);
   const [mobileImages, setMobileImages] = useState<SectionImage[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true); // Combined loading state for images and title
+  const [headerTitle, setHeaderTitle] = useState<string>(""); // State for the title
   const [error, setError] = useState<string | null>(null);
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
 
-  // Effect for fetching images
+  // Effect for fetching images and title
   useEffect(() => {
-    const fetchImages = async () => {
-      // setIsLoading(true); // Already true by default, will be set to false in finally
+    const fetchData = async () => {
+      setIsLoading(true);
       setError(null);
       try {
-        const response = await fetch("/api/section-header-images");
-        if (!response.ok) {
+        // Fetch Images
+        const imageResponse = await fetch("/api/section-header-images");
+        if (!imageResponse.ok) {
           throw new Error(
-            `Failed to fetch images: ${response.statusText} (${response.status})`
+            `Failed to fetch images: ${imageResponse.statusText} (${imageResponse.status})`
           );
         }
-        const data: ApiImageData = await response.json();
-        setWebImages(data.web || []);
-        setMobileImages(data.mobile || []);
+        const imageData: ApiImageData = await imageResponse.json();
+        setWebImages(imageData.web || []);
+        setMobileImages(imageData.mobile || []);
+
+        // Fetch Title
+        const titleResponse = await fetch(
+          "/api/config/section_header_main_title"
+        );
+        if (!titleResponse.ok) {
+          // If title is not found (404) or other error, we can set a default or leave it empty
+          if (titleResponse.status === 404) {
+            console.warn(
+              "Main title configuration not found, using empty title."
+            );
+            setHeaderTitle(""); // Or a default title like "Welcome"
+          } else {
+            throw new Error(
+              `Failed to fetch title: ${titleResponse.statusText} (${titleResponse.status})`
+            );
+          }
+        } else {
+          const titleData = await titleResponse.json();
+          setHeaderTitle(titleData.value || ""); // Ensure value exists
+        }
       } catch (e) {
         const errorMessage =
           e instanceof Error ? e.message : "An unknown error occurred";
-        console.error("Error fetching section header images:", errorMessage);
+        console.error("Error fetching section header data:", errorMessage);
         setError(errorMessage);
         // Keep webImages and mobileImages empty on error, resize effect will handle it
+        // Also, headerTitle will remain its initial value or the value from a partially successful fetch
       } finally {
         setIsLoading(false); // Fetch attempt is complete
       }
     };
-    fetchImages();
+    fetchData();
   }, []);
 
   // Effect for determining and setting active images based on screen size and fetched data
@@ -127,7 +148,7 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({ title }) => {
       mediaQuery.removeEventListener("change", handleResize);
     };
     // Rerun when fetched image data changes, or loading state transitions
-  }, [webImages, mobileImages, isLoading, activeImages]);
+  }, [webImages, mobileImages, isLoading, activeImages]); // isLoading here refers to the combined loading state
 
   // Effect for slideshow interval
   useEffect(() => {
@@ -176,7 +197,8 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({ title }) => {
         <p className="text-red-500 text-xl">Error: {error}</p>
         <div className="absolute inset-0 flex items-end md:items-center justify-center">
           <h1 className="uppercase text-gray-700 text-7xl drop-shadow-lg font-[Eckmannpsych] mb-20 md:mb-0">
-            {title}
+            {/* Display fetched title or a fallback if error specifically affected title and not images */}
+            {headerTitle || "Error Loading Title"}
           </h1>
         </div>
       </section>
@@ -184,13 +206,15 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({ title }) => {
   }
 
   // Show if there are no images to display AFTER loading/fetching attempt and no error
+  // This condition might need adjustment if title is critical for display
   if (activeImages.length === 0 && !isLoading && !error) {
     return (
       <section className="relative w-full h-[75vh] flex items-center justify-center bg-gray-300">
         <p className="text-gray-800 text-xl">No images to display.</p>
         <div className="absolute inset-0 flex items-end md:items-center justify-center">
           <h1 className="uppercase text-gray-700 text-7xl drop-shadow-lg font-[Eckmannpsych] mb-20 md:mb-0">
-            {title}
+            {/* Display fetched title or a fallback */}
+            {headerTitle || " "}
           </h1>
         </div>
       </section>
@@ -220,7 +244,7 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({ title }) => {
 
       <div className="absolute inset-0 flex items-end md:items-center justify-center">
         <h1 className="uppercase text-white text-7xl drop-shadow-2xl font-[Eckmannpsych] mb-20 md:mb-0">
-          {title}
+          {headerTitle}
         </h1>
       </div>
 

@@ -1,7 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { PhotoIcon, DocumentTextIcon } from "@heroicons/react/24/outline"; // Example icons
+import {
+  PhotoIcon,
+  DocumentTextIcon,
+  Cog8ToothIcon, // Example for a settings/configurations icon
+} from "@heroicons/react/24/outline"; // Example icons
 
 interface AdminSection {
   href: string;
@@ -29,6 +33,12 @@ const adminSections: AdminSection[] = [
     title: "Administra los Trips",
     description: "Añade, edita o elimina viajes.",
     icon: DocumentTextIcon,
+  },
+  {
+    href: "/admin/configurations",
+    title: "Configuraciones Generales",
+    description: "Administra los valores de configuración general del sitio.",
+    icon: Cog8ToothIcon, // Using a settings icon
   },
   // Add more admin sections here as needed
 ];

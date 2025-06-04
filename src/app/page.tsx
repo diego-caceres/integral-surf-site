@@ -29,7 +29,7 @@ export default function HomePage() {
   return (
     <section className="mx-auto text-center">
       {/* Hero Image Section */}
-      <SectionHeader title="Viajes al mar" />
+      <SectionHeader />
 
       <SectionOurPurpose />
       <SectionCalendar />
