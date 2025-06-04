@@ -1,11 +1,11 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { supabaseServer } from "../../../../lib/supabaseServer"; // Using Supabase client
 
 export async function GET(
-  request: Request,
-  { params }: { params: { key: string } }
+  request: NextRequest,
+  context: { params: { key: string } }
 ) {
-  const { key } = params;
+  const { key } = context.params;
 
   if (!key) {
     return NextResponse.json(
@@ -59,10 +59,10 @@ export async function GET(
 }
 
 export async function PUT(
-  request: Request,
-  { params }: { params: { key: string } }
+  request: NextRequest,
+  context: { params: { key: string } }
 ) {
-  const { key } = params;
+  const { key } = context.params;
   let body;
   try {
     body = await request.json();
@@ -133,10 +133,10 @@ export async function PUT(
 }
 
 export async function DELETE(
-  request: Request,
-  { params }: { params: { key: string } }
+  request: NextRequest,
+  context: { params: { key: string } }
 ) {
-  const { key } = params;
+  const { key } = context.params;
 
   if (!key) {
     return NextResponse.json(
