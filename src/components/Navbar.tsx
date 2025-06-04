@@ -172,13 +172,13 @@ export default function NavBar() {
             INTEGRAL SURF
           </span>
         </Link>
-        <div className="absolute left-1/2 transform -translate-x-1/2">
+        <div className="absolute left-1/2 transform -translate-x-1/2 z-40">
           <Image
             src="/images/icons/logo.png"
             alt="Logo Integral Surf"
             width={100}
             height={100}
-            className="pos"
+            className="pos z-40"
           />
         </div>
         <ul className="flex gap-x-8 text-xl items-center">

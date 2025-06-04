@@ -25,7 +25,7 @@ const MegaMenuItem = ({
   const [dynamicXOffset, setDynamicXOffset] = useState(0);
 
   const dropdownVariants = {
-    hidden: { opacity: 0, y: 10, display: "none" },
+    hidden: { opacity: 0, y: 0, display: "none" },
     visible: {
       opacity: 1,
       y: 0,
@@ -34,7 +34,7 @@ const MegaMenuItem = ({
     },
     exit: {
       opacity: 0,
-      y: 10,
+      y: 0,
       transition: { duration: 0.15 },
       transitionEnd: { display: "none" },
     },
@@ -85,7 +85,7 @@ const MegaMenuItem = ({
             animate="visible"
             exit="exit"
             variants={dropdownVariants}
-            className="absolute top-full left-0 mt-5 p-6 bg-white shadow-xl z-30 text-sm text-primary w-screen min-h-[250px]" // Full width and min height
+            className="absolute top-full left-0 mt-0 p-6 bg-white shadow-xl z-30 text-sm text-primary w-screen min-h-[250px]" // Full width and min height
           >
             <div
               className={`flex ${
