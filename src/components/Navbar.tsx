@@ -18,6 +18,17 @@ interface MenuImagesData {
   [key: string]: MenuItemImage[];
 }
 
+const menuTripItems = [
+  { name: "La Paloma, Uruguay ", url: "/viajes/la-paloma-marzo" },
+  { name: "Cabo Polonio, Uruguay ", url: "/viajes/cabo-polonio-abril" },
+  { name: "Garopaba, Brasil ", url: "/viajes/garopaba-octubre" },
+  {
+    name: "Punta del Diablo, Uruguay ",
+    url: "/viajes/punta-del-diablo-noviembre",
+  },
+  { name: "Santa Teresa, Costa Rica ", url: "/viajes/costa-rica-junio" },
+];
+
 export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const [menuItemImages, setMenuItemImages] = useState<MenuImagesData>({}); // State for images
@@ -182,16 +193,13 @@ export default function NavBar() {
                   DESTINOS 2025
                 </h3>
                 <ul className="space-y-2">
-                  {[
-                    "La Paloma, Uruguay",
-                    "Cabo Polonio, Uruguay",
-                    "Garopaba, Brasil",
-                    "Punta del Diablo, Uruguay",
-                    "Santa Teresa, Costa Rica",
-                  ].map((destino) => (
-                    <li key={destino}>
-                      <Link href="#" className="hover:text-accent text-sm">
-                        {destino}
+                  {menuTripItems.map((destino) => (
+                    <li key={destino.name}>
+                      <Link
+                        href={destino.url}
+                        className="hover:text-accent text-sm"
+                      >
+                        {destino.name}
                       </Link>
                     </li>
                   ))}
