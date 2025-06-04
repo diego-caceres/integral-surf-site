@@ -169,8 +169,8 @@ export default function AdminMenuImagesPage() {
               className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 transition-colors text-sm font-medium"
             >
               {sectionSaveStates[title]?.saving
-                ? "Saving..."
-                : "Save Changes for this Section"}
+                ? "Guardando..."
+                : "Guardar cambios para esta sección"}
             </button>
           </div>
           {sectionSaveStates[title]?.message && (
@@ -244,17 +244,22 @@ export default function AdminMenuImagesPage() {
                   onClick={() => handleRemoveImage(title, index)}
                   className="mt-auto px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors text-sm"
                 >
-                  Remove Image
+                  Eliminar imagen
                 </button>
               </div>
             ))}
           </div>
-          <button
-            onClick={() => handleAddImage(title)}
-            className="px-5 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm font-medium"
-          >
-            + Add New Image to {title}
-          </button>
+          <div className="flex flex-col gap-2">
+            <button
+              onClick={() => handleAddImage(title)}
+              className="px-5 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm font-medium"
+            >
+              + Agrega una nueva imagen para {title}
+            </button>
+            <p className="text-sm text-gray-500">
+              Recuerda que el menú espera 3 imágenes por sección.
+            </p>
+          </div>
         </section>
       ))}
     </div>
