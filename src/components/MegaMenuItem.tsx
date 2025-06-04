@@ -81,27 +81,27 @@ const MegaMenuItem = ({
             animate="visible"
             exit="exit"
             variants={dropdownVariants}
-            className="absolute top-full left-0 mt-2 p-6 bg-white shadow-xl z-30 text-sm text-primary w-screen min-h-[250px]" // Full width and min height
+            className="absolute top-full left-0 mt-5 p-6 bg-white shadow-xl z-30 text-sm text-primary w-screen min-h-[250px]" // Full width and min height
           >
-            <div className="flex gap-x-6 max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex gap-x-6 mx-auto w-full">
               {" "}
               {/* Added container to center content within full-width dropdown */}
               {images && images.length > 0 && (
-                <div className="flex gap-x-4 w-[50%] flex-shrink-0">
+                <div className="flex gap-x-4 w-[60%] flex-shrink-0">
                   {images.slice(0, 3).map((src, index) => (
                     <div key={index} className="w-1/3">
                       <Image
                         src={src}
                         alt={`${title} promotional image ${index + 1}`}
                         width={200}
-                        height={200}
-                        className="object-cover rounded-md w-full h-auto"
+                        height={150}
+                        className="object-cover rounded-md w-full h-40"
                       />
                     </div>
                   ))}
                 </div>
               )}
-              <div className="flex-1 min-w-0">{children}</div>
+              <div className="flex-1 min-w-0 pl-16">{children}</div>
             </div>
           </motion.div>
         )}
