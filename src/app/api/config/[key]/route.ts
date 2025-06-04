@@ -3,9 +3,9 @@ import { supabaseServer } from "../../../../lib/supabaseServer"; // Using Supaba
 
 export async function GET(
   request: NextRequest,
-  context: { params: { key: string } }
+  context: { params: Promise<{ key: string }> }
 ) {
-  const { key } = context.params;
+  const { key } = await context.params;
 
   if (!key) {
     return NextResponse.json(
@@ -60,9 +60,9 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  context: { params: { key: string } }
+  context: { params: Promise<{ key: string }> }
 ) {
-  const { key } = context.params;
+  const { key } = await context.params;
   let body;
   try {
     body = await request.json();
@@ -134,9 +134,9 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  context: { params: { key: string } }
+  context: { params: Promise<{ key: string }> }
 ) {
-  const { key } = context.params;
+  const { key } = await context.params;
 
   if (!key) {
     return NextResponse.json(
