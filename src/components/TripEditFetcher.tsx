@@ -357,6 +357,14 @@ export default function TripEditFetcher(params: TripEditFetcherProps) {
                 onChange={handleChange}
                 className="w-full p-2 border rounded"
               />
+              {form.header_image && (
+                <img
+                  src={form.header_image}
+                  alt="Preview Header Image"
+                  className="mt-2 max-w-xs max-h-32 object-contain border rounded"
+                  onError={(e) => (e.currentTarget.style.display = "none")}
+                />
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -383,6 +391,14 @@ export default function TripEditFetcher(params: TripEditFetcherProps) {
                 onChange={handleChange}
                 className="w-full p-2 border rounded"
               />
+              {form.header_mobile_image && (
+                <img
+                  src={form.header_mobile_image}
+                  alt="Preview Header Mobile Image"
+                  className="mt-2 max-w-xs max-h-32 object-contain border rounded"
+                  onError={(e) => (e.currentTarget.style.display = "none")}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -500,6 +516,14 @@ export default function TripEditFetcher(params: TripEditFetcherProps) {
                 onChange={handleChange}
                 className="w-full p-2 border rounded"
               />
+              {form.section_1_image && (
+                <img
+                  src={form.section_1_image}
+                  alt="Preview Section 1 Image"
+                  className="mt-2 max-w-xs max-h-32 object-contain border rounded"
+                  onError={(e) => (e.currentTarget.style.display = "none")}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -545,6 +569,14 @@ export default function TripEditFetcher(params: TripEditFetcherProps) {
                 onChange={handleChange}
                 className="w-full p-2 border rounded"
               />
+              {form.section_2_image && (
+                <img
+                  src={form.section_2_image}
+                  alt="Preview Section 2 Image"
+                  className="mt-2 max-w-xs max-h-32 object-contain border rounded"
+                  onError={(e) => (e.currentTarget.style.display = "none")}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -610,6 +642,14 @@ export default function TripEditFetcher(params: TripEditFetcherProps) {
                 onChange={handleChange}
                 className="w-full p-2 border rounded"
               />
+              {form.final_img_1 && (
+                <img
+                  src={form.final_img_1}
+                  alt="Preview Final Image 1"
+                  className="mt-2 max-w-xs max-h-32 object-contain border rounded"
+                  onError={(e) => (e.currentTarget.style.display = "none")}
+                />
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -623,6 +663,14 @@ export default function TripEditFetcher(params: TripEditFetcherProps) {
                 onChange={handleChange}
                 className="w-full p-2 border rounded"
               />
+              {form.final_img_2 && (
+                <img
+                  src={form.final_img_2}
+                  alt="Preview Final Image 2"
+                  className="mt-2 max-w-xs max-h-32 object-contain border rounded"
+                  onError={(e) => (e.currentTarget.style.display = "none")}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -734,6 +782,14 @@ export default function TripEditFetcher(params: TripEditFetcherProps) {
                     }
                     className="w-full p-2 border rounded"
                   />
+                  {content.image_url && (
+                    <img
+                      src={content.image_url}
+                      alt={`Preview Content Image ${index + 1}`}
+                      className="mt-2 max-w-xs max-h-32 object-contain border rounded"
+                      onError={(e) => (e.currentTarget.style.display = "none")}
+                    />
+                  )}
                 </div>
               </div>
             </div>

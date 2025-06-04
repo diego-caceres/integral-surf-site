@@ -13,6 +13,7 @@ export default function NuevoViaje() {
     date_month: "",
     date_days: "",
     header_image: "",
+    header_mobile_image: "",
     header_video: "",
     price_promo: 0,
     price_final: 0,
@@ -188,22 +189,70 @@ export default function NuevoViaje() {
 
         {/* Multimedia */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <input
-            type="text"
-            name="header_image"
-            placeholder="Imagen Principal"
-            value={form.header_image}
-            onChange={handleChange}
-            className="p-2 border rounded"
-          />
-          <input
-            type="text"
-            name="header_video"
-            placeholder="Video Principal"
-            value={form.header_video}
-            onChange={handleChange}
-            className="p-2 border rounded"
-          />
+          <div>
+            <label
+              htmlFor="header_image"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Imagen de Cabecera (URL)
+            </label>
+            <input
+              type="text"
+              name="header_image"
+              id="header_image"
+              value={form.header_image}
+              onChange={handleChange}
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+            />
+            {form.header_image && (
+              <img
+                src={form.header_image}
+                alt="Preview Header Image"
+                className="mt-2 max-w-xs max-h-32 object-contain border rounded"
+                onError={(e) => (e.currentTarget.style.display = "none")}
+              />
+            )}
+          </div>
+          <div>
+            <label
+              htmlFor="header_mobile_image"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Imagen de Cabecera Móvil (URL)
+            </label>
+            <input
+              type="text"
+              name="header_mobile_image"
+              id="header_mobile_image"
+              value={form.header_mobile_image}
+              onChange={handleChange}
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+            />
+            {form.header_mobile_image && (
+              <img
+                src={form.header_mobile_image}
+                alt="Preview Header Mobile Image"
+                className="mt-2 max-w-xs max-h-32 object-contain border rounded"
+                onError={(e) => (e.currentTarget.style.display = "none")}
+              />
+            )}
+          </div>
+          <div>
+            <label
+              htmlFor="header_video"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Video de Cabecera (URL)
+            </label>
+            <input
+              type="text"
+              name="header_video"
+              id="header_video"
+              value={form.header_video}
+              onChange={handleChange}
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+            />
+          </div>
         </div>
 
         {/* Precios */}
@@ -267,14 +316,30 @@ export default function NuevoViaje() {
           onChange={handleChange}
           className="w-full p-2 border rounded"
         />
-        <input
-          type="text"
-          name="section_1_image"
-          placeholder="Imagen Sección 1"
-          value={form.section_1_image}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-        />
+        <div>
+          <label
+            htmlFor="section_1_image"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Imagen Sección 1 (URL)
+          </label>
+          <input
+            type="text"
+            name="section_1_image"
+            id="section_1_image"
+            value={form.section_1_image}
+            onChange={handleChange}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+          />
+          {form.section_1_image && (
+            <img
+              src={form.section_1_image}
+              alt="Preview Section 1 Image"
+              className="mt-2 max-w-xs max-h-32 object-contain border rounded"
+              onError={(e) => (e.currentTarget.style.display = "none")}
+            />
+          )}
+        </div>
 
         {/* Sección 2 */}
         <h2 className="text-xl font-semibold mt-4">Sección 2</h2>
@@ -293,14 +358,30 @@ export default function NuevoViaje() {
           onChange={handleChange}
           className="w-full p-2 border rounded"
         ></textarea>
-        <input
-          type="text"
-          name="section_2_image"
-          placeholder="Imagen Sección 2"
-          value={form.section_2_image}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-        />
+        <div>
+          <label
+            htmlFor="section_2_image"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Imagen Sección 2 (URL)
+          </label>
+          <input
+            type="text"
+            name="section_2_image"
+            id="section_2_image"
+            value={form.section_2_image}
+            onChange={handleChange}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+          />
+          {form.section_2_image && (
+            <img
+              src={form.section_2_image}
+              alt="Preview Section 2 Image"
+              className="mt-2 max-w-xs max-h-32 object-contain border rounded"
+              onError={(e) => (e.currentTarget.style.display = "none")}
+            />
+          )}
+        </div>
 
         {/* Sección Video */}
         <h2 className="text-xl font-semibold mt-4">Sección Video</h2>
@@ -330,22 +411,54 @@ export default function NuevoViaje() {
 
         {/* Imágenes Finales */}
         <h2 className="text-xl font-semibold mt-4">Imágenes Finales</h2>
-        <input
-          type="text"
-          name="final_img_1"
-          placeholder="Imagen Final 1"
-          value={form.final_img_1}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-        />
-        <input
-          type="text"
-          name="final_img_2"
-          placeholder="Imagen Final 2"
-          value={form.final_img_2}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-        />
+        <div>
+          <label
+            htmlFor="final_img_1"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Imagen Final 1 (URL)
+          </label>
+          <input
+            type="text"
+            name="final_img_1"
+            id="final_img_1"
+            value={form.final_img_1}
+            onChange={handleChange}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+          />
+          {form.final_img_1 && (
+            <img
+              src={form.final_img_1}
+              alt="Preview Final Image 1"
+              className="mt-2 max-w-xs max-h-32 object-contain border rounded"
+              onError={(e) => (e.currentTarget.style.display = "none")}
+            />
+          )}
+        </div>
+        <div>
+          <label
+            htmlFor="final_img_2"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Imagen Final 2 (URL)
+          </label>
+          <input
+            type="text"
+            name="final_img_2"
+            id="final_img_2"
+            value={form.final_img_2}
+            onChange={handleChange}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+          />
+          {form.final_img_2 && (
+            <img
+              src={form.final_img_2}
+              alt="Preview Final Image 2"
+              className="mt-2 max-w-xs max-h-32 object-contain border rounded"
+              onError={(e) => (e.currentTarget.style.display = "none")}
+            />
+          )}
+        </div>
 
         {/* Sección para Contenidos */}
         <h2 className="text-xl font-semibold mt-4">Contenidos del Viaje</h2>
@@ -395,15 +508,32 @@ export default function NuevoViaje() {
               }
               className="w-full p-2 border rounded"
             ></textarea>
-            <input
-              type="text"
-              placeholder="Imagen URL"
-              value={content.image_url}
-              onChange={(e) =>
-                handleContentChange(index, "image_url", e.target.value)
-              }
-              className="w-full p-2 border rounded"
-            />
+            <div>
+              <label
+                htmlFor={`content_image_url_${index}`}
+                className="block text-sm font-medium text-gray-700"
+              >
+                Imagen (URL)
+              </label>
+              <input
+                type="text"
+                name="image_url"
+                id={`content_image_url_${index}`}
+                value={content.image_url}
+                onChange={(e) =>
+                  handleContentChange(index, "image_url", e.target.value)
+                }
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              />
+              {content.image_url && (
+                <img
+                  src={content.image_url}
+                  alt={`Preview Content Image ${index + 1}`}
+                  className="mt-2 max-w-xs max-h-32 object-contain border rounded"
+                  onError={(e) => (e.currentTarget.style.display = "none")}
+                />
+              )}
+            </div>
 
             <button
               type="button"
