@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 interface MenuItemImage {
   url: string;
@@ -191,17 +192,22 @@ export default function AdminMenuImagesPage() {
                 key={index} // Consider more stable keys if reordering is implemented
                 className="border p-4 rounded-md shadow-sm bg-gray-50 flex flex-col"
               >
-                <img
+                <Image
                   src={
                     image.url ||
                     "https://via.placeholder.com/300x200?text=New+Image"
                   }
                   alt={image.alt || "Image preview"}
+                  width={300}
+                  height={192}
                   className="w-full h-48 object-cover rounded-md mb-3 bg-gray-200"
-                  onError={(e) => {
-                    e.currentTarget.src =
+                  onError={(
+                    e: React.SyntheticEvent<HTMLImageElement, Event>
+                  ) => {
+                    const target = e.currentTarget as HTMLImageElement;
+                    target.src =
                       "https://via.placeholder.com/300x200?text=Invalid+URL";
-                    e.currentTarget.alt = "Invalid image URL";
+                    target.alt = "Invalid image URL";
                   }}
                 />
                 <div className="mb-2">

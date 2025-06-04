@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { Trip, TripContent } from "@/types/trip";
+import Image from "next/image";
 
 interface TripEditFetcherProps {
   id: string;
@@ -358,9 +359,11 @@ export default function TripEditFetcher(params: TripEditFetcherProps) {
                 className="w-full p-2 border rounded"
               />
               {form.header_image && (
-                <img
+                <Image
                   src={form.header_image}
                   alt="Preview Header Image"
+                  width={320}
+                  height={128}
                   className="mt-2 max-w-xs max-h-32 object-contain border rounded"
                   onError={(e) => (e.currentTarget.style.display = "none")}
                 />
@@ -392,9 +395,11 @@ export default function TripEditFetcher(params: TripEditFetcherProps) {
                 className="w-full p-2 border rounded"
               />
               {form.header_mobile_image && (
-                <img
+                <Image
                   src={form.header_mobile_image}
                   alt="Preview Header Mobile Image"
+                  width={320}
+                  height={128}
                   className="mt-2 max-w-xs max-h-32 object-contain border rounded"
                   onError={(e) => (e.currentTarget.style.display = "none")}
                 />
@@ -517,9 +522,11 @@ export default function TripEditFetcher(params: TripEditFetcherProps) {
                 className="w-full p-2 border rounded"
               />
               {form.section_1_image && (
-                <img
+                <Image
                   src={form.section_1_image}
                   alt="Preview Section 1 Image"
+                  width={320}
+                  height={128}
                   className="mt-2 max-w-xs max-h-32 object-contain border rounded"
                   onError={(e) => (e.currentTarget.style.display = "none")}
                 />
@@ -570,9 +577,11 @@ export default function TripEditFetcher(params: TripEditFetcherProps) {
                 className="w-full p-2 border rounded"
               />
               {form.section_2_image && (
-                <img
+                <Image
                   src={form.section_2_image}
                   alt="Preview Section 2 Image"
+                  width={320}
+                  height={128}
                   className="mt-2 max-w-xs max-h-32 object-contain border rounded"
                   onError={(e) => (e.currentTarget.style.display = "none")}
                 />
@@ -643,9 +652,11 @@ export default function TripEditFetcher(params: TripEditFetcherProps) {
                 className="w-full p-2 border rounded"
               />
               {form.final_img_1 && (
-                <img
+                <Image
                   src={form.final_img_1}
                   alt="Preview Final Image 1"
+                  width={320}
+                  height={128}
                   className="mt-2 max-w-xs max-h-32 object-contain border rounded"
                   onError={(e) => (e.currentTarget.style.display = "none")}
                 />
@@ -664,9 +675,11 @@ export default function TripEditFetcher(params: TripEditFetcherProps) {
                 className="w-full p-2 border rounded"
               />
               {form.final_img_2 && (
-                <img
+                <Image
                   src={form.final_img_2}
                   alt="Preview Final Image 2"
+                  width={320}
+                  height={128}
                   className="mt-2 max-w-xs max-h-32 object-contain border rounded"
                   onError={(e) => (e.currentTarget.style.display = "none")}
                 />
@@ -783,9 +796,11 @@ export default function TripEditFetcher(params: TripEditFetcherProps) {
                     className="w-full p-2 border rounded"
                   />
                   {content.image_url && (
-                    <img
+                    <Image
                       src={content.image_url}
                       alt={`Preview Content Image ${index + 1}`}
+                      width={320}
+                      height={128}
                       className="mt-2 max-w-xs max-h-32 object-contain border rounded"
                       onError={(e) => (e.currentTarget.style.display = "none")}
                     />
