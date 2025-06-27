@@ -18,7 +18,9 @@ export default function Footer() {
       <div className="flex flex-col md:flex-row justify-between items-start mx-auto px-10 mt-6 space-y-6 md:space-y-0 md:space-x-6">
         {/* Column 1: Siguenos en */}
         <div className="flex flex-col space-y-2 ">
-          <h3 className="font-semibold text-lg text-white">Siguenos en</h3>
+          <h3 className="font-bold text-xl text-white font-librefranklin">
+            Comunidad
+          </h3>
           <a
             href="https://www.instagram.com/integralsurf/"
             target="_blank"
@@ -39,7 +41,9 @@ export default function Footer() {
 
         {/* Column 2: Nuestro contacto */}
         <div className="flex flex-col space-y-2">
-          <h3 className="font-semibold text-lg text-white">Nuestro contacto</h3>
+          <h3 className="font-bold text-xl text-white font-librefranklin">
+            Nuestro contacto
+          </h3>
           <a href="mailto:integralsurfuy@gmail.com" className="hover:underline">
             integralsurfuy@gmail.com
           </a>

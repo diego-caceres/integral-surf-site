@@ -64,19 +64,18 @@ export default function NavBar() {
           <Bars3Icon className="h-8 w-8 text-primary" />
         </button>
 
-        <Link href="/" className="text-center">
-          <span className="text-primary font-[Eckmannpsych] text-2xl">
+        <Link href="/" className="flex justify-center">
+          <Image
+            src="/images/icons/logo.png"
+            alt="Logo Integral Surf"
+            width={65}
+            height={65}
+            className="self-end"
+          />
+          {/* <span className="text-primary font-[Eckmannpsych] text-2xl">
             INTEGRAL SURF
-          </span>
+          </span> */}
         </Link>
-
-        <Image
-          src="/images/icons/logo.png"
-          alt="Logo Integral Surf"
-          width={65}
-          height={65}
-          className="self-end"
-        />
       </div>
 
       {/* Menú lateral deslizante */}
