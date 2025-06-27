@@ -5,6 +5,7 @@ import {
   PhotoIcon,
   DocumentTextIcon,
   Cog8ToothIcon, // Example for a settings/configurations icon
+  UserGroupIcon, // For about page management
 } from "@heroicons/react/24/outline"; // Example icons
 
 interface AdminSection {
@@ -27,6 +28,12 @@ const adminSections: AdminSection[] = [
     title: "Administrar Imágenes del Encabezado",
     description: "Gestiona las imágenes del carrusel principal (web y móvil).",
     icon: PhotoIcon,
+  },
+  {
+    href: "/admin/about",
+    title: "Administrar Página About",
+    description: "Edita el contenido de la página About y los instructores.",
+    icon: UserGroupIcon,
   },
   {
     href: "/admin/trips",
