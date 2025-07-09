@@ -28,11 +28,35 @@ export default function AdminNavbar() {
     <nav className="bg-primary shadow-md">
       <div className="container mx-auto px-4 md:px-8">
         <div className="flex items-center justify-between h-16">
-          <Link href="/admin" legacyBehavior>
-            <a className="text-white text-xl font-bold hover:text-gray-200">
-              Integral Surf Admin
-            </a>
-          </Link>
+          <div className="flex items-center space-x-8">
+            <Link href="/admin" legacyBehavior>
+              <a className="text-white text-xl font-bold hover:text-gray-200">
+                Integral Surf Admin
+              </a>
+            </Link>
+            <div className="hidden md:flex space-x-4">
+              <Link href="/admin" legacyBehavior>
+                <a className="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">
+                  Dashboard
+                </a>
+              </Link>
+              <Link href="/admin/about" legacyBehavior>
+                <a className="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">
+                  About
+                </a>
+              </Link>
+              <Link href="/admin/fundamentos" legacyBehavior>
+                <a className="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">
+                  Fundamentos
+                </a>
+              </Link>
+              <Link href="/admin/trips" legacyBehavior>
+                <a className="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">
+                  Trips
+                </a>
+              </Link>
+            </div>
+          </div>
           <button
             onClick={handleLogout}
             disabled={isLoading}

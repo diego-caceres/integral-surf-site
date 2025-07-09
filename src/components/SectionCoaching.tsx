@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Button from "@/components/ui/Button";
+import Link from "next/link";
 
 export default function SectionCoaching() {
   return (
@@ -29,7 +30,9 @@ export default function SectionCoaching() {
               compartiéndonos este deporte desde sus raíces. buscamos aprender
               la técnica y teoría del surf en profundidad.
             </p>
-            <Button className="mt-4 text-lg md:text-xl">Descubre más</Button>
+            <Link href="/fundamentos">
+              <Button className="mt-4 text-lg md:text-xl">Descubre más</Button>
+            </Link>
           </div>
         </div>
       </div>

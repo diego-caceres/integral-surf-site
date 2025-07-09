@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Button from "@/components/ui/Button";
+import Link from "next/link";
 
 export default function SectionTheRoad() {
   return (
@@ -44,7 +45,9 @@ export default function SectionTheRoad() {
               del surf desde sus orígenes, y es una oportunidad acompañarnos
               frente a los desafíos que el mar nos propone.
             </p>
-            <Button className="mt-4 text-lg md:text-xl">Descubre más</Button>
+            <Link href="/fundamentos">
+              <Button className="mt-4 text-lg md:text-xl">Descubre más</Button>
+            </Link>
           </div>
         </div>
       </div>

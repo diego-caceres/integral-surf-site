@@ -211,7 +211,10 @@ export default function NavBar() {
                 <ul className="space-y-2">
                   {["Coaching", "Yoga", "Naturaleza"].map((item) => (
                     <li key={item}>
-                      <Link href="#" className="hover:text-accent text-sm">
+                      <Link
+                        href="/fundamentos"
+                        className="hover:text-accent text-sm"
+                      >
                         {item}
                       </Link>
                     </li>
