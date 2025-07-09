@@ -1,6 +1,7 @@
 "use client";
 import Button from "@/components/ui/Button";
 import Image from "next/image";
+import Link from "next/link";
 
 const SectionOurPurpose: React.FC = () => {
   return (
@@ -16,11 +17,13 @@ const SectionOurPurpose: React.FC = () => {
           las olas.
         </p>
         <p className="mt-10 text-xl tracking-[0.2rem]">
-          “Elegimos la naturaleza para interpretar lo más profundo de nuestro
-          ser. El surfing, el yoga y el arte son las experiencias que nos
-          permiten reencontrarnos”.
+          &ldquo;Elegimos la naturaleza para interpretar lo más profundo de
+          nuestro ser. El surfing, el yoga y el arte son las experiencias que
+          nos permiten reencontrarnos&rdquo;.
         </p>
-        <Button className="mt-8 text-xl">Sobre Nosotros</Button>
+        <Link href="/about">
+          <Button className="mt-8 text-xl">Sobre Nosotros</Button>
+        </Link>
       </div>
       <div className="flex flex-row justify-center items-start md:items-center">
         <Image
