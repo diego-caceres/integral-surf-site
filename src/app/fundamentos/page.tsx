@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import FundamentosImageSlider from "@/components/FundamentosImageSlider";
 import { useEffect, useState } from "react";
 import type { FundamentosPage } from "@/types/fundamentos";
 
@@ -89,23 +90,17 @@ export default function FundamentosPage() {
                         ))}
                     </p>
                   </div>
-                  <div className="relative h-[500px] rounded-lg overflow-hidden">
-                    <Image
-                      src={section.image_url}
-                      alt={section.title}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
+                  <FundamentosImageSlider
+                    images={section.images}
+                    alt={section.title}
+                  />
                 </>
               ) : (
                 <>
-                  <div className="relative h-[500px] rounded-lg overflow-hidden order-2 md:order-1">
-                    <Image
-                      src={section.image_url}
+                  <div className="order-2 md:order-1">
+                    <FundamentosImageSlider
+                      images={section.images}
                       alt={section.title}
-                      fill
-                      className="object-cover"
                     />
                   </div>
                   <div className="space-y-6 order-1 md:order-2">

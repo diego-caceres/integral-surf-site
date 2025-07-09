@@ -5,6 +5,7 @@ import type {
   FundamentosPage,
   FundamentosSection,
   FundamentosTeamMember,
+  FundamentosSectionImage,
 } from "@/types/fundamentos";
 
 export default function ManageFundamentosPage() {
@@ -19,7 +20,7 @@ export default function ManageFundamentosPage() {
   const [newSection, setNewSection] = useState({
     title: "",
     description: "",
-    image_url: "",
+    images: [] as FundamentosSectionImage[],
     order_number: 0,
     team_members: [] as FundamentosTeamMember[],
   });
@@ -78,7 +79,7 @@ export default function ManageFundamentosPage() {
   };
 
   const handleAddSection = () => {
-    if (!newSection.title || !newSection.description || !newSection.image_url) {
+    if (!newSection.title || !newSection.description) {
       alert("Please fill in all section fields");
       return;
     }
@@ -92,7 +93,7 @@ export default function ManageFundamentosPage() {
     setNewSection({
       title: "",
       description: "",
-      image_url: "",
+      images: [],
       order_number: editingSections.length + 1,
       team_members: [],
     });
@@ -222,16 +223,81 @@ export default function ManageFundamentosPage() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                  Image URL
+                  Images
                 </label>
-                <input
-                  type="text"
-                  value={newSection.image_url}
-                  onChange={(e) =>
-                    setNewSection({ ...newSection, image_url: e.target.value })
-                  }
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                />
+                <div className="space-y-2">
+                  {newSection.images.map((image, imageIndex) => (
+                    <div key={imageIndex} className="flex gap-2">
+                      <input
+                        type="text"
+                        placeholder="Image URL"
+                        value={image.image_url}
+                        onChange={(e) => {
+                          const updatedImages = [...newSection.images];
+                          updatedImages[imageIndex] = {
+                            ...updatedImages[imageIndex],
+                            image_url: e.target.value,
+                          };
+                          setNewSection({
+                            ...newSection,
+                            images: updatedImages,
+                          });
+                        }}
+                        className="flex-1 px-2 py-1 border border-gray-300 rounded text-sm"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Alt text"
+                        value={image.alt_text || ""}
+                        onChange={(e) => {
+                          const updatedImages = [...newSection.images];
+                          updatedImages[imageIndex] = {
+                            ...updatedImages[imageIndex],
+                            alt_text: e.target.value,
+                          };
+                          setNewSection({
+                            ...newSection,
+                            images: updatedImages,
+                          });
+                        }}
+                        className="flex-1 px-2 py-1 border border-gray-300 rounded text-sm"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const updatedImages = newSection.images.filter(
+                            (_, i) => i !== imageIndex
+                          );
+                          setNewSection({
+                            ...newSection,
+                            images: updatedImages,
+                          });
+                        }}
+                        className="px-2 py-1 bg-red-500 text-white rounded text-xs hover:bg-red-600"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const newImage: FundamentosSectionImage = {
+                        id: `temp-${Date.now()}`,
+                        image_url: "",
+                        alt_text: "",
+                        order_number: newSection.images.length,
+                      };
+                      setNewSection({
+                        ...newSection,
+                        images: [...newSection.images, newImage],
+                      });
+                    }}
+                    className="px-3 py-1 bg-green-500 text-white rounded text-sm hover:bg-green-600"
+                  >
+                    Add Image
+                  </button>
+                </div>
               </div>
             </div>
             <div className="mt-4">
@@ -306,20 +372,89 @@ export default function ManageFundamentosPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
-                    Image URL
+                    Images
                   </label>
-                  <input
-                    type="text"
-                    value={section.image_url}
-                    onChange={(e) =>
-                      handleSectionChange(
-                        sectionIndex,
-                        "image_url",
-                        e.target.value
-                      )
-                    }
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  />
+                  <div className="space-y-2">
+                    {section.images.map((image, imageIndex) => (
+                      <div key={imageIndex} className="flex gap-2">
+                        <input
+                          type="text"
+                          placeholder="Image URL"
+                          value={image.image_url}
+                          onChange={(e) => {
+                            const updatedSections = [...editingSections];
+                            const updatedImages = [...section.images];
+                            updatedImages[imageIndex] = {
+                              ...updatedImages[imageIndex],
+                              image_url: e.target.value,
+                            };
+                            updatedSections[sectionIndex] = {
+                              ...section,
+                              images: updatedImages,
+                            };
+                            setEditingSections(updatedSections);
+                          }}
+                          className="flex-1 px-2 py-1 border border-gray-300 rounded text-sm"
+                        />
+                        <input
+                          type="text"
+                          placeholder="Alt text"
+                          value={image.alt_text || ""}
+                          onChange={(e) => {
+                            const updatedSections = [...editingSections];
+                            const updatedImages = [...section.images];
+                            updatedImages[imageIndex] = {
+                              ...updatedImages[imageIndex],
+                              alt_text: e.target.value,
+                            };
+                            updatedSections[sectionIndex] = {
+                              ...section,
+                              images: updatedImages,
+                            };
+                            setEditingSections(updatedSections);
+                          }}
+                          className="flex-1 px-2 py-1 border border-gray-300 rounded text-sm"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updatedSections = [...editingSections];
+                            const updatedImages = section.images.filter(
+                              (_, i) => i !== imageIndex
+                            );
+                            updatedSections[sectionIndex] = {
+                              ...section,
+                              images: updatedImages,
+                            };
+                            setEditingSections(updatedSections);
+                          }}
+                          className="px-2 py-1 bg-red-500 text-white rounded text-xs hover:bg-red-600"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const updatedSections = [...editingSections];
+                        const newImage: FundamentosSectionImage = {
+                          id: `temp-${Date.now()}`,
+                          image_url: "",
+                          alt_text: "",
+                          order_number: section.images.length,
+                        };
+                        updatedSections[sectionIndex] = {
+                          ...section,
+                          images: [...section.images, newImage],
+                        };
+                        setEditingSections(updatedSections);
+                      }}
+                      className="px-3 py-1 bg-green-500 text-white rounded text-sm hover:bg-green-600"
+                    >
+                      Add Image
+                    </button>
+                  </div>
                 </div>
               </div>
               <div className="mb-4">

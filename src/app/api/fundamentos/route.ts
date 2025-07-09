@@ -28,9 +28,25 @@ export async function GET() {
       );
     }
 
-    // For each section, fetch its team members
+    // For each section, fetch its images and team members
     const sectionsWithTeam = await Promise.all(
       (sectionsData || []).map(async (section) => {
+        // Fetch section images
+        const { data: sectionImages, error: imagesError } = await supabaseServer
+          .from("fundamentos_section_images")
+          .select("*")
+          .eq("section_id", section.id)
+          .order("order_number", { ascending: true });
+
+        if (imagesError) {
+          console.error(
+            "Error fetching images for section:",
+            section.id,
+            imagesError
+          );
+        }
+
+        // Fetch team members
         const { data: teamMembers, error: teamError } = await supabaseServer
           .from("fundamentos_team_members")
           .select("*")
@@ -45,12 +61,14 @@ export async function GET() {
           );
           return {
             ...section,
+            images: sectionImages || [],
             team_members: [],
           };
         }
 
         return {
           ...section,
+          images: sectionImages || [],
           team_members: teamMembers || [],
         };
       })

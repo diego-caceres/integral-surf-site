@@ -42,9 +42,25 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // For each section, fetch its team members
+    // For each section, fetch its images and team members
     const sectionsWithTeam = await Promise.all(
       (sectionsData || []).map(async (section) => {
+        // Fetch section images
+        const { data: sectionImages, error: imagesError } = await supabaseServer
+          .from("fundamentos_section_images")
+          .select("*")
+          .eq("section_id", section.id)
+          .order("order_number", { ascending: true });
+
+        if (imagesError) {
+          console.error(
+            "Error fetching images for section:",
+            section.id,
+            imagesError
+          );
+        }
+
+        // Fetch team members
         const { data: teamMembers, error: teamError } = await supabaseServer
           .from("fundamentos_team_members")
           .select("*")
@@ -59,12 +75,14 @@ export async function GET(request: NextRequest) {
           );
           return {
             ...section,
+            images: sectionImages || [],
             team_members: [],
           };
         }
 
         return {
           ...section,
+          images: sectionImages || [],
           team_members: teamMembers || [],
         };
       })
@@ -99,7 +117,7 @@ export async function PUT(request: NextRequest) {
 
     // Update sections if provided
     if (sections && Array.isArray(sections)) {
-      // Delete existing sections and team members
+      // Delete existing sections, images, and team members
       const { error: deleteSectionsError } = await supabaseServer
         .from("fundamentos_sections")
         .delete()
@@ -111,6 +129,23 @@ export async function PUT(request: NextRequest) {
           {
             error: "Failed to delete sections",
             details: deleteSectionsError.message,
+          },
+          { status: 500 }
+        );
+      }
+
+      // Delete existing section images
+      const { error: deleteImagesError } = await supabaseServer
+        .from("fundamentos_section_images")
+        .delete()
+        .neq("id", "00000000-0000-0000-0000-000000000000"); // Delete all trick
+
+      if (deleteImagesError) {
+        console.error("Error deleting section images:", deleteImagesError);
+        return NextResponse.json(
+          {
+            error: "Failed to delete section images",
+            details: deleteImagesError.message,
           },
           { status: 500 }
         );
@@ -133,7 +168,7 @@ export async function PUT(request: NextRequest) {
         );
       }
 
-      // Insert new sections and their team members
+      // Insert new sections and their images and team members
       if (sections.length > 0) {
         for (const section of sections) {
           const { data: insertedSection, error: insertSectionError } =
@@ -142,7 +177,6 @@ export async function PUT(request: NextRequest) {
               .insert({
                 title: section.title,
                 description: section.description,
-                image_url: section.image_url,
                 order_number: section.order_number,
               })
               .select()
@@ -157,6 +191,40 @@ export async function PUT(request: NextRequest) {
               },
               { status: 500 }
             );
+          }
+
+          // Insert images for this section
+          if (section.images && section.images.length > 0) {
+            const imagesToInsert = section.images.map(
+              (image: {
+                image_url: string;
+                alt_text: string | null;
+                order_number: number;
+              }) => ({
+                image_url: image.image_url,
+                alt_text: image.alt_text,
+                order_number: image.order_number,
+                section_id: insertedSection.id,
+              })
+            );
+
+            const { error: insertImagesError } = await supabaseServer
+              .from("fundamentos_section_images")
+              .insert(imagesToInsert);
+
+            if (insertImagesError) {
+              console.error(
+                "Error inserting section images:",
+                insertImagesError
+              );
+              return NextResponse.json(
+                {
+                  error: "Failed to insert section images",
+                  details: insertImagesError.message,
+                },
+                { status: 500 }
+              );
+            }
           }
 
           // Insert team members for this section
