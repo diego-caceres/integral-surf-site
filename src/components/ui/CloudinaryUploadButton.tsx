@@ -103,18 +103,23 @@ export default function CloudinaryUploadButton({
 
       {/* Image Preview */}
       {showPreview && value && (
-        <div className="mt-2">
-          <Image
-            src={value}
-            alt={label || "Preview"}
-            width={320}
-            height={128}
-            className={
-              previewClassName ||
-              "max-w-xs max-h-32 object-contain border rounded"
-            }
-            onError={(e) => (e.currentTarget.style.display = "none")}
-          />
+        <div className="mt-2 relative">
+          <p className="text-xs text-gray-500 mb-1">Preview:</p>
+          <div className={previewClassName || "relative w-full max-w-xs h-32 border rounded bg-gray-50"}>
+            <Image
+              src={value}
+              alt={label || "Preview"}
+              fill
+              className="object-contain p-1"
+              onError={(e) => {
+                e.currentTarget.style.display = "none";
+                const parent = e.currentTarget.parentElement;
+                if (parent) {
+                  parent.innerHTML = '<p class="flex items-center justify-center h-full text-gray-400 text-sm">Unable to load preview</p>';
+                }
+              }}
+            />
+          </div>
         </div>
       )}
     </div>

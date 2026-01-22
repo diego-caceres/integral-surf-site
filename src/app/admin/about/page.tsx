@@ -286,7 +286,6 @@ export default function ManageAboutPage() {
                       }
                       label="Image URL"
                       folder="integral-surf/about/instructors"
-                      showPreview={false}
                     />
                   </div>
                 </div>
@@ -422,7 +421,6 @@ export default function ManageAboutPage() {
                           }
                           label="Image URL"
                           folder="integral-surf/about/instructors"
-                          showPreview={false}
                         />
                       </div>
                     </div>

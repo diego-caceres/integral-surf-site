@@ -239,7 +239,6 @@ export default function AdminSectionHeaderImagesPage() {
                       onChange={(url) => handleInputChange(deviceType, index, "image_url", url)}
                       label="Image URL"
                       folder={`integral-surf/section-headers/${deviceType}`}
-                      showPreview={false}
                     />
                   </div>
                   <div className="mb-3">
