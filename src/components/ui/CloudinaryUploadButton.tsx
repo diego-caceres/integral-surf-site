@@ -92,7 +92,7 @@ export default function CloudinaryUploadButton({
       {/* Text Input for Manual URL */}
       <input
         type="text"
-        value={value}
+        value={value ?? ''}
         onChange={(e) => onChange(e.target.value)}
         placeholder="Or paste image URL here"
         className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"

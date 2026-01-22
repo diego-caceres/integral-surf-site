@@ -47,6 +47,19 @@ export default function TripEditFetcher(params: TripEditFetcherProps) {
   const [contents, setContents] = useState<TripContent[]>([]);
 
   useEffect(() => {
+    // Helper to convert null values to empty strings for form inputs
+    const sanitizeFormData = (data: Trip): Trip => {
+      const sanitized = { ...data };
+      const numericFields = ['price_promo', 'price_final', 'order'];
+      for (const key in sanitized) {
+        const value = sanitized[key as keyof Trip];
+        if (value === null) {
+          (sanitized as Record<string, unknown>)[key] = numericFields.includes(key) ? 0 : '';
+        }
+      }
+      return sanitized;
+    };
+
     const fetchTrip = async () => {
       try {
         const { id } = await params;
@@ -60,10 +73,20 @@ export default function TripEditFetcher(params: TripEditFetcherProps) {
         const data = await res.json();
 
         if (data && data.trip) {
-          setForm(data.trip);
+          setForm(sanitizeFormData(data.trip));
 
           if (data.contents && data.contents.length > 0) {
-            setContents(data.contents);
+            // Sanitize contents to convert null values to empty strings
+            const sanitizedContents = data.contents.map((content: TripContent) => ({
+              ...content,
+              title: content.title ?? '',
+              subtitle: content.subtitle ?? '',
+              description: content.description ?? '',
+              subtitle_2: content.subtitle_2 ?? '',
+              description_2: content.description_2 ?? '',
+              image_url: content.image_url ?? '',
+            }));
+            setContents(sanitizedContents);
           } else {
             setContents([
               {

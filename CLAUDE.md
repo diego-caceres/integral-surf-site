@@ -22,8 +22,8 @@ Required in `.env.local`:
 ```
 SUPABASE_URL=your_supabase_url
 SUPABASE_SERVICE_ROLE=your_supabase_service_role_key
-CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
-CLOUDINARY_API_KEY=your_cloudinary_api_key
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+NEXT_PUBLIC_CLOUDINARY_API_KEY=your_cloudinary_api_key
 CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 ADMIN_USERNAME=your_admin_username
 ADMIN_PASSWORD=your_admin_password
@@ -31,6 +31,8 @@ ADMIN_PASSWORD=your_admin_password
 
 **Cloudinary Configuration:**
 - Uses signed uploads for security (API key/secret required)
+- Cloud name and API key use `NEXT_PUBLIC_` prefix (required by next-cloudinary client)
+- API secret stays server-only (no prefix)
 - Upload signature endpoint: `/api/cloudinary/sign`
 - Images organized in folders: `integral-surf/trips/`, `integral-surf/menu-images/`, etc.
 
