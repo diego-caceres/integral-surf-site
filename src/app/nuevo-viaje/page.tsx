@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
-import Image from "next/image";
+import CloudinaryUploadButton from "@/components/ui/CloudinaryUploadButton";
 
 export default function NuevoViaje() {
   const [form, setForm] = useState({
@@ -191,56 +191,20 @@ export default function NuevoViaje() {
         {/* Multimedia */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label
-              htmlFor="header_image"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Imagen de Cabecera (URL)
-            </label>
-            <input
-              type="text"
-              name="header_image"
-              id="header_image"
+            <CloudinaryUploadButton
               value={form.header_image}
-              onChange={handleChange}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              onChange={(url) => setForm({ ...form, header_image: url })}
+              label="Imagen de Cabecera"
+              folder="integral-surf/trips/headers"
             />
-            {form.header_image && (
-              <Image
-                src={form.header_image}
-                alt="Preview Header Image"
-                width={320}
-                height={128}
-                className="mt-2 max-w-xs max-h-32 object-contain border rounded"
-                onError={(e) => (e.currentTarget.style.display = "none")}
-              />
-            )}
           </div>
           <div>
-            <label
-              htmlFor="header_mobile_image"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Imagen de Cabecera Móvil (URL)
-            </label>
-            <input
-              type="text"
-              name="header_mobile_image"
-              id="header_mobile_image"
+            <CloudinaryUploadButton
               value={form.header_mobile_image}
-              onChange={handleChange}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              onChange={(url) => setForm({ ...form, header_mobile_image: url })}
+              label="Imagen de Cabecera Móvil"
+              folder="integral-surf/trips/headers"
             />
-            {form.header_mobile_image && (
-              <Image
-                src={form.header_mobile_image}
-                alt="Preview Header Mobile Image"
-                width={320}
-                height={128}
-                className="mt-2 max-w-xs max-h-32 object-contain border rounded"
-                onError={(e) => (e.currentTarget.style.display = "none")}
-              />
-            )}
           </div>
           <div>
             <label
@@ -322,30 +286,12 @@ export default function NuevoViaje() {
           className="w-full p-2 border rounded"
         />
         <div>
-          <label
-            htmlFor="section_1_image"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Imagen Sección 1 (URL)
-          </label>
-          <input
-            type="text"
-            name="section_1_image"
-            id="section_1_image"
+          <CloudinaryUploadButton
             value={form.section_1_image}
-            onChange={handleChange}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+            onChange={(url) => setForm({ ...form, section_1_image: url })}
+            label="Imagen Sección 1"
+            folder="integral-surf/trips/sections"
           />
-          {form.section_1_image && (
-            <Image
-              src={form.section_1_image}
-              alt="Preview Section 1 Image"
-              width={320}
-              height={128}
-              className="mt-2 max-w-xs max-h-32 object-contain border rounded"
-              onError={(e) => (e.currentTarget.style.display = "none")}
-            />
-          )}
         </div>
 
         {/* Sección 2 */}
@@ -366,30 +312,12 @@ export default function NuevoViaje() {
           className="w-full p-2 border rounded"
         ></textarea>
         <div>
-          <label
-            htmlFor="section_2_image"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Imagen Sección 2 (URL)
-          </label>
-          <input
-            type="text"
-            name="section_2_image"
-            id="section_2_image"
+          <CloudinaryUploadButton
             value={form.section_2_image}
-            onChange={handleChange}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+            onChange={(url) => setForm({ ...form, section_2_image: url })}
+            label="Imagen Sección 2"
+            folder="integral-surf/trips/sections"
           />
-          {form.section_2_image && (
-            <Image
-              src={form.section_2_image}
-              alt="Preview Section 2 Image"
-              width={320}
-              height={128}
-              className="mt-2 max-w-xs max-h-32 object-contain border rounded"
-              onError={(e) => (e.currentTarget.style.display = "none")}
-            />
-          )}
         </div>
 
         {/* Sección Video */}
@@ -421,56 +349,20 @@ export default function NuevoViaje() {
         {/* Imágenes Finales */}
         <h2 className="text-xl font-semibold mt-4">Imágenes Finales</h2>
         <div>
-          <label
-            htmlFor="final_img_1"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Imagen Final 1 (URL)
-          </label>
-          <input
-            type="text"
-            name="final_img_1"
-            id="final_img_1"
+          <CloudinaryUploadButton
             value={form.final_img_1}
-            onChange={handleChange}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+            onChange={(url) => setForm({ ...form, final_img_1: url })}
+            label="Imagen Final 1"
+            folder="integral-surf/trips/finals"
           />
-          {form.final_img_1 && (
-            <Image
-              src={form.final_img_1}
-              alt="Preview Final Image 1"
-              width={320}
-              height={128}
-              className="mt-2 max-w-xs max-h-32 object-contain border rounded"
-              onError={(e) => (e.currentTarget.style.display = "none")}
-            />
-          )}
         </div>
         <div>
-          <label
-            htmlFor="final_img_2"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Imagen Final 2 (URL)
-          </label>
-          <input
-            type="text"
-            name="final_img_2"
-            id="final_img_2"
+          <CloudinaryUploadButton
             value={form.final_img_2}
-            onChange={handleChange}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+            onChange={(url) => setForm({ ...form, final_img_2: url })}
+            label="Imagen Final 2"
+            folder="integral-surf/trips/finals"
           />
-          {form.final_img_2 && (
-            <Image
-              src={form.final_img_2}
-              alt="Preview Final Image 2"
-              width={320}
-              height={128}
-              className="mt-2 max-w-xs max-h-32 object-contain border rounded"
-              onError={(e) => (e.currentTarget.style.display = "none")}
-            />
-          )}
         </div>
 
         {/* Sección para Contenidos */}
@@ -522,32 +414,12 @@ export default function NuevoViaje() {
               className="w-full p-2 border rounded"
             ></textarea>
             <div>
-              <label
-                htmlFor={`content_image_url_${index}`}
-                className="block text-sm font-medium text-gray-700"
-              >
-                Imagen (URL)
-              </label>
-              <input
-                type="text"
-                name="image_url"
-                id={`content_image_url_${index}`}
+              <CloudinaryUploadButton
                 value={content.image_url}
-                onChange={(e) =>
-                  handleContentChange(index, "image_url", e.target.value)
-                }
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                onChange={(url) => handleContentChange(index, "image_url", url)}
+                label="Imagen"
+                folder="integral-surf/trips/contents"
               />
-              {content.image_url && (
-                <Image
-                  src={content.image_url}
-                  alt={`Preview Content Image ${index + 1}`}
-                  width={320}
-                  height={128}
-                  className="mt-2 max-w-xs max-h-32 object-contain border rounded"
-                  onError={(e) => (e.currentTarget.style.display = "none")}
-                />
-              )}
             </div>
 
             <button

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import CloudinaryUploadButton from "@/components/ui/CloudinaryUploadButton";
 
 interface MenuItemImage {
   url: string;
@@ -211,21 +212,12 @@ export default function AdminMenuImagesPage() {
                   }}
                 />
                 <div className="mb-2">
-                  <label
-                    htmlFor={`url-${title}-${index}`}
-                    className="text-sm font-medium text-gray-700 block mb-1"
-                  >
-                    URL:
-                  </label>
-                  <input
-                    id={`url-${title}-${index}`}
-                    type="text"
+                  <CloudinaryUploadButton
                     value={image.url}
-                    onChange={(e) =>
-                      handleInputChange(title, index, "url", e.target.value)
-                    }
-                    placeholder="Enter image URL"
-                    className="w-full p-2 border rounded text-xs text-gray-700 focus:ring-blue-500 focus:border-blue-500"
+                    onChange={(url) => handleInputChange(title, index, "url", url)}
+                    label="URL"
+                    folder={`integral-surf/menu-images/${title.toLowerCase().replace(/\s+/g, '-')}`}
+                    showPreview={false}
                   />
                 </div>
                 <div className="mb-3">

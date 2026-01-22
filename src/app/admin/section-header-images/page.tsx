@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import Image from "next/image";
+import CloudinaryUploadButton from "@/components/ui/CloudinaryUploadButton";
 
 // Matches the structure returned by GET and expected by PUT for each image
 interface HeaderImage {
@@ -233,26 +234,12 @@ export default function AdminSectionHeaderImagesPage() {
                     }}
                   />
                   <div className="mb-2">
-                    <label
-                      htmlFor={`url-${deviceType}-${index}`}
-                      className="text-sm font-medium text-gray-700 block mb-1"
-                    >
-                      Image URL:
-                    </label>
-                    <input
-                      id={`url-${deviceType}-${index}`}
-                      type="text"
+                    <CloudinaryUploadButton
                       value={image.image_url}
-                      onChange={(e) =>
-                        handleInputChange(
-                          deviceType,
-                          index,
-                          "image_url",
-                          e.target.value
-                        )
-                      }
-                      placeholder="Enter image URL"
-                      className="w-full p-2 border rounded text-xs text-gray-700 focus:ring-blue-500 focus:border-blue-500"
+                      onChange={(url) => handleInputChange(deviceType, index, "image_url", url)}
+                      label="Image URL"
+                      folder={`integral-surf/section-headers/${deviceType}`}
+                      showPreview={false}
                     />
                   </div>
                   <div className="mb-3">

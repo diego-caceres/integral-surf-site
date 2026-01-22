@@ -22,10 +22,12 @@ const menuTripItems = [
   { name: "La Paloma, Uruguay ", url: "/viajes/la-paloma-marzo" },
   { name: "Cabo Polonio, Uruguay ", url: "/viajes/cabo-polonio-abril" },
   { name: "Garopaba, Brasil ", url: "/viajes/garopaba-octubre" },
+  { name: "Itamambuca, Brasil ", url: "/viajes/itamambuca" },
   {
     name: "Punta del Diablo, Uruguay ",
     url: "/viajes/punta-del-diablo-noviembre",
   },
+  { name: "Lobitos, Perú ", url: "/viajes/lobitos-peru-agosto" },
   { name: "Santa Teresa, Costa Rica ", url: "/viajes/costa-rica-junio" },
 ];
 

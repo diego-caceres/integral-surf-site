@@ -2,6 +2,7 @@
 
 import { useState, useEffect, FormEvent } from "react";
 import type { AboutPage, AboutInstructor } from "@/types/about";
+import CloudinaryUploadButton from "@/components/ui/CloudinaryUploadButton";
 
 export default function ManageAboutPage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -275,20 +276,17 @@ export default function ManageAboutPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                      Image URL
-                    </label>
-                    <input
-                      type="text"
+                    <CloudinaryUploadButton
                       value={newInstructor.image_url}
-                      onChange={(e) =>
+                      onChange={(url) =>
                         setNewInstructor({
                           ...newInstructor,
-                          image_url: e.target.value,
+                          image_url: url,
                         })
                       }
-                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                      placeholder="https://example.com/image.jpg"
+                      label="Image URL"
+                      folder="integral-surf/about/instructors"
+                      showPreview={false}
                     />
                   </div>
                 </div>
@@ -413,21 +411,18 @@ export default function ManageAboutPage() {
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">
-                          Image URL
-                        </label>
-                        <input
-                          type="text"
+                        <CloudinaryUploadButton
                           value={instructor.image_url}
-                          onChange={(e) =>
+                          onChange={(url) =>
                             handleInstructorChange(
                               index,
                               "image_url",
-                              e.target.value
+                              url
                             )
                           }
-                          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                          placeholder="https://example.com/image.jpg"
+                          label="Image URL"
+                          folder="integral-surf/about/instructors"
+                          showPreview={false}
                         />
                       </div>
                     </div>

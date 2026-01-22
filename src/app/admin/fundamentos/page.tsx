@@ -7,6 +7,7 @@ import type {
   FundamentosTeamMember,
   FundamentosSectionImage,
 } from "@/types/fundamentos";
+import CloudinaryUploadButton from "@/components/ui/CloudinaryUploadButton";
 
 export default function ManageFundamentosPage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -228,23 +229,24 @@ export default function ManageFundamentosPage() {
                 <div className="space-y-2">
                   {newSection.images.map((image, imageIndex) => (
                     <div key={imageIndex} className="flex gap-2">
-                      <input
-                        type="text"
-                        placeholder="Image URL"
-                        value={image.image_url}
-                        onChange={(e) => {
-                          const updatedImages = [...newSection.images];
-                          updatedImages[imageIndex] = {
-                            ...updatedImages[imageIndex],
-                            image_url: e.target.value,
-                          };
-                          setNewSection({
-                            ...newSection,
-                            images: updatedImages,
-                          });
-                        }}
-                        className="flex-1 px-2 py-1 border border-gray-300 rounded text-sm"
-                      />
+                      <div className="flex-1">
+                        <CloudinaryUploadButton
+                          value={image.image_url}
+                          onChange={(url) => {
+                            const updatedImages = [...newSection.images];
+                            updatedImages[imageIndex] = {
+                              ...updatedImages[imageIndex],
+                              image_url: url,
+                            };
+                            setNewSection({
+                              ...newSection,
+                              images: updatedImages,
+                            });
+                          }}
+                          folder="integral-surf/fundamentos/sections"
+                          showPreview={false}
+                        />
+                      </div>
                       <input
                         type="text"
                         placeholder="Alt text"
@@ -377,25 +379,26 @@ export default function ManageFundamentosPage() {
                   <div className="space-y-2">
                     {section.images.map((image, imageIndex) => (
                       <div key={imageIndex} className="flex gap-2">
-                        <input
-                          type="text"
-                          placeholder="Image URL"
-                          value={image.image_url}
-                          onChange={(e) => {
-                            const updatedSections = [...editingSections];
-                            const updatedImages = [...section.images];
-                            updatedImages[imageIndex] = {
-                              ...updatedImages[imageIndex],
-                              image_url: e.target.value,
-                            };
-                            updatedSections[sectionIndex] = {
-                              ...section,
-                              images: updatedImages,
-                            };
-                            setEditingSections(updatedSections);
-                          }}
-                          className="flex-1 px-2 py-1 border border-gray-300 rounded text-sm"
-                        />
+                        <div className="flex-1">
+                          <CloudinaryUploadButton
+                            value={image.image_url}
+                            onChange={(url) => {
+                              const updatedSections = [...editingSections];
+                              const updatedImages = [...section.images];
+                              updatedImages[imageIndex] = {
+                                ...updatedImages[imageIndex],
+                                image_url: url,
+                              };
+                              updatedSections[sectionIndex] = {
+                                ...section,
+                                images: updatedImages,
+                              };
+                              setEditingSections(updatedSections);
+                            }}
+                            folder="integral-surf/fundamentos/sections"
+                            showPreview={false}
+                          />
+                        </div>
                         <input
                           type="text"
                           placeholder="Alt text"
@@ -524,21 +527,18 @@ export default function ManageFundamentosPage() {
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-medium text-gray-700">
-                          Image URL
-                        </label>
-                        <input
-                          type="text"
+                        <CloudinaryUploadButton
                           value={member.image_url}
-                          onChange={(e) =>
+                          onChange={(url) =>
                             handleTeamMemberChange(
                               sectionIndex,
                               memberIndex,
                               "image_url",
-                              e.target.value
+                              url
                             )
                           }
-                          className="mt-1 block w-full px-2 py-1 border border-gray-300 rounded text-sm"
+                          label="Image URL"
+                          folder="integral-surf/fundamentos/team"
                         />
                       </div>
                       <div>
