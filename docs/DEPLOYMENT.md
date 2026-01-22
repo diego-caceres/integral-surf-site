@@ -42,7 +42,7 @@ NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 
 # Cloudinary
-NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
 
 # Other
 NEXT_PUBLIC_SITE_URL=https://your-domain.com

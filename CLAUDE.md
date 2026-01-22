@@ -22,7 +22,7 @@ Required in `.env.local`:
 ```
 SUPABASE_URL=your_supabase_url
 SUPABASE_SERVICE_ROLE=your_supabase_service_role_key
-NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
 CLOUDINARY_API_KEY=your_cloudinary_api_key
 CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 ADMIN_USERNAME=your_admin_username

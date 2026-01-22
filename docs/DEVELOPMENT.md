@@ -34,7 +34,7 @@ This document provides comprehensive guidelines for developing the Integral Surf
    ```
    NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-   NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+   CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
    ```
 
 4. Start the development server:
