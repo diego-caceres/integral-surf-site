@@ -11,12 +11,30 @@ const WhatsAppButton: React.FC<WhatsAppButtonProps> = ({
   onlyBubble = false,
 }) => {
   const [isVisible, setIsVisible] = useState(true);
-  const phoneNumber = "+59899748323";
+  const [phoneNumber, setPhoneNumber] = useState("+59899748323");
   const message = "¡Hola! Estoy interesado en saber más sobre tus servicios."; // Mensaje predeterminado
 
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
     message
   )}`;
+
+  useEffect(() => {
+    const fetchPhoneNumber = async () => {
+      try {
+        const response = await fetch("/api/config/whatsapp_phone_number");
+        if (response.ok) {
+          const data = await response.json();
+          if (data.value) {
+            setPhoneNumber(data.value);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching WhatsApp phone number:", error);
+      }
+    };
+
+    fetchPhoneNumber();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
