@@ -40,6 +40,16 @@ export default function AdminNavbar() {
                   Dashboard
                 </a>
               </Link>
+              <Link href="/admin/menu-images" legacyBehavior>
+                <a className="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">
+                  Imágenes del Menú
+                </a>
+              </Link>
+              <Link href="/admin/section-header-images" legacyBehavior>
+                <a className="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">
+                  Imágenes del Header
+                </a>
+              </Link>
               <Link href="/admin/about" legacyBehavior>
                 <a className="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">
                   About
@@ -53,6 +63,11 @@ export default function AdminNavbar() {
               <Link href="/admin/trips" legacyBehavior>
                 <a className="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">
                   Trips
+                </a>
+              </Link>
+              <Link href="/admin/configurations" legacyBehavior>
+                <a className="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">
+                  Configuraciones
                 </a>
               </Link>
             </div>

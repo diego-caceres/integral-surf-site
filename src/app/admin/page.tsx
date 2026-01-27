@@ -4,9 +4,10 @@ import Link from "next/link";
 import {
   PhotoIcon,
   DocumentTextIcon,
-  Cog8ToothIcon, // Example for a settings/configurations icon
-  UserGroupIcon, // For about page management
-} from "@heroicons/react/24/outline"; // Example icons
+  Cog8ToothIcon,
+  UserGroupIcon,
+  AcademicCapIcon,
+} from "@heroicons/react/24/outline";
 
 interface AdminSection {
   href: string;
@@ -34,6 +35,12 @@ const adminSections: AdminSection[] = [
     title: "Administrar Página About",
     description: "Edita el contenido de la página About y los instructores.",
     icon: UserGroupIcon,
+  },
+  {
+    href: "/admin/fundamentos",
+    title: "Administrar Fundamentos",
+    description: "Edita el contenido y las imágenes de la página Fundamentos.",
+    icon: AcademicCapIcon,
   },
   {
     href: "/admin/trips",
