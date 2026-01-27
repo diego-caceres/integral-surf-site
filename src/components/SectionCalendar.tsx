@@ -8,6 +8,7 @@ const SectionCalendar: React.FC = () => {
   const [trips, setTrips] = useState<Trip[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [calendarTitle, setCalendarTitle] = useState("{calendarTitle}");
 
   useEffect(() => {
     const fetchTrips = async () => {
@@ -31,7 +32,22 @@ const SectionCalendar: React.FC = () => {
       }
     };
 
+    const fetchCalendarTitle = async () => {
+      try {
+        const response = await fetch("/api/config/menu_destinos_title");
+        if (response.ok) {
+          const data = await response.json();
+          if (data.value) {
+            setCalendarTitle(data.value);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching calendar title:", error);
+      }
+    };
+
     fetchTrips();
+    fetchCalendarTitle();
   }, []);
 
   if (isLoading) {
@@ -58,7 +74,7 @@ const SectionCalendar: React.FC = () => {
       <section className="w-full md:h-[90vh] md:px-20 pt-10 md:py-20">
         <div className="px-2 md:px-5">
           <h2 className="font-[Eckmannpsych] text-redColor tracking-[0.1rem]">
-            CALENDARIO 2025
+            {calendarTitle}
           </h2>
           <div className="container mx-auto px-4 py-8 text-center">
             <p className="text-xl">No hay viajes disponibles por el momento.</p>
@@ -93,7 +109,7 @@ const SectionCalendar: React.FC = () => {
     <section className="w-full md:h-[90vh] md:px-20 pt-10 md:py-20">
       <div className="px-2 md:px-5">
         <h2 className="font-[Eckmannpsych] text-redColor tracking-[0.1rem]">
-          CALENDARIO 2025
+          {calendarTitle}
         </h2>
 
         <div className="container mx-auto px-4 py-8">

@@ -35,6 +35,8 @@ const TripDetail = ({ trip }: { trip: Trip }) => {
     header_video,
     date_days,
     date_month,
+    date_days_2,
+    date_month_2,
     trip_contents,
     final_img_1,
     final_img_2,
@@ -116,8 +118,15 @@ const TripDetail = ({ trip }: { trip: Trip }) => {
           <span
             className={`${bebasNeuelFont.className} tracking-[0.2rem] uppercase text-redColor text-2xl md:text-3xl`}
           >
-            {date_days} {date_month}
+            {date_month} {date_days}
           </span>
+          {date_days_2 && date_month_2 && (
+            <span
+              className={`${bebasNeuelFont.className} tracking-[0.2rem] uppercase text-redColor text-2xl md:text-3xl block mt-1`}
+            >
+              {date_month_2} {date_days_2}
+            </span>
+          )}
         </div>
       </section>
 

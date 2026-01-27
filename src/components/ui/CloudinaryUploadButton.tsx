@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { CldUploadWidget } from "next-cloudinary";
-import Image from "next/image";
 
 interface CloudinaryUploadButtonProps {
   value: string;
@@ -101,24 +100,25 @@ export default function CloudinaryUploadButton({
       {/* Error Display */}
       {error && <p className="text-red-500 text-sm">{error}</p>}
 
-      {/* Image Preview */}
+      {/* Image Preview - using native img to avoid next/image hostname restrictions */}
       {showPreview && value && (
         <div className="mt-2 relative">
           <p className="text-xs text-gray-500 mb-1">Preview:</p>
-          <div className={previewClassName || "relative w-full max-w-xs h-32 border rounded bg-gray-50"}>
-            <Image
+          <div className={previewClassName || "relative w-full max-w-xs h-32 border rounded bg-gray-50 flex items-center justify-center"}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
               src={value}
               alt={label || "Preview"}
-              fill
-              className="object-contain p-1"
+              className="max-w-full max-h-full object-contain p-1"
               onError={(e) => {
                 e.currentTarget.style.display = "none";
-                const parent = e.currentTarget.parentElement;
-                if (parent) {
-                  parent.innerHTML = '<p class="flex items-center justify-center h-full text-gray-400 text-sm">Unable to load preview</p>';
+                const sibling = e.currentTarget.nextElementSibling;
+                if (sibling) {
+                  (sibling as HTMLElement).style.display = "block";
                 }
               }}
             />
+            <p className="hidden text-gray-400 text-sm">Unable to load preview</p>
           </div>
         </div>
       )}

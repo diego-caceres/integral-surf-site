@@ -217,6 +217,7 @@ export default function AdminMenuImagesPage() {
                     onChange={(url) => handleInputChange(title, index, "url", url)}
                     label="URL"
                     folder={`integral-surf/menu-images/${title.toLowerCase().replace(/\s+/g, '-')}`}
+                    showPreview={false}
                   />
                 </div>
                 <div className="mb-3">

@@ -20,6 +20,8 @@ export type Trip = {
   coaching_subtitle: string;
   date_month: string;
   date_days: string;
+  date_month_2?: string;
+  date_days_2?: string;
   header_image: string;
   header_mobile_image?: string;
   header_video?: string;

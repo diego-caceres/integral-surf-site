@@ -147,7 +147,7 @@ export default function NuevoViaje() {
           <input
             type="text"
             name="title_2"
-            placeholder="Título 2"
+            placeholder="País"
             value={form.title_2}
             onChange={handleChange}
             className="p-2 border rounded"

@@ -18,22 +18,26 @@ interface MenuImagesData {
   [key: string]: MenuItemImage[];
 }
 
-const menuTripItems = [
-  { name: "La Paloma, Uruguay ", url: "/viajes/la-paloma-marzo" },
-  { name: "Cabo Polonio, Uruguay ", url: "/viajes/cabo-polonio-abril" },
-  { name: "Garopaba, Brasil ", url: "/viajes/garopaba-octubre" },
-  { name: "Itamambuca, Brasil ", url: "/viajes/itamambuca" },
-  {
-    name: "Punta del Diablo, Uruguay ",
-    url: "/viajes/punta-del-diablo-noviembre",
-  },
-  { name: "Lobitos, Perú ", url: "/viajes/lobitos-peru-agosto" },
-  { name: "Santa Teresa, Costa Rica ", url: "/viajes/costa-rica-junio" },
-];
+// Define the structure for trip menu items
+interface MenuTripItem {
+  name: string;
+  id: string;
+  url: string;
+}
+
+// Define the structure for trips from API
+interface TripData {
+  slug: string;
+  title: string;
+  title_2: string;
+  is_deleted?: boolean;
+}
 
 export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [menuItemImages, setMenuItemImages] = useState<MenuImagesData>({}); // State for images
+  const [menuItemImages, setMenuItemImages] = useState<MenuImagesData>({});
+  const [menuTripItems, setMenuTripItems] = useState<MenuTripItem[]>([]);
+  const [destinosTitle, setDestinosTitle] = useState("DESTINOS 2026");
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -51,11 +55,46 @@ export default function NavBar() {
         setMenuItemImages(data);
       } catch (error) {
         console.error("Error fetching menu images:", error);
-        // Optionally, set some default/fallback images or handle error state
+      }
+    };
+
+    const fetchTrips = async () => {
+      try {
+        const response = await fetch("/api/trips");
+        if (!response.ok) {
+          throw new Error("Failed to fetch trips");
+        }
+        const trips: TripData[] = await response.json();
+        const activeTrips = trips
+          .filter((trip) => !trip.is_deleted)
+          .map((trip) => ({
+            name: trip.title + (trip.title_2 ? ", " + trip.title_2 : ""),
+            id: trip.slug,
+            url: `/viajes/${trip.slug}`,
+          }));
+        setMenuTripItems(activeTrips);
+      } catch (error) {
+        console.error("Error fetching trips:", error);
+      }
+    };
+
+    const fetchDestinosTitle = async () => {
+      try {
+        const response = await fetch("/api/config/menu_destinos_title");
+        if (response.ok) {
+          const data = await response.json();
+          if (data.value) {
+            setDestinosTitle(data.value);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching destinos title:", error);
       }
     };
 
     fetchMenuItems();
+    fetchTrips();
+    fetchDestinosTitle();
   }, []);
 
   return (
@@ -191,11 +230,11 @@ export default function NavBar() {
             <div className="grid grid-cols-2 gap-x-8">
               <div>
                 <h3 className="font-semibold text-lg mb-3 text-primary">
-                  DESTINOS 2025
+                  {destinosTitle}
                 </h3>
                 <ul className="space-y-2">
-                  {menuTripItems.map((destino) => (
-                    <li key={destino.name}>
+                  {menuTripItems.map((destino, index) => (
+                    <li key={`${destino.id}-${index}`}>
                       <Link
                         href={destino.url}
                         className="hover:text-accent text-sm"
@@ -226,7 +265,7 @@ export default function NavBar() {
             </div>
           </MegaMenuItem>
 
-          <MegaMenuItem
+          {/* <MegaMenuItem
             title="TIENDA"
             href="/productos"
             images={menuItemImages["TIENDA"]}
@@ -240,7 +279,7 @@ export default function NavBar() {
             images={menuItemImages["BLOG"]}
           >
             <p className="text-primary">Próximamente...</p>
-          </MegaMenuItem>
+          </MegaMenuItem> */}
 
           <MegaMenuItem
             title="NOSOTROS"
