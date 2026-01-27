@@ -154,7 +154,7 @@ export default function ManageAboutPage() {
   return (
     <div className="container mx-auto p-4 md:p-8">
       <h1 className="text-3xl font-bold mb-10 text-primary text-center">
-        Manage About Page
+        Administra la Página About (Nosotros)
       </h1>
 
       <form onSubmit={handleSaveAll} className="space-y-8">

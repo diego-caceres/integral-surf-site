@@ -155,7 +155,7 @@ export default function AdminMenuImagesPage() {
   return (
     <div className="container mx-auto p-4 md:p-8">
       <h1 className="text-3xl font-bold mb-8 text-primary">
-        Manage Menu Images
+        Administra las Imágenes del Menú
       </h1>
 
       {Object.entries(menuImages).map(([title, images]) => (

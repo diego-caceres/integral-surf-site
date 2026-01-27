@@ -180,12 +180,12 @@ export default function ManageConfigurationsPage() {
   return (
     <div className="container mx-auto p-4 md:p-8">
       <h1 className="text-3xl font-bold mb-10 text-primary text-center">
-        Manage General Configurations
+        Administra las Configuraciones del Sitio
       </h1>
 
       <div className="bg-white shadow-md rounded-lg p-6 mb-8">
         <h2 className="text-xl font-semibold mb-4 text-primary">
-          Add New Configuration
+          Agregar Nueva Configuración
         </h2>
         <form onSubmit={handleAddConfiguration} className="space-y-4">
           <div>
@@ -193,7 +193,7 @@ export default function ManageConfigurationsPage() {
               htmlFor="config_key"
               className="block text-sm font-medium text-gray-700"
             >
-              Configuration Key
+              Clave de Configuración (Key)
             </label>
             <input
               type="text"
@@ -209,7 +209,7 @@ export default function ManageConfigurationsPage() {
               htmlFor="config_value"
               className="block text-sm font-medium text-gray-700"
             >
-              Configuration Value
+              Configuración Valor (Value)
             </label>
             <textarea
               id="config_value"
@@ -224,17 +224,17 @@ export default function ManageConfigurationsPage() {
             disabled={isAdding}
             className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
           >
-            {isAdding ? "Adding..." : "Add Configuration"}
+            {isAdding ? "Agregando..." : "Agregar Configuración"}
           </button>
         </form>
       </div>
 
       <div className="bg-white shadow-md rounded-lg p-6">
         <h2 className="text-xl font-semibold mb-4 text-primary">
-          Existing Configurations
+          Configuraciones Existentes
         </h2>
         {configurations.length === 0 ? (
-          <p>No configurations found.</p>
+          <p>No se encontraron configuraciones.</p>
         ) : (
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
@@ -244,25 +244,25 @@ export default function ManageConfigurationsPage() {
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
-                    Key
+                    Key (clave)
                   </th>
                   <th
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
-                    Value
+                    Valor
                   </th>
                   <th
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
-                    Last Updated
+                    Ultima Actualización
                   </th>
                   <th
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
-                    Actions
+                    Acciones
                   </th>
                 </tr>
               </thead>
@@ -296,13 +296,13 @@ export default function ManageConfigurationsPage() {
                             onClick={() => handleUpdateConfiguration(item)}
                             className="text-green-600 hover:text-green-900"
                           >
-                            Save
+                            Guardar
                           </button>
                           <button
                             onClick={() => toggleEditMode(item.id)}
                             className="text-gray-600 hover:text-gray-900"
                           >
-                            Cancel
+                            Cancelar
                           </button>
                         </>
                       ) : (
@@ -310,7 +310,7 @@ export default function ManageConfigurationsPage() {
                           onClick={() => toggleEditMode(item.id)}
                           className="text-indigo-600 hover:text-indigo-900"
                         >
-                          Edit
+                          Editar
                         </button>
                       )}
                       <button
@@ -320,7 +320,7 @@ export default function ManageConfigurationsPage() {
                         className="text-red-600 hover:text-red-900 ml-2"
                         disabled={item.isEditing}
                       >
-                        Delete
+                        Borrar
                       </button>
                     </td>
                   </tr>

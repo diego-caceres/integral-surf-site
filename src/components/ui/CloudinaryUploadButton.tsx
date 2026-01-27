@@ -71,7 +71,7 @@ export default function CloudinaryUploadButton({
               disabled={uploading}
               className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-400 transition-colors"
             >
-              {uploading ? "Uploading..." : "Upload Image"}
+              {uploading ? "Cargando..." : "Cargar Imagen"}
             </button>
           )}
         </CldUploadWidget>
@@ -83,7 +83,7 @@ export default function CloudinaryUploadButton({
             onClick={() => onChange("")}
             className="px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
           >
-            Clear
+            Limpiar
           </button>
         )}
       </div>

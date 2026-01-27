@@ -175,7 +175,7 @@ export default function AdminSectionHeaderImagesPage() {
     <div className="container mx-auto p-4 md:p-8">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-primary">
-          Manage Section Header Images
+          Administra las Imágenes del Header (página principal)
         </h1>
         <button
           onClick={handleSaveChanges}
@@ -239,6 +239,7 @@ export default function AdminSectionHeaderImagesPage() {
                       onChange={(url) => handleInputChange(deviceType, index, "image_url", url)}
                       label="Image URL"
                       folder={`integral-surf/section-headers/${deviceType}`}
+                      showPreview={false}
                     />
                   </div>
                   <div className="mb-3">
