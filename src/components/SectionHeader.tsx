@@ -38,7 +38,7 @@ const SectionHeader: React.FC = () => {
   const [webImages, setWebImages] = useState<SectionImage[]>([]);
   const [mobileImages, setMobileImages] = useState<SectionImage[]>([]);
   const [isLoading, setIsLoading] = useState(true); // Combined loading state for images and title
-  const [headerTitle, setHeaderTitle] = useState<string>(""); // State for the title
+  const [headerTitle, setHeaderTitle] = useState<string>("Viajes al Mar"); // State for the title
   const [error, setError] = useState<string | null>(null);
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
