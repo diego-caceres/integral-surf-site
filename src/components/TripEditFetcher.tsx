@@ -44,6 +44,8 @@ export default function TripEditFetcher(params: TripEditFetcherProps) {
     final_img_1: "",
     final_img_2: "",
     order: 0,
+    created_at: "",
+    updated_at: "",
   });
 
   const [contents, setContents] = useState<TripContent[]>([]);
@@ -248,6 +250,15 @@ export default function TripEditFetcher(params: TripEditFetcherProps) {
           </button>
         </div>
       </div>
+
+      {form.updated_at && (
+        <p className="text-sm text-gray-500 mb-4">
+          Última actualización: {new Date(form.updated_at).toLocaleString("es-AR", {
+            dateStyle: "medium",
+            timeStyle: "short",
+          })}
+        </p>
+      )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Información general */}

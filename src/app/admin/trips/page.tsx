@@ -19,6 +19,8 @@ type Trip = {
   destiny: string;
   date_month: string;
   date_days: string;
+  date_month_2?: string;
+  date_days_2?: string;
   order: number;
   is_deleted?: boolean;
 };
@@ -223,6 +225,12 @@ export default function TripsManagement() {
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
+                  Fechas 2
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Orden
                 </th>
                 <th
@@ -267,6 +275,13 @@ export default function TripsManagement() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900">
                         {trip.date_month} {trip.date_days}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-900">
+                        {trip.date_month_2 && trip.date_days_2
+                          ? `${trip.date_month_2} ${trip.date_days_2}`
+                          : "-"}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
