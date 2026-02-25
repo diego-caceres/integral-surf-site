@@ -265,15 +265,17 @@ export default function NavBar() {
             </div>
           </MegaMenuItem>
 
-          {/* <MegaMenuItem
+          <MegaMenuItem
             title="TIENDA"
             href="/productos"
             images={menuItemImages["TIENDA"]}
           >
-            <p className="text-primary">Próximamente...</p>
+            <p className="text-primary text-sm">
+              Merch oficial y productos para apoyar los viajes.
+            </p>
           </MegaMenuItem>
 
-          <MegaMenuItem
+          {/* <MegaMenuItem
             title="BLOG"
             href="/blog"
             images={menuItemImages["BLOG"]}

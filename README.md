@@ -49,6 +49,9 @@ integral-surf-site/
    NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
    CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+   RESEND_API_KEY=your_resend_api_key
+   STORE_FROM_EMAIL=Integral Surf <store@yourdomain.com>
+   STORE_ADMIN_EMAILS=admin1@yourdomain.com,admin2@yourdomain.com
    ```
 
 ### Development
@@ -79,6 +82,7 @@ For more detailed information about the project, please refer to:
 - [API Integration](./docs/API.md) - API and database integration
 - [Styling Guide](./docs/STYLING.md) - Styling conventions and design system
 - [Deployment](./docs/DEPLOYMENT.md) - Deployment process and configuration
+- [Store Setup](./docs/STORE_SETUP.md) - Store schema, cart order flow, and email setup
 - [Contributing](./docs/CONTRIBUTING.md) - How to contribute to the project
 
 ## Learn More
