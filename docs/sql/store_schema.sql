@@ -57,6 +57,11 @@ ALTER TABLE public.store_order_items
 ALTER TABLE public.store_order_items
   ADD COLUMN IF NOT EXISTS selected_color TEXT;
 
+-- Enable RLS on all store tables (service role bypasses this, but protects against direct anon access)
+ALTER TABLE public.store_products ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.store_orders ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.store_order_items ENABLE ROW LEVEL SECURITY;
+
 CREATE INDEX IF NOT EXISTS idx_store_products_active_order
   ON public.store_products(is_active, sort_order);
 
@@ -70,7 +75,8 @@ BEGIN
   NEW.updated_at = NOW();
   RETURN NEW;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql
+SET search_path = '';
 
 DROP TRIGGER IF EXISTS trg_store_products_updated_at ON public.store_products;
 CREATE TRIGGER trg_store_products_updated_at

@@ -76,7 +76,7 @@ export async function PUT(request: NextRequest) {
 
 // You would need to create this PostgreSQL function in your Supabase SQL editor:
 /*
-CREATE OR REPLACE FUNCTION update_menu_items_transactional(payload_data JSONB)
+CREATE OR REPLACE FUNCTION public.update_menu_items_transactional(payload_data JSONB)
 RETURNS VOID AS $$
 DECLARE
     item_title TEXT;
@@ -102,5 +102,6 @@ BEGIN
         END LOOP;
     END LOOP;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql
+SET search_path = '';
 */
