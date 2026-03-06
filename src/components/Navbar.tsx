@@ -33,11 +33,17 @@ interface TripData {
   is_deleted?: boolean;
 }
 
+interface FundamentosSection {
+  id: string;
+  title: string;
+}
+
 export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const [menuItemImages, setMenuItemImages] = useState<MenuImagesData>({});
   const [menuTripItems, setMenuTripItems] = useState<MenuTripItem[]>([]);
   const [destinosTitle, setDestinosTitle] = useState("DESTINOS 2026");
+  const [fundamentosSections, setFundamentosSections] = useState<FundamentosSection[]>([]);
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -92,9 +98,24 @@ export default function NavBar() {
       }
     };
 
+    const fetchFundamentos = async () => {
+      try {
+        const response = await fetch("/api/fundamentos");
+        if (response.ok) {
+          const data = await response.json();
+          if (data.sections) {
+            setFundamentosSections(data.sections);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching fundamentos sections:", error);
+      }
+    };
+
     fetchMenuItems();
     fetchTrips();
     fetchDestinosTitle();
+    fetchFundamentos();
   }, []);
 
   return (
@@ -247,13 +268,13 @@ export default function NavBar() {
               </div>
               <div>
                 <h3 className="font-semibold text-lg mb-3 text-primary">
-                  QUÉ APRENDERÁS
+                  FUNDAMENTOS
                 </h3>
                 <ul className="space-y-2">
-                  {["Coaching", "Yoga", "Naturaleza"].map((item) => (
+                  {["Surfing", "Yoga", "Naturaleza", "Arte"].map((item, index) => (
                     <li key={item}>
                       <Link
-                        href="/fundamentos"
+                        href={`/fundamentos#section-${index}`}
                         className="hover:text-accent text-sm"
                       >
                         {item}

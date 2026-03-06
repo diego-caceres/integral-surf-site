@@ -13,6 +13,13 @@ export default function FundamentosPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!loading && fundamentosData && window.location.hash) {
+      const el = document.getElementById(window.location.hash.slice(1));
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [loading, fundamentosData]);
+
+  useEffect(() => {
     const fetchFundamentosData = async () => {
       try {
         const response = await fetch("/api/fundamentos");
@@ -65,6 +72,7 @@ export default function FundamentosPage() {
       {fundamentosData.sections.map((section, index) => (
         <section
           key={section.id}
+          id={`section-${index}`}
           className={`py-16 md:py-24 ${
             index % 2 === 0 ? "bg-secondary/20" : "bg-background"
           }`}
