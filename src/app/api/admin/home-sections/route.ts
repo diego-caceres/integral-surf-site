@@ -47,6 +47,7 @@ export async function PUT(request: NextRequest) {
             image_url: section.image_url,
             image_2_url: section.image_2_url,
             video_url: section.video_url,
+            background_image_url: section.background_image_url,
             updated_at: new Date().toISOString(),
           },
           { onConflict: "section_key" }

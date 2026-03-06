@@ -5,18 +5,20 @@ interface SectionExperiencesProps {
   title?: string;
   description?: string;
   videoUrl?: string;
+  backgroundImageUrl?: string;
 }
 
 export default function SectionExperiences({
   title = "Experiencias Integrales",
   description = "En este ciclo de entrevistas a viajeros, Federico García nos cuenta sobre su experiencia aprendiendo a surfear con Integral en Perú",
   videoUrl = "https://www.youtube.com/embed/EDKX-i1_yMI?si=CLg0ghvuidtUVpG9&autoplay=1&mute=1",
+  backgroundImageUrl = "/images/home/experiences-background.jpg",
 }: SectionExperiencesProps) {
   return (
     <div className="relative w-full min-[1300px]:h-screen overflow-hidden">
       {/* Background Image */}
       <Image
-        src="/images/home/experiences-background.jpg"
+        src={backgroundImageUrl}
         alt="Background"
         fill
         style={{ objectFit: "cover" }}

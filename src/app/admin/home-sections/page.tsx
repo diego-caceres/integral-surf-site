@@ -100,6 +100,7 @@ export default function ManageHomeSectionsPage() {
           const isExperiences = key === "experiences";
           const isOurPurpose = key === "our_purpose";
           const isTheRoad = key === "the_road";
+          const hasBackground = isTheRoad || isExperiences;
 
           return (
             <div key={key} className="bg-white shadow-md rounded-lg p-6">
@@ -186,6 +187,16 @@ export default function ManageHomeSectionsPage() {
                     value={section.image_2_url || ""}
                     onChange={(url) => updateField(key, "image_2_url", url)}
                     label="Segunda Imagen"
+                    folder="integral-surf/home"
+                  />
+                )}
+
+                {/* Background image - for the_road and experiences */}
+                {hasBackground && (
+                  <CloudinaryUploadButton
+                    value={section.background_image_url || ""}
+                    onChange={(url) => updateField(key, "background_image_url", url)}
+                    label="Imagen de Fondo"
                     folder="integral-surf/home"
                   />
                 )}

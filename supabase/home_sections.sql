@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS home_sections (
   image_url TEXT,
   image_2_url TEXT,
   video_url TEXT,
+  background_image_url TEXT,
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -69,3 +70,6 @@ VALUES
     'https://www.youtube.com/embed/EDKX-i1_yMI?si=CLg0ghvuidtUVpG9&autoplay=1&mute=1'
   )
 ON CONFLICT (section_key) DO NOTHING;
+
+-- Migration: add background_image_url column if it doesn't exist
+ALTER TABLE home_sections ADD COLUMN IF NOT EXISTS background_image_url TEXT;

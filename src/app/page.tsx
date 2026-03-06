@@ -67,6 +67,7 @@ export default function HomePage() {
         buttonText={theRoad?.button_text ?? undefined}
         imageUrl={theRoad?.image_url || undefined}
         image2Url={theRoad?.image_2_url || undefined}
+        backgroundImageUrl={theRoad?.background_image_url || undefined}
       />
       <SectionCoaching
         title={coaching?.title ?? undefined}
@@ -78,6 +79,7 @@ export default function HomePage() {
         title={experiences?.title ?? undefined}
         description={experiences?.description ?? undefined}
         videoUrl={experiences?.video_url || undefined}
+        backgroundImageUrl={experiences?.background_image_url || undefined}
       />
       <SectionInstagram />
 

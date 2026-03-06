@@ -8,5 +8,6 @@ export interface HomeSection {
   image_url: string | null;
   image_2_url: string | null;
   video_url: string | null;
+  background_image_url: string | null;
   updated_at: string;
 }

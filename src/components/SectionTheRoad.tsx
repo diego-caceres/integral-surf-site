@@ -8,6 +8,7 @@ interface SectionTheRoadProps {
   buttonText?: string;
   imageUrl?: string;
   image2Url?: string;
+  backgroundImageUrl?: string;
 }
 
 export default function SectionTheRoad({
@@ -16,12 +17,13 @@ export default function SectionTheRoad({
   buttonText = "Descubre más",
   imageUrl = "/images/home/the-road-img1.png",
   image2Url = "/images/home/the-road-img2.png",
+  backgroundImageUrl = "/images/home/sea-background.jpeg",
 }: SectionTheRoadProps) {
   return (
     <div className="relative w-full min-[1150px]:min-h-[90vh] min-[1150px]:px-20 min-[1150px]:py-20 pb-10 min-[1150px]:pb-20 grid grid-cols-1 min-[1150px]:grid-cols-2 min-[1150px]:gap-10">
       {/* Background Image */}
       <Image
-        src="/images/home/sea-background.jpeg"
+        src={backgroundImageUrl}
         alt="Background"
         fill
         style={{ objectFit: "cover", zIndex: -1 }}
