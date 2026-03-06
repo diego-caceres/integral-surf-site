@@ -52,7 +52,7 @@ const SectionCalendar: React.FC = () => {
 
   if (isLoading) {
     return (
-      <section className="w-full md:h-[90vh] md:px-20 pt-10 md:py-20">
+      <section className="w-full min-[1190px]:min-h-[90vh] md:px-20 pt-10 pb-10 md:py-20">
         <LogoLoader size={60} />
       </section>
     );
@@ -60,7 +60,7 @@ const SectionCalendar: React.FC = () => {
 
   if (error) {
     return (
-      <div className="w-full md:h-[90vh] md:px-20 pt-10 md:py-20 flex justify-center items-center">
+      <div className="w-full min-[1190px]:min-h-[90vh] md:px-20 pt-10 pb-10 md:py-20 flex justify-center items-center">
         <div className="text-red-500 text-center">
           <p className="text-xl font-bold">Error loading trips</p>
           <p>{error}</p>
@@ -71,7 +71,7 @@ const SectionCalendar: React.FC = () => {
 
   if (trips.length === 0) {
     return (
-      <section className="w-full md:h-[90vh] md:px-20 pt-10 md:py-20">
+      <section className="w-full min-[1190px]:min-h-[90vh] md:px-20 pt-10 pb-10 md:py-20">
         <div className="px-2 md:px-5">
           <h2 className="font-[Eckmannpsych] text-redColor tracking-[0.1rem]">
             {calendarTitle}
@@ -84,59 +84,45 @@ const SectionCalendar: React.FC = () => {
     );
   }
 
-  // Split trips into two groups for the grid layout
-  const activeTrips = trips; // Assuming 'trips' state already contains only active ones
-
-  let firstHalf: Trip[];
-  let secondHalf: Trip[];
+  // Split trips: even pairs go into two columns, odd last trip spans both
+  const activeTrips = trips;
+  let pairedTrips: Trip[];
   let lastTrip: Trip | null = null;
 
-  if (activeTrips.length % 2 !== 0 && activeTrips.length > 0) {
-    // Odd number of trips: save the last one for the center
+  if (activeTrips.length % 2 !== 0) {
     lastTrip = activeTrips[activeTrips.length - 1];
-    const remainingTrips = activeTrips.slice(0, activeTrips.length - 1);
-    firstHalf = remainingTrips.slice(0, remainingTrips.length / 2);
-    secondHalf = remainingTrips.slice(remainingTrips.length / 2);
+    pairedTrips = activeTrips.slice(0, activeTrips.length - 1);
   } else {
-    // Even number of trips (or zero): split them into two columns
-    firstHalf = activeTrips.slice(0, activeTrips.length / 2);
-    secondHalf = activeTrips.slice(activeTrips.length / 2);
-    // Ensure lastTrip is null if it's an even number, so it doesn't render
-    lastTrip = null;
+    pairedTrips = activeTrips;
+  }
+
+  // Interleave into [left0, right0, left1, right1, ...] so CSS grid rows align heights
+  const half = pairedTrips.length / 2;
+  const leftTrips = pairedTrips.slice(0, half);
+  const rightTrips = pairedTrips.slice(half);
+  const gridItems: Trip[] = [];
+  for (let i = 0; i < half; i++) {
+    gridItems.push(leftTrips[i]);
+    gridItems.push(rightTrips[i]);
   }
 
   return (
-    <section className="w-full md:h-[90vh] md:px-20 pt-10 md:py-20">
+    <section className="w-full min-[1190px]:min-h-[90vh] md:px-20 pt-10 pb-10 md:py-20">
       <div className="px-2 md:px-5">
         <h2 className="font-[Eckmannpsych] text-redColor tracking-[0.1rem]">
           {calendarTitle}
         </h2>
 
         <div className="container mx-auto px-4 py-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 md:gap-4">
-            {/* Left column */}
-            <div>
-              {firstHalf.map((trip) => (
-                <div key={trip.id}>
-                  <TripCard trip={trip} />
-                </div>
-              ))}
-            </div>
-
-            {/* Right column */}
-            <div>
-              {secondHalf.map((trip) => (
-                <div key={trip.id}>
-                  <TripCard trip={trip} />
-                </div>
-              ))}
-            </div>
+          <div className="grid grid-cols-1 min-[1190px]:grid-cols-2 gap-4 items-stretch">
+            {gridItems.map((trip) => (
+              <TripCard key={trip.id} trip={trip} />
+            ))}
           </div>
 
-          {/* Last trip centered below the columns */}
           {lastTrip && (
-            <div className="flex justify-center md:mt-4">
-              <div>
+            <div className="flex justify-center mt-4">
+              <div className="w-full min-[1190px]:w-1/2">
                 <TripCard trip={lastTrip} />
               </div>
             </div>
