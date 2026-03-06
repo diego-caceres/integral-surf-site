@@ -7,6 +7,7 @@ import {
   Cog8ToothIcon,
   UserGroupIcon,
   AcademicCapIcon,
+  HomeIcon,
 } from "@heroicons/react/24/outline";
 
 interface AdminSection {
@@ -53,6 +54,12 @@ const adminSections: AdminSection[] = [
     title: "Configuraciones Generales",
     description: "Administra los valores de configuración general del sitio.",
     icon: Cog8ToothIcon, // Using a settings icon
+  },
+  {
+    href: "/admin/home-sections",
+    title: "Secciones Home",
+    description: "Edita los textos e imágenes de las secciones de la página principal.",
+    icon: HomeIcon,
   },
   // Add more admin sections here as needed
 ];
