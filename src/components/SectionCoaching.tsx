@@ -16,33 +16,26 @@ export default function SectionCoaching({
   imageUrl = "/images/home/coaching.jpg",
 }: SectionCoachingProps) {
   return (
-    <div className="relative w-full min-h-screen overflow-hidden pt-20">
-      {/* Content Overlay */}
-      <div className="absolute inset-0 flex items-start justify-center p-6 pb-10">
-        <div className="flex flex-col md:grid md:grid-cols-2 md:pl-[100px] w-full gap-6 ">
-          {/* Left Column (Shown below on mobile) */}
-          <div className="flex flex-col gap-4 md:gap-8 justify-center order-2 md:order-1 ">
-            <Image
-              src={imageUrl}
-              alt="Left Image 1"
-              width={488}
-              height={594}
-              style={{ objectFit: "cover" }}
-              className="max-w-full"
-            />
-          </div>
+    <div className="w-full min-[1150px]:min-h-[90vh] min-[1150px]:px-20 min-[1150px]:py-20 pb-10 min-[1150px]:pb-20 grid grid-cols-1 min-[1150px]:grid-cols-2 min-[1150px]:gap-10">
+      {/* Left Column - Image (below text on mobile) */}
+      <div className="flex flex-row justify-center items-start min-[1150px]:items-center order-2 min-[1150px]:order-1">
+        <Image
+          src={imageUrl}
+          alt="Left Image 1"
+          width={500}
+          height={600}
+          style={{ objectFit: "cover" }}
+          className="max-w-full max-h-[500px]"
+        />
+      </div>
 
-          {/* Right Column (Shown first on mobile) */}
-          <div className="md:max-w-[450px] flex flex-col items-center md:items-start justify-center gap-4 order-1 md:order-2 py-10 md:py-20 text-left">
-            <h2 className="uppercase font-[Eckmannpsych]  text-3xl md:text-5xl">
-              {title}
-            </h2>
-            <p className="text-lg md:text-xl">{description}</p>
-            <Link href="/fundamentos">
-              <Button className="mt-4 text-lg md:text-xl">{buttonText}</Button>
-            </Link>
-          </div>
-        </div>
+      {/* Right Column - Text (above image on mobile) */}
+      <div className="max-w-[660px] mx-auto min-[1150px]:mx-0 px-10 min-[1150px]:px-20 py-10 min-[1150px]:py-20 text-center min-[1150px]:text-left order-1 min-[1150px]:order-2">
+        <h2 className="uppercase font-[Eckmannpsych]">{title}</h2>
+        <p className="mt-6 text-xl tracking-[0.2rem]">{description}</p>
+        <Link href="/fundamentos">
+          <Button className="mt-8 text-xl">{buttonText}</Button>
+        </Link>
       </div>
     </div>
   );

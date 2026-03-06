@@ -37,8 +37,8 @@ const SectionOurPurpose: React.FC<SectionOurPurposeProps> = ({
           src={imageUrl}
           alt="Nuestro propósito"
           className="max-h-[500px]"
-          width={402}
-          height={500}
+          width={500}
+          height={600}
         />
       </div>
     </section>
