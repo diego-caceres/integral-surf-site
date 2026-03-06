@@ -15,6 +15,23 @@ interface ApiImageData {
   mobile: SectionImage[];
 }
 
+interface HeaderCache {
+  web: SectionImage[];
+  mobile: SectionImage[];
+  title: string;
+}
+
+const HEADER_CACHE_KEY = "integral_section_header";
+
+function loadHeaderCache(): HeaderCache | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const cached = localStorage.getItem(HEADER_CACHE_KEY);
+    if (cached) return JSON.parse(cached);
+  } catch { /* ignore */ }
+  return null;
+}
+
 // Define default images to display while loading
 const defaultImageUrls = [
   "/images/home/header1.jpg",
@@ -37,16 +54,24 @@ const SectionHeader: React.FC = () => {
     useState<SectionImage[]>(defaultSectionImages);
   const [webImages, setWebImages] = useState<SectionImage[]>([]);
   const [mobileImages, setMobileImages] = useState<SectionImage[]>([]);
-  const [isLoading, setIsLoading] = useState(true); // Combined loading state for images and title
-  const [headerTitle, setHeaderTitle] = useState<string>("Viajes al Mar"); // State for the title
+  const [isLoading, setIsLoading] = useState(true);
+  const [headerTitle, setHeaderTitle] = useState<string>("Viajes al Mar");
   const [error, setError] = useState<string | null>(null);
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
 
   // Effect for fetching images and title
   useEffect(() => {
+    // Load from cache immediately to avoid showing defaults
+    const cached = loadHeaderCache();
+    if (cached) {
+      setWebImages(cached.web);
+      setMobileImages(cached.mobile);
+      setHeaderTitle(cached.title);
+      setIsLoading(false);
+    }
+
     const fetchData = async () => {
-      setIsLoading(true);
       setError(null);
       try {
         // Fetch Images
@@ -57,20 +82,18 @@ const SectionHeader: React.FC = () => {
           );
         }
         const imageData: ApiImageData = await imageResponse.json();
-        setWebImages(imageData.web || []);
-        setMobileImages(imageData.mobile || []);
 
         // Fetch Title
+        let freshTitle = headerTitle;
         const titleResponse = await fetch(
           "/api/config/section_header_main_title"
         );
         if (!titleResponse.ok) {
-          // If title is not found (404) or other error, we can set a default or leave it empty
           if (titleResponse.status === 404) {
             console.warn(
               "Main title configuration not found, using empty title."
             );
-            setHeaderTitle(""); // Or a default title like "Welcome"
+            freshTitle = "";
           } else {
             throw new Error(
               `Failed to fetch title: ${titleResponse.statusText} (${titleResponse.status})`
@@ -78,20 +101,36 @@ const SectionHeader: React.FC = () => {
           }
         } else {
           const titleData = await titleResponse.json();
-          setHeaderTitle(titleData.value || ""); // Ensure value exists
+          freshTitle = titleData.value || "";
+        }
+
+        // Compare with cache; only update state and cache if data changed
+        const freshCache: HeaderCache = {
+          web: imageData.web || [],
+          mobile: imageData.mobile || [],
+          title: freshTitle,
+        };
+        const cached = localStorage.getItem(HEADER_CACHE_KEY);
+        if (JSON.stringify(freshCache) !== cached) {
+          localStorage.setItem(HEADER_CACHE_KEY, JSON.stringify(freshCache));
+          setWebImages(freshCache.web);
+          setMobileImages(freshCache.mobile);
+          setHeaderTitle(freshCache.title);
         }
       } catch (e) {
         const errorMessage =
           e instanceof Error ? e.message : "An unknown error occurred";
         console.error("Error fetching section header data:", errorMessage);
-        setError(errorMessage);
-        // Keep webImages and mobileImages empty on error, resize effect will handle it
-        // Also, headerTitle will remain its initial value or the value from a partially successful fetch
+        // Only show error state if we have no cached data to display
+        if (!loadHeaderCache()) {
+          setError(errorMessage);
+        }
       } finally {
-        setIsLoading(false); // Fetch attempt is complete
+        setIsLoading(false);
       }
     };
     fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Effect for determining and setting active images based on screen size and fetched data

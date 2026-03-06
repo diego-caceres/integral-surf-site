@@ -65,6 +65,11 @@ export default function AdminNavbar() {
                   Trips
                 </a>
               </Link>
+              <Link href="/admin/home-sections" legacyBehavior>
+                <a className="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">
+                  Secciones Home
+                </a>
+              </Link>
               <Link href="/admin/configurations" legacyBehavior>
                 <a className="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">
                   Configuraciones

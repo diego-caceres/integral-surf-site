@@ -2,7 +2,21 @@ import Image from "next/image";
 import Button from "@/components/ui/Button";
 import Link from "next/link";
 
-export default function SectionTheRoad() {
+interface SectionTheRoadProps {
+  title?: string;
+  description?: string;
+  buttonText?: string;
+  imageUrl?: string;
+  image2Url?: string;
+}
+
+export default function SectionTheRoad({
+  title = "El camino del surf no es solitario",
+  description = "juntos aprendemos más y mejor, compartir es un principio básico del surf desde sus orígenes, y es una oportunidad acompañarnos frente a los desafíos que el mar nos propone.",
+  buttonText = "Descubre más",
+  imageUrl = "/images/home/the-road-img1.png",
+  image2Url = "/images/home/the-road-img2.png",
+}: SectionTheRoadProps) {
   return (
     <div className="relative w-full min-h-screen overflow-hidden pt-20">
       {/* Background Image */}
@@ -20,14 +34,14 @@ export default function SectionTheRoad() {
           {/* Left Column (Shown below on mobile) */}
           <div className="flex flex-col gap-4 md:gap-8 justify-center order-2 md:order-1 ">
             <Image
-              src="/images/home/the-road-img1.png"
+              src={imageUrl}
               alt="Left Image 1"
               width={450}
               height={380}
               className="max-w-full"
             />
             <Image
-              src="/images/home/the-road-img2.png"
+              src={image2Url}
               alt="Left Image 2"
               width={450}
               height={274}
@@ -38,15 +52,11 @@ export default function SectionTheRoad() {
           {/* Right Column (Shown first on mobile) */}
           <div className="md:max-w-[450px] flex flex-col items-center md:items-start justify-center gap-4 order-1 md:order-2 py-10 md:py-20 text-left">
             <h2 className="uppercase font-[Eckmannpsych] text-white text-3xl md:text-5xl">
-              El camino del surf no es solitario
+              {title}
             </h2>
-            <p className="text-white text-lg md:text-xl">
-              juntos aprendemos más y mejor, compartir es un principio básico
-              del surf desde sus orígenes, y es una oportunidad acompañarnos
-              frente a los desafíos que el mar nos propone.
-            </p>
+            <p className="text-white text-lg md:text-xl">{description}</p>
             <Link href="/fundamentos">
-              <Button className="mt-4 text-lg md:text-xl">Descubre más</Button>
+              <Button className="mt-4 text-lg md:text-xl">{buttonText}</Button>
             </Link>
           </div>
         </div>

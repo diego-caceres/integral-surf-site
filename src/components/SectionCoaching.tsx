@@ -2,7 +2,19 @@ import Image from "next/image";
 import Button from "@/components/ui/Button";
 import Link from "next/link";
 
-export default function SectionCoaching() {
+interface SectionCoachingProps {
+  title?: string;
+  description?: string;
+  buttonText?: string;
+  imageUrl?: string;
+}
+
+export default function SectionCoaching({
+  title = "La importancia del coaching",
+  description = "surf coachs profesionales y experientes nos acompañan compartiéndonos este deporte desde sus raíces. buscamos aprender la técnica y teoría del surf en profundidad.",
+  buttonText = "Descubre más",
+  imageUrl = "/images/home/coaching.jpg",
+}: SectionCoachingProps) {
   return (
     <div className="relative w-full min-h-screen overflow-hidden pt-20">
       {/* Content Overlay */}
@@ -11,7 +23,7 @@ export default function SectionCoaching() {
           {/* Left Column (Shown below on mobile) */}
           <div className="flex flex-col gap-4 md:gap-8 justify-center order-2 md:order-1 ">
             <Image
-              src="/images/home/coaching.jpg"
+              src={imageUrl}
               alt="Left Image 1"
               width={488}
               height={594}
@@ -23,15 +35,11 @@ export default function SectionCoaching() {
           {/* Right Column (Shown first on mobile) */}
           <div className="md:max-w-[450px] flex flex-col items-center md:items-start justify-center gap-4 order-1 md:order-2 py-10 md:py-20 text-left">
             <h2 className="uppercase font-[Eckmannpsych]  text-3xl md:text-5xl">
-              La importancia del coaching
+              {title}
             </h2>
-            <p className="text-lg md:text-xl">
-              surf coachs profesionales y experientes nos acompañan
-              compartiéndonos este deporte desde sus raíces. buscamos aprender
-              la técnica y teoría del surf en profundidad.
-            </p>
+            <p className="text-lg md:text-xl">{description}</p>
             <Link href="/fundamentos">
-              <Button className="mt-4 text-lg md:text-xl">Descubre más</Button>
+              <Button className="mt-4 text-lg md:text-xl">{buttonText}</Button>
             </Link>
           </div>
         </div>

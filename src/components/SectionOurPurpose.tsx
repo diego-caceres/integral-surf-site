@@ -1,33 +1,40 @@
-"use client";
 import Button from "@/components/ui/Button";
 import Image from "next/image";
 import Link from "next/link";
 
-const SectionOurPurpose: React.FC = () => {
+interface SectionOurPurposeProps {
+  title?: string;
+  description?: string;
+  quote?: string;
+  buttonText?: string;
+  imageUrl?: string;
+}
+
+const SectionOurPurpose: React.FC<SectionOurPurposeProps> = ({
+  title = "Nuestro proposito",
+  description = "es ayudarte a lograr tus objetivos de manera consciente, ya sea conectar por primera vez con el surf o a mejorar tu performance sobre las olas.",
+  quote = "Elegimos la naturaleza para interpretar lo más profundo de nuestro ser. El surfing, el yoga y el arte son las experiencias que nos permiten reencontrarnos",
+  buttonText = "Sobre Nosotros",
+  imageUrl = "/images/home/image1.png",
+}) => {
   return (
     <section
       className="w-full md:h-[90vh] md:px-20 md:py-20 grid grid-cols-1 md:grid-cols-2 md:gap-10"
       style={{ boxShadow: "0 1px 2px -2px #7f807e" }}
     >
       <div className="max-w-[660px] px-10 md:px-20 py-10 md:py-20 text-left">
-        <h2 className="font-[Eckmannpsych]">Nuestro proposito</h2>
-        <p className="mt-6 text-xl tracking-[0.2rem]">
-          es ayudarte a lograr tus objetivos de manera consciente, ya sea
-          conectar por primera vez con el surf o a mejorar tu performance sobre
-          las olas.
-        </p>
+        <h2 className="font-[Eckmannpsych]">{title}</h2>
+        <p className="mt-6 text-xl tracking-[0.2rem]">{description}</p>
         <p className="mt-10 text-xl tracking-[0.2rem]">
-          &ldquo;Elegimos la naturaleza para interpretar lo más profundo de
-          nuestro ser. El surfing, el yoga y el arte son las experiencias que
-          nos permiten reencontrarnos&rdquo;.
+          &ldquo;{quote}&rdquo;.
         </p>
         <Link href="/about">
-          <Button className="mt-8 text-xl">Sobre Nosotros</Button>
+          <Button className="mt-8 text-xl">{buttonText}</Button>
         </Link>
       </div>
       <div className="flex flex-row justify-center items-start md:items-center">
         <Image
-          src="/images/home/image1.png"
+          src={imageUrl}
           alt="Nuestro propósito"
           className="max-h-[500px]"
           width={402}
