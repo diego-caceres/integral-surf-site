@@ -33,17 +33,11 @@ interface TripData {
   is_deleted?: boolean;
 }
 
-interface FundamentosSection {
-  id: string;
-  title: string;
-}
-
 export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const [menuItemImages, setMenuItemImages] = useState<MenuImagesData>({});
   const [menuTripItems, setMenuTripItems] = useState<MenuTripItem[]>([]);
   const [destinosTitle, setDestinosTitle] = useState("DESTINOS 2026");
-  const [fundamentosSections, setFundamentosSections] = useState<FundamentosSection[]>([]);
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -98,24 +92,9 @@ export default function NavBar() {
       }
     };
 
-    const fetchFundamentos = async () => {
-      try {
-        const response = await fetch("/api/fundamentos");
-        if (response.ok) {
-          const data = await response.json();
-          if (data.sections) {
-            setFundamentosSections(data.sections);
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching fundamentos sections:", error);
-      }
-    };
-
     fetchMenuItems();
     fetchTrips();
     fetchDestinosTitle();
-    fetchFundamentos();
   }, []);
 
   return (

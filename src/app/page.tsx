@@ -58,26 +58,26 @@ export default function HomePage() {
         description={ourPurpose?.description ?? undefined}
         quote={ourPurpose?.extra_text ?? undefined}
         buttonText={ourPurpose?.button_text ?? undefined}
-        imageUrl={ourPurpose?.image_url ?? undefined}
+        imageUrl={ourPurpose?.image_url || undefined}
       />
       <SectionCalendar />
       <SectionTheRoad
         title={theRoad?.title ?? undefined}
         description={theRoad?.description ?? undefined}
         buttonText={theRoad?.button_text ?? undefined}
-        imageUrl={theRoad?.image_url ?? undefined}
-        image2Url={theRoad?.image_2_url ?? undefined}
+        imageUrl={theRoad?.image_url || undefined}
+        image2Url={theRoad?.image_2_url || undefined}
       />
       <SectionCoaching
         title={coaching?.title ?? undefined}
         description={coaching?.description ?? undefined}
         buttonText={coaching?.button_text ?? undefined}
-        imageUrl={coaching?.image_url ?? undefined}
+        imageUrl={coaching?.image_url || undefined}
       />
       <SectionExperiences
         title={experiences?.title ?? undefined}
         description={experiences?.description ?? undefined}
-        videoUrl={experiences?.video_url ?? undefined}
+        videoUrl={experiences?.video_url || undefined}
       />
       <SectionInstagram />
 
