@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import { Trip, TripContent } from "@/types/trip";
+import { Trip, TripContent, TripContentImage } from "@/types/trip";
 import CloudinaryUploadButton from "@/components/ui/CloudinaryUploadButton";
 
 interface TripEditFetcherProps {
@@ -89,6 +89,7 @@ export default function TripEditFetcher(params: TripEditFetcherProps) {
               subtitle_2: content.subtitle_2 ?? '',
               description_2: content.description_2 ?? '',
               image_url: content.image_url ?? '',
+              images: content.images ?? [],
             }));
             setContents(sanitizedContents);
           } else {
@@ -100,6 +101,7 @@ export default function TripEditFetcher(params: TripEditFetcherProps) {
                 subtitle_2: "",
                 description_2: "",
                 image_url: "",
+                images: [],
               },
             ]);
           }
@@ -160,8 +162,46 @@ export default function TripEditFetcher(params: TripEditFetcherProps) {
         subtitle_2: "",
         description_2: "",
         image_url: "",
+        images: [],
       },
     ]);
+  };
+
+  const addContentImage = (contentIndex: number) => {
+    const newContents = [...contents];
+    const newImage: TripContentImage = {
+      id: `temp-${Date.now()}`,
+      image_url: "",
+      alt_text: "",
+      order_number: newContents[contentIndex].images?.length ?? 0,
+    };
+    newContents[contentIndex] = {
+      ...newContents[contentIndex],
+      images: [...(newContents[contentIndex].images ?? []), newImage],
+    };
+    setContents(newContents);
+  };
+
+  const removeContentImage = (contentIndex: number, imageIndex: number) => {
+    const newContents = [...contents];
+    newContents[contentIndex] = {
+      ...newContents[contentIndex],
+      images: (newContents[contentIndex].images ?? []).filter((_, i) => i !== imageIndex),
+    };
+    setContents(newContents);
+  };
+
+  const handleContentImageChange = (
+    contentIndex: number,
+    imageIndex: number,
+    field: "image_url" | "alt_text",
+    value: string
+  ) => {
+    const newContents = [...contents];
+    const updatedImages = [...(newContents[contentIndex].images ?? [])];
+    updatedImages[imageIndex] = { ...updatedImages[imageIndex], [field]: value };
+    newContents[contentIndex] = { ...newContents[contentIndex], images: updatedImages };
+    setContents(newContents);
   };
 
   const removeContent = (index: number) => {
@@ -769,9 +809,54 @@ export default function TripEditFetcher(params: TripEditFetcherProps) {
                   <CloudinaryUploadButton
                     value={content.image_url}
                     onChange={(url) => handleContentChange(index, "image_url", url)}
-                    label="URL de la Imagen"
+                    label="Imagen Principal (fallback)"
                     folder="integral-surf/trips/contents"
                   />
+                </div>
+
+                {/* Multi-image slideshow */}
+                <div className="border-t pt-3 mt-3">
+                  <div className="flex justify-between items-center mb-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Imágenes del Slideshow
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => addContentImage(index)}
+                      className="bg-green-500 text-white p-1 px-3 rounded hover:bg-green-600 text-sm"
+                    >
+                      Agregar Imagen
+                    </button>
+                  </div>
+                  {(content.images ?? []).map((image, imageIndex) => (
+                    <div key={imageIndex} className="border rounded p-3 mb-2 bg-gray-50">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-gray-600">
+                          Imagen {imageIndex + 1}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => removeContentImage(index, imageIndex)}
+                          className="bg-red-500 text-white p-1 px-2 rounded hover:bg-red-600 text-xs"
+                        >
+                          Quitar
+                        </button>
+                      </div>
+                      <CloudinaryUploadButton
+                        value={image.image_url}
+                        onChange={(url) => handleContentImageChange(index, imageIndex, "image_url", url)}
+                        label="Imagen"
+                        folder="integral-surf/trips/contents"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Texto alternativo (opcional)"
+                        value={image.alt_text || ""}
+                        onChange={(e) => handleContentImageChange(index, imageIndex, "alt_text", e.target.value)}
+                        className="w-full p-2 border rounded mt-2 text-sm"
+                      />
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>

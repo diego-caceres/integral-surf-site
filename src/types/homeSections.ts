@@ -1,3 +1,10 @@
+export interface HomeSectionImage {
+  id: string;
+  image_url: string;
+  alt_text?: string | null;
+  order_number: number;
+}
+
 export interface HomeSection {
   id: string;
   section_key: string;
@@ -10,4 +17,5 @@ export interface HomeSection {
   video_url: string | null;
   background_image_url: string | null;
   updated_at: string;
+  images?: HomeSectionImage[];
 }

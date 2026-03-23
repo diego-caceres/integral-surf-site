@@ -2,7 +2,7 @@
 
 import { useState, useEffect, FormEvent } from "react";
 import CloudinaryUploadButton from "@/components/ui/CloudinaryUploadButton";
-import type { HomeSection } from "@/types/homeSections";
+import type { HomeSection, HomeSectionImage } from "@/types/homeSections";
 
 const SECTION_LABELS: Record<string, string> = {
   our_purpose: "Nuestro Propósito",
@@ -56,6 +56,48 @@ export default function ManageHomeSectionsPage() {
       ...prev,
       [key]: { ...prev[key], [field]: value },
     }));
+  };
+
+  const addSectionImage = (sectionKey: string) => {
+    const newImage: HomeSectionImage = {
+      id: `temp-${Date.now()}`,
+      image_url: "",
+      alt_text: "",
+      order_number: sections[sectionKey]?.images?.length ?? 0,
+    };
+    setSections((prev) => ({
+      ...prev,
+      [sectionKey]: {
+        ...prev[sectionKey],
+        images: [...(prev[sectionKey]?.images ?? []), newImage],
+      },
+    }));
+  };
+
+  const removeSectionImage = (sectionKey: string, imageIndex: number) => {
+    setSections((prev) => ({
+      ...prev,
+      [sectionKey]: {
+        ...prev[sectionKey],
+        images: (prev[sectionKey]?.images ?? []).filter((_, i) => i !== imageIndex),
+      },
+    }));
+  };
+
+  const updateSectionImage = (
+    sectionKey: string,
+    imageIndex: number,
+    field: "image_url" | "alt_text",
+    value: string
+  ) => {
+    setSections((prev) => {
+      const updatedImages = [...(prev[sectionKey]?.images ?? [])];
+      updatedImages[imageIndex] = { ...updatedImages[imageIndex], [field]: value };
+      return {
+        ...prev,
+        [sectionKey]: { ...prev[sectionKey], images: updatedImages },
+      };
+    });
   };
 
   const handleSave = async (e: FormEvent) => {
@@ -181,14 +223,51 @@ export default function ManageHomeSectionsPage() {
                   />
                 )}
 
-                {/* Second image - only for the_road */}
-                {isTheRoad && (
-                  <CloudinaryUploadButton
-                    value={section.image_2_url || ""}
-                    onChange={(url) => updateField(key, "image_2_url", url)}
-                    label="Segunda Imagen"
-                    folder="integral-surf/home"
-                  />
+                {/* Slideshow images - for all sections except experiences */}
+                {!isExperiences && (
+                  <div className="border-t pt-4 mt-2">
+                    <div className="flex justify-between items-center mb-2">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Imágenes del Slideshow
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => addSectionImage(key)}
+                        className="bg-green-500 text-white p-1 px-3 rounded hover:bg-green-600 text-sm"
+                      >
+                        Agregar Imagen
+                      </button>
+                    </div>
+                    {(section.images ?? []).map((image, imageIndex) => (
+                      <div key={imageIndex} className="border rounded p-3 mb-2 bg-gray-50">
+                        <div className="flex justify-between items-center mb-2">
+                          <span className="text-sm font-medium text-gray-600">
+                            Imagen {imageIndex + 1}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => removeSectionImage(key, imageIndex)}
+                            className="bg-red-500 text-white p-1 px-2 rounded hover:bg-red-600 text-xs"
+                          >
+                            Quitar
+                          </button>
+                        </div>
+                        <CloudinaryUploadButton
+                          value={image.image_url}
+                          onChange={(url) => updateSectionImage(key, imageIndex, "image_url", url)}
+                          label="Imagen"
+                          folder="integral-surf/home"
+                        />
+                        <input
+                          type="text"
+                          placeholder="Texto alternativo (opcional)"
+                          value={image.alt_text || ""}
+                          onChange={(e) => updateSectionImage(key, imageIndex, "alt_text", e.target.value)}
+                          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                        />
+                      </div>
+                    ))}
+                  </div>
                 )}
 
                 {/* Background image - for the_road and experiences */}

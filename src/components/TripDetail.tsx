@@ -1,11 +1,12 @@
 import Image from "next/image";
 import parse from "html-react-parser";
-import { Trip } from "@/types/trip";
+import { Trip, TripContentImage } from "@/types/trip";
 import { bebasNeuelFont } from "@/styles/fonts";
 import { libreFranklinFont } from "@/styles/fonts";
 
 import PriceComponent from "@/components/PriceComponent";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import TripContentImageSlider from "@/components/TripContentImageSlider";
 
 interface TripContentSectionProps {
   title: string;
@@ -15,6 +16,7 @@ interface TripContentSectionProps {
   description2?: string;
   imageUrl: string;
   imageLeft?: boolean;
+  images?: TripContentImage[];
 }
 
 function extractVideoId(url: string): string {
@@ -99,7 +101,7 @@ const TripDetail = ({ trip }: { trip: Trip }) => {
           className={`${classesIfVideo} absolute inset-0 flex flex-col items-center justify-center md:pb-[100px]`}
         >
           <span
-            className={`${bebasNeuelFont.className} tracking-[0.2rem] uppercase text-redColor text-2xl md:text-3xl`}
+            className={`${bebasNeuelFont.className} tracking-[0.2rem] uppercase text-white text-2xl md:text-3xl`}
           >
             {top_subtitle}
           </span>
@@ -116,13 +118,13 @@ const TripDetail = ({ trip }: { trip: Trip }) => {
             {title}
           </h2>
           <span
-            className={`${bebasNeuelFont.className} tracking-[0.2rem] uppercase text-redColor text-2xl md:text-3xl`}
+            className={`${bebasNeuelFont.className} tracking-[0.2rem] uppercase text-white text-2xl md:text-3xl`}
           >
             {date_month} {date_days}
           </span>
           {date_days_2 && date_month_2 && (
             <span
-              className={`${bebasNeuelFont.className} tracking-[0.2rem] uppercase text-redColor text-2xl md:text-3xl block mt-1`}
+              className={`${bebasNeuelFont.className} tracking-[0.2rem] uppercase text-white text-2xl md:text-3xl block mt-1`}
             >
               {date_month_2} {date_days_2}
             </span>
@@ -154,6 +156,7 @@ const TripDetail = ({ trip }: { trip: Trip }) => {
             subtitle={section.subtitle}
             subtitle_2={section.subtitle_2}
             description2={section.description_2}
+            images={section.images}
             imageLeft={index % 2 !== 0}
           />
         ))}
@@ -277,32 +280,29 @@ const TripContentSection: React.FC<TripContentSectionProps> = ({
   subtitle = "",
   subtitle_2 = "",
   description2 = "",
+  images = [],
 }) => {
   return (
     <section className="w-full flex flex-col md:flex-row items-center md:items-stretch shadow-lg shadow-gray-300">
-      <div className="md:hidden w-full md:w-1/2 h-[300px] md:h-[700px]">
-        <Image
-          src={imageUrl}
+      <div className="md:hidden w-full h-[300px]">
+        <TripContentImageSlider
+          images={images}
+          fallbackImageUrl={imageUrl}
           alt={title}
-          width={800}
-          height={600}
-          className="w-full h-full object-cover"
         />
       </div>
       {imageLeft && (
-        <div className="hidden md:flex w-full md:w-1/2 h-[300px] md:h-[700px]">
-          <Image
-            src={imageUrl}
+        <div className="hidden md:block w-full md:w-1/2 h-[700px]">
+          <TripContentImageSlider
+            images={images}
+            fallbackImageUrl={imageUrl}
             alt={title}
-            width={800}
-            height={600}
-            className="w-full h-full object-cover"
           />
         </div>
       )}
 
       <div className="w-full md:w-1/2 flex flex-col justify-center md:text-left p-12">
-        <h2 className="font-[Eckmannpsych] tracking-[0.1rem] uppercase text-redColor text-3xl font-bold mb-4">
+        <h2 className="font-[Eckmannpsych] tracking-[0.1rem] uppercase text-3xl font-bold mb-4">
           {title}
         </h2>
         <div>
@@ -334,13 +334,11 @@ const TripContentSection: React.FC<TripContentSectionProps> = ({
       </div>
 
       {!imageLeft && (
-        <div className="hidden md:flex w-full md:w-1/2 h-[300px] md:h-[700px]">
-          <Image
-            src={imageUrl}
+        <div className="hidden md:block w-full md:w-1/2 h-[700px]">
+          <TripContentImageSlider
+            images={images}
+            fallbackImageUrl={imageUrl}
             alt={title}
-            width={800}
-            height={700}
-            className="w-full h-full object-cover"
           />
         </div>
       )}

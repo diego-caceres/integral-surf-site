@@ -13,7 +13,21 @@ export async function GET() {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    return NextResponse.json(data || []);
+    const sections = data || [];
+
+    // Enrich sections with their slideshow images
+    const enriched = await Promise.all(
+      sections.map(async (section) => {
+        const { data: images } = await supabaseServer
+          .from("home_section_images")
+          .select("*")
+          .eq("section_key", section.section_key)
+          .order("order_number", { ascending: true });
+        return { ...section, images: images || [] };
+      })
+    );
+
+    return NextResponse.json(enriched);
   } catch (error) {
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Unknown error" },
@@ -55,6 +69,27 @@ export async function PUT(request: NextRequest) {
 
       if (error) {
         return NextResponse.json({ error: error.message }, { status: 500 });
+      }
+
+      // Save slideshow images (delete-then-reinsert)
+      if (section.images !== undefined && section.section_key) {
+        await supabaseServer
+          .from("home_section_images")
+          .delete()
+          .eq("section_key", section.section_key);
+
+        if (section.images.length > 0) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          await supabaseServer.from("home_section_images").insert(
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (section.images as any[]).map((img: any, i: number) => ({
+              section_key: section.section_key,
+              image_url: img.image_url,
+              alt_text: img.alt_text ?? null,
+              order_number: i,
+            }))
+          );
+        }
       }
     }
 

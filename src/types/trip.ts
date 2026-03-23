@@ -1,3 +1,10 @@
+export type TripContentImage = {
+  id: string;
+  image_url: string;
+  alt_text?: string | null;
+  order_number: number;
+};
+
 export type TripContent = {
   id?: string;
   title: string;
@@ -6,6 +13,7 @@ export type TripContent = {
   subtitle_2?: string;
   description_2?: string;
   image_url: string;
+  images?: TripContentImage[];
   trip_id?: string;
   order?: number;
 };

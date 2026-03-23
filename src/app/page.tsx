@@ -59,6 +59,7 @@ export default function HomePage() {
         quote={ourPurpose?.extra_text ?? undefined}
         buttonText={ourPurpose?.button_text ?? undefined}
         imageUrl={ourPurpose?.image_url || undefined}
+        images={ourPurpose?.images ?? []}
       />
       <SectionCalendar />
       <SectionTheRoad
@@ -68,12 +69,14 @@ export default function HomePage() {
         imageUrl={theRoad?.image_url || undefined}
         image2Url={theRoad?.image_2_url || undefined}
         backgroundImageUrl={theRoad?.background_image_url || undefined}
+        images={theRoad?.images ?? []}
       />
       <SectionCoaching
         title={coaching?.title ?? undefined}
         description={coaching?.description ?? undefined}
         buttonText={coaching?.button_text ?? undefined}
         imageUrl={coaching?.image_url || undefined}
+        images={coaching?.images ?? []}
       />
       <SectionExperiences
         title={experiences?.title ?? undefined}

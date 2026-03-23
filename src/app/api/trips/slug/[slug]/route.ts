@@ -38,10 +38,22 @@ export async function GET(
 
     if (contentError) throw contentError;
 
+    // Enrich each content with its images
+    const enrichedContents = await Promise.all(
+      (contentData || []).map(async (content) => {
+        const { data: images } = await supabaseServer
+          .from("trip_content_images")
+          .select("*")
+          .eq("trip_content_id", content.id)
+          .order("order_number", { ascending: true });
+        return { ...content, images: images || [] };
+      })
+    );
+
     // Combine trip with its contents
     const fullTrip: Trip = {
       ...tripData,
-      trip_contents: contentData || [],
+      trip_contents: enrichedContents,
     };
 
     return NextResponse.json(fullTrip);

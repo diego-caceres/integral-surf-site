@@ -80,14 +80,19 @@ const WhatsAppButton: React.FC<WhatsAppButtonProps> = ({
         </a>
       )}
       {isVisible && (
-        <Link
-          href={whatsappUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="fixed bottom-6 right-6 md:bottom-8 md:right-8 bg-green-500 text-white p-4 md:p-5 rounded-full shadow-lg shadow-green-700/50 hover:bg-green-600 transition-transform transform hover:scale-110"
-        >
-          <FaWhatsapp className="w-6 h-6 md:w-8 md:h-8" />
-        </Link>
+        <div className="fixed bottom-6 right-6 md:bottom-8 md:right-8 flex flex-col items-center gap-2">
+          <span className="bg-white text-green-700 text-xs font-semibold px-3 py-1 rounded-full shadow-md whitespace-nowrap">
+            Viaja al mar con nosotros
+          </span>
+          <Link
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-green-500 text-white p-4 md:p-5 rounded-full shadow-lg shadow-green-700/50 hover:bg-green-600 transition-transform transform hover:scale-110 cursor-pointer"
+          >
+            <FaWhatsapp className="w-6 h-6 md:w-8 md:h-8" />
+          </Link>
+        </div>
         // <a
         //   href={whatsappUrl}
         //   target="_blank"

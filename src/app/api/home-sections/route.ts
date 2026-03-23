@@ -11,7 +11,21 @@ export async function GET() {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    return NextResponse.json(data || []);
+    const sections = data || [];
+
+    // Enrich sections that have a slideshow with their images
+    const enriched = await Promise.all(
+      sections.map(async (section) => {
+        const { data: images } = await supabaseServer
+          .from("home_section_images")
+          .select("*")
+          .eq("section_key", section.section_key)
+          .order("order_number", { ascending: true });
+        return { ...section, images: images || [] };
+      })
+    );
+
+    return NextResponse.json(enriched);
   } catch (error) {
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Unknown error" },

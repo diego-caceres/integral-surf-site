@@ -1,6 +1,9 @@
+"use client";
+
 import Button from "@/components/ui/Button";
-import Image from "next/image";
 import Link from "next/link";
+import HomeSectionSlider from "@/components/HomeSectionSlider";
+import type { HomeSectionImage } from "@/types/homeSections";
 
 interface SectionOurPurposeProps {
   title?: string;
@@ -8,6 +11,7 @@ interface SectionOurPurposeProps {
   quote?: string;
   buttonText?: string;
   imageUrl?: string;
+  images?: HomeSectionImage[];
 }
 
 const SectionOurPurpose: React.FC<SectionOurPurposeProps> = ({
@@ -16,6 +20,7 @@ const SectionOurPurpose: React.FC<SectionOurPurposeProps> = ({
   quote = "Elegimos la naturaleza para interpretar lo más profundo de nuestro ser. El surfing, el yoga y el arte son las experiencias que nos permiten reencontrarnos",
   buttonText = "Sobre Nosotros",
   imageUrl = "/images/home/image1.png",
+  images = [],
 }) => {
   return (
     <section
@@ -33,13 +38,7 @@ const SectionOurPurpose: React.FC<SectionOurPurposeProps> = ({
         </Link>
       </div>
       <div className="flex flex-row justify-center items-start min-[1150px]:items-center">
-        <Image
-          src={imageUrl}
-          alt="Nuestro propósito"
-          className="max-h-[500px]"
-          width={500}
-          height={600}
-        />
+        <HomeSectionSlider images={images} fallbackUrl={imageUrl || ""} alt="Nuestro propósito" />
       </div>
     </section>
   );

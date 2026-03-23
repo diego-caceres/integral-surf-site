@@ -71,25 +71,36 @@ export async function POST(
       );
     }
 
-    // 6. If there are contents, clone them too
+    // 6. If there are contents, clone them too (one at a time to capture new IDs for image cloning)
     if (sourceContents && sourceContents.length > 0) {
-      const clonedContents = sourceContents.map((content) => {
-        // Let Supabase generate new IDs
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { id, ...restContent } = content;
-        return {
-          ...restContent,
-          trip_id: newTripId,
-        };
-      });
+      for (const content of sourceContents) {
+        const { id: sourceContentId, ...restContent } = content;
 
-      const { error: contentsError } = await supabaseServer
-        .from("trip_contents")
-        .insert(clonedContents);
+        const { data: newContent, error: contentError } = await supabaseServer
+          .from("trip_contents")
+          .insert({ ...restContent, trip_id: newTripId })
+          .select()
+          .single();
 
-      if (contentsError) {
-        // Even if contents fail to clone, we'll still return success for the trip
-        console.error("Error cloning trip contents:", contentsError);
+        if (contentError) {
+          console.error("Error cloning trip content:", contentError);
+          continue;
+        }
+
+        // Clone images for this content
+        const { data: sourceImages } = await supabaseServer
+          .from("trip_content_images")
+          .select("*")
+          .eq("trip_content_id", sourceContentId);
+
+        if (sourceImages && sourceImages.length > 0) {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const imagesToInsert = sourceImages.map(({ id, trip_content_id, ...rest }) => ({
+            ...rest,
+            trip_content_id: newContent.id,
+          }));
+          await supabaseServer.from("trip_content_images").insert(imagesToInsert);
+        }
       }
     }
 

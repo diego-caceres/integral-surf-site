@@ -40,7 +40,19 @@ export async function GET(
       );
     }
 
-    return NextResponse.json({ trip, contents });
+    // Enrich each content with its images
+    const enrichedContents = await Promise.all(
+      (contents || []).map(async (content) => {
+        const { data: images } = await supabaseServer
+          .from("trip_content_images")
+          .select("*")
+          .eq("trip_content_id", content.id)
+          .order("order_number", { ascending: true });
+        return { ...content, images: images || [] };
+      })
+    );
+
+    return NextResponse.json({ trip, contents: enrichedContents });
   } catch (error) {
     console.error("Error fetching trip:", error);
     return NextResponse.json(
@@ -94,6 +106,8 @@ export async function PUT(
 
       // Process each content
       for (const content of contents) {
+        let contentId: string;
+
         if (content.id) {
           // Update existing content
           await supabaseServer
@@ -107,17 +121,42 @@ export async function PUT(
               image_url: content.image_url,
             })
             .eq("id", content.id);
+          contentId = content.id;
         } else {
-          // Insert new content
-          await supabaseServer.from("trip_contents").insert({
-            trip_id: id,
-            title: content.title,
-            subtitle: content.subtitle || null,
-            description: content.description,
-            subtitle_2: content.subtitle_2 || null,
-            description_2: content.description_2 || null,
-            image_url: content.image_url,
-          });
+          // Insert new content and capture the new ID
+          const { data: inserted } = await supabaseServer
+            .from("trip_contents")
+            .insert({
+              trip_id: id,
+              title: content.title,
+              subtitle: content.subtitle || null,
+              description: content.description,
+              subtitle_2: content.subtitle_2 || null,
+              description_2: content.description_2 || null,
+              image_url: content.image_url,
+            })
+            .select()
+            .single();
+          contentId = inserted?.id;
+        }
+
+        // Save images for this content (delete-then-reinsert)
+        if (contentId) {
+          await supabaseServer
+            .from("trip_content_images")
+            .delete()
+            .eq("trip_content_id", contentId);
+
+          if (content.images && content.images.length > 0) {
+            await supabaseServer.from("trip_content_images").insert(
+              content.images.map((img: any, i: number) => ({
+                trip_content_id: contentId,
+                image_url: img.image_url,
+                alt_text: img.alt_text ?? null,
+                order_number: i,
+              }))
+            );
+          }
         }
       }
     } else {

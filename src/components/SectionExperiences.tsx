@@ -29,9 +29,9 @@ export default function SectionExperiences({
       <div className="relative z-10 flex flex-col min-[1300px]:grid min-[1300px]:grid-cols-[30%_70%] min-[1300px]:absolute min-[1300px]:inset-0 min-[1300px]:pl-[100px] w-full min-[1300px]:h-full gap-6 min-[1300px]:items-start min-[1300px]:pt-20">
         {/* Left Column */}
         <div className="flex flex-col gap-4 min-[1300px]:gap-8 justify-center px-10 min-[1300px]:px-20 py-10 min-[1300px]:py-20 text-left">
-          <h2 className="uppercase font-[Eckmannpsych]">{title}</h2>
+          <h2 className="uppercase font-[Eckmannpsych] text-white">{title}</h2>
           <p
-            className={`${libreFranklinFont.className} tracking-[0.1rem] text-lg`}
+            className={`${libreFranklinFont.className} tracking-[0.2rem] text-xl text-white`}
           >
             {description}
           </p>
