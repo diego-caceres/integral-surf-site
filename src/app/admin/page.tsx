@@ -61,6 +61,13 @@ const adminSections: AdminSection[] = [
     description: "Edita los textos e imágenes de las secciones de la página principal.",
     icon: HomeIcon,
   },
+  {
+    href: "/admin/instagram-posts",
+    title: "Posts de Instagram",
+    description:
+      "Administrar los posts de Instagram que aparecen en la página principal.",
+    icon: PhotoIcon,
+  },
   // Add more admin sections here as needed
 ];
 
