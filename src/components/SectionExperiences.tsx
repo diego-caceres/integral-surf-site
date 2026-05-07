@@ -15,7 +15,7 @@ export default function SectionExperiences({
   backgroundImageUrl = "/images/home/experiences-background.jpg",
 }: SectionExperiencesProps) {
   return (
-    <div className="relative w-full min-[1300px]:h-screen overflow-hidden">
+    <div className="relative w-full lg:h-screen overflow-hidden">
       {/* Background Image */}
       <Image
         src={backgroundImageUrl}
@@ -26,9 +26,9 @@ export default function SectionExperiences({
       />
 
       {/* Content Overlay */}
-      <div className="relative z-10 flex flex-col min-[1300px]:grid min-[1300px]:grid-cols-[30%_70%] min-[1300px]:absolute min-[1300px]:inset-0 min-[1300px]:pl-[100px] w-full min-[1300px]:h-full gap-6 min-[1300px]:items-start min-[1300px]:pt-20">
+      <div className="relative z-10 flex flex-col lg:grid lg:grid-cols-[35%_65%] lg:absolute lg:inset-0 lg:pl-[100px] w-full lg:h-full gap-6 lg:items-center">
         {/* Left Column */}
-        <div className="flex flex-col gap-4 min-[1300px]:gap-8 justify-center px-10 min-[1300px]:px-20 py-10 min-[1300px]:py-20 text-left">
+        <div className="flex flex-col gap-4 lg:gap-8 justify-center px-10 lg:px-0 py-10 lg:py-0 text-left">
           <h2 className="uppercase font-[Eckmannpsych] text-white">{title}</h2>
           <p
             className={`${libreFranklinFont.className} tracking-[0.2rem] text-xl text-white`}
@@ -38,8 +38,8 @@ export default function SectionExperiences({
         </div>
 
         {/* Right Column */}
-        <div className="flex flex-col items-center min-[1300px]:items-start w-full justify-center px-10 min-[1300px]:px-0 pb-10 min-[1300px]:pb-0">
-          <div className="relative w-full aspect-video min-[1300px]:w-[800px] min-[1300px]:h-[450px] min-[1300px]:aspect-auto overflow-hidden rounded-xl">
+        <div className="flex flex-col items-center w-full justify-center px-10 lg:px-8 pb-10 lg:pb-0">
+          <div className="relative w-full aspect-video overflow-hidden rounded-xl">
             <iframe
               className="absolute top-0 left-0 w-full h-full"
               src={videoUrl}

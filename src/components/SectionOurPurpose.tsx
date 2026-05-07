@@ -34,7 +34,7 @@ const SectionOurPurpose: React.FC<SectionOurPurposeProps> = ({
           &ldquo;{quote}&rdquo;.
         </p>
         <Link href="/about">
-          <Button className="mt-8 text-xl">{buttonText}</Button>
+          <Button className="mt-8 text-xl bg-black hover:bg-gray-900">{buttonText}</Button>
         </Link>
       </div>
       <div className="flex flex-row justify-center items-start min-[1150px]:items-center">

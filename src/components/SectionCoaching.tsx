@@ -32,7 +32,7 @@ export default function SectionCoaching({
         <h2 className="uppercase font-[Eckmannpsych]">{title}</h2>
         <p className="mt-6 text-xl tracking-[0.2rem]">{description}</p>
         <Link href="/fundamentos">
-          <Button className="mt-8 text-xl">{buttonText}</Button>
+          <Button className="mt-8 text-xl bg-black hover:bg-gray-900">{buttonText}</Button>
         </Link>
       </div>
     </div>
