@@ -23,7 +23,7 @@ const PriceComponent: React.FC<PriceProps> = ({
 
   return (
     <div className="flex flex-col gap-8 items-center px-10 py-20">
-      <h2 className="font-[Eckmannpsych] tracking-[0.1rem] uppercase text-black text-3xl font-bold mb-4">
+      <h2 className="font-[Eckmannpsych] tracking-[0.1rem] uppercase text-redColor text-3xl font-bold mb-4">
         Reserva tu lugar
       </h2>
       <div
@@ -31,7 +31,7 @@ const PriceComponent: React.FC<PriceProps> = ({
       >
         {/* Precio Promocional */}
         <Link href={whatsappUrl} target="_blank" rel="noopener noreferrer">
-          <div className="border rounded-3xl p-5 bg-black text-white flex flex-col">
+          <div className="border rounded-3xl p-5 bg-redColor text-white flex flex-col">
             <span className="uppercase font-bold text-xl ">Promo</span>
             <span className="uppercase font-bold text-xl">Reserva con 50%</span>
             <div className="font-bold p-2 rounded mt-2 text-5xl ">
@@ -41,7 +41,7 @@ const PriceComponent: React.FC<PriceProps> = ({
           </div>
         </Link>
         <Link href={whatsappUrl} target="_blank" rel="noopener noreferrer">
-          <div className="border rounded-3xl p-5 bg-black text-white flex flex-col">
+          <div className="border rounded-3xl p-5 bg-redColor text-white flex flex-col">
             <span className=" uppercase font-bold text-xl">Precio Final</span>
             <span className=" uppercase font-bold text-xl">
               Reserva con 50%
