@@ -221,15 +221,17 @@ const TripDetailSection = ({
       </div>
 
       {/* Right Column */}
-      <div className="md:w-[40%] w-full flex justify-center items-center">
-        <Image
-          src={imageUrl}
-          alt={title}
-          width={400}
-          height={500}
-          className="object-cover max-h-[500px]"
-        />
-      </div>
+      {imageUrl && (
+        <div className="md:w-[40%] w-full flex justify-center items-center">
+          <Image
+            src={imageUrl}
+            alt={title}
+            width={400}
+            height={500}
+            className="object-cover max-h-[500px]"
+          />
+        </div>
+      )}
     </section>
   );
 };
@@ -247,15 +249,17 @@ const TripDetailImageSection = ({
   return (
     <section className="min-h-[75vh] w-full flex flex-col items-center justify-center shadow-md shadow-gray-200">
       {/* Full-width Image */}
-      <div className="w-full h-[300px] overflow-hidden">
-        <Image
-          src={imageUrl}
-          alt={title}
-          width={1920}
-          height={300}
-          className="w-full h-full object-cover"
-        />
-      </div>
+      {imageUrl && (
+        <div className="w-full h-[300px] overflow-hidden">
+          <Image
+            src={imageUrl}
+            alt={title}
+            width={1920}
+            height={300}
+            className="w-full h-full object-cover"
+          />
+        </div>
+      )}
 
       {/* Title and Description */}
       <div className="flex flex-col items-center justify-center m-10 max-w-[700px]">

@@ -43,9 +43,7 @@ export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const [menuItemImages, setMenuItemImages] = useState<MenuImagesData>({});
   const [menuTripItems, setMenuTripItems] = useState<MenuTripItem[]>([]);
-  const [destinosTitle, setDestinosTitle] = useState(
-    () => getDestinosTitleFromCache() ?? "DESTINOS 2026"
-  );
+  const [destinosTitle, setDestinosTitle] = useState("DESTINOS 2026");
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -63,9 +61,11 @@ export default function NavBar() {
   }
 
   useEffect(() => {
-    // Populate from cache immediately, then refresh in background
+    // Populate from cache immediately after mount, then refresh in background
     const cachedTrips = getTripsFromCache();
     if (cachedTrips) setMenuTripItems(tripsToMenuItems(cachedTrips));
+    const cachedTitle = getDestinosTitleFromCache();
+    if (cachedTitle) setDestinosTitle(cachedTitle);
 
     const fetchMenuItems = async () => {
       try {
@@ -187,14 +187,6 @@ export default function NavBar() {
           >
             NOSOTROS
           </Link>
-          {/* <Link
-            href="/admin/trips"
-            className="text-xl font-semibold hover:text-accent transition"
-            onClick={toggleMenu}
-            prefetch
-          >
-            ADMIN
-          </Link> */}
         </nav>
       </motion.div>
       )}
@@ -260,33 +252,11 @@ export default function NavBar() {
             </div>
           </MegaMenuItem>
 
-          {/* <MegaMenuItem
-            title="TIENDA"
-            href="/productos"
-            images={menuItemImages["TIENDA"]}
-          >
-            <p className="text-primary">Próximamente...</p>
-          </MegaMenuItem>
-
-          <MegaMenuItem
-            title="BLOG"
-            href="/blog"
-            images={menuItemImages["BLOG"]}
-          >
-            <p className="text-primary">Próximamente...</p>
-          </MegaMenuItem> */}
-
           <MegaMenuItem
             title="NOSOTROS"
             href="/about"
             images={menuItemImages["NOSOTROS"]}
           ></MegaMenuItem>
-
-          {/* <li>
-            <Link href="/admin/trips" className="hover:text-accent">
-              ADMIN
-            </Link>
-          </li> */}
         </ul>
       </nav>
     </>

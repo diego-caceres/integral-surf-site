@@ -19,7 +19,7 @@ export default function SectionInstagram() {
   return (
     <div className="w-full p-4">
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4">
-        {posts.map((post) => (
+        {posts.map((post, index) => (
           <a
             key={post.id}
             href={post.post_url}
@@ -29,7 +29,7 @@ export default function SectionInstagram() {
             <div className="relative w-full aspect-square">
               <Image
                 src={post.image_url}
-                alt="Instagram Post"
+                alt={`Post de Instagram ${index + 1}`}
                 fill
                 style={{ objectFit: "cover" }}
                 className="rounded-lg hover:opacity-80 transition-opacity"

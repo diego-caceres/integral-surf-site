@@ -11,17 +11,21 @@ import {
 } from "@/lib/tripsCache";
 
 const SectionCalendar: React.FC = () => {
-  const [trips, setTrips] = useState<Trip[]>(() => {
-    const cached = getTripsFromCache();
-    return cached ? cached.filter((t) => !t.is_deleted) : [];
-  });
-  const [isLoading, setIsLoading] = useState(() => !getTripsFromCache());
+  const [trips, setTrips] = useState<Trip[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [calendarTitle, setCalendarTitle] = useState(
-    () => getDestinosTitleFromCache() ?? "DESTINOS 2026"
-  );
+  const [calendarTitle, setCalendarTitle] = useState("DESTINOS 2026");
 
   useEffect(() => {
+    // Apply cache immediately after mount to avoid showing the spinner
+    const cachedTrips = getTripsFromCache();
+    if (cachedTrips) {
+      setTrips(cachedTrips.filter((t) => !t.is_deleted));
+      setIsLoading(false);
+    }
+    const cachedTitle = getDestinosTitleFromCache();
+    if (cachedTitle) setCalendarTitle(cachedTitle);
+
     fetchTripsOnce()
       .then((data) => {
         setTrips(data.filter((t) => !t.is_deleted));

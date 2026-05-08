@@ -90,11 +90,3 @@ export default function HomePage() {
     </section>
   );
 }
-
-// 5. Agregar imágenes con estilo retro
-// Puedes aprovechar las utilidades de Tailwind para aplicar un estilo a imágenes:
-// <img
-//   src="/images/surf-trip.jpg"
-//   alt="Viaje de Surf"
-//   className="w-full h-[400px] object-cover rounded-lg shadow-lg"
-// />

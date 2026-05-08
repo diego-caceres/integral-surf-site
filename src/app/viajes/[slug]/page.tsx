@@ -7,7 +7,6 @@ export default async function TripPage({
 }) {
   const slug = (await params).slug;
 
-  console.log("Slug:", slug);
   if (!slug) {
     return <div className="text-center text-red-500">Viaje no encontrado.</div>;
   }

@@ -6,8 +6,8 @@ import { motion, AnimatePresence } from "framer-motion";
 interface MegaMenuItemProps {
   title: string;
   href: string;
-  children?: ReactNode; // Content for the dropdown's main section
-  images?: { url: string; alt: string }[]; // Array of image objects for the dropdown
+  children?: ReactNode;
+  images?: { url: string; alt: string }[];
   disabled?: boolean;
   className?: string;
 }
@@ -20,8 +20,9 @@ const MegaMenuItem = ({
   disabled,
   className,
 }: MegaMenuItemProps) => {
-  const [isHovered, setIsHovered] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const liRef = useRef<HTMLLIElement>(null);
+  const linkRef = useRef<HTMLAnchorElement>(null);
   const [dynamicXOffset, setDynamicXOffset] = useState(0);
 
   const dropdownVariants = {
@@ -40,20 +41,27 @@ const MegaMenuItem = ({
     },
   };
 
-  const handleMouseEnter = () => {
-    if (!disabled) {
-      if (liRef.current) {
-        // Calculate the offset needed to align the dropdown's left edge with the viewport's left edge
-        const rect = liRef.current.getBoundingClientRect();
-        setDynamicXOffset(-rect.left);
-      }
-      setIsHovered(true);
+  const open = () => {
+    if (disabled) return;
+    if (liRef.current) {
+      const rect = liRef.current.getBoundingClientRect();
+      setDynamicXOffset(-rect.left);
+    }
+    setIsOpen(true);
+  };
+
+  const close = () => setIsOpen(false);
+
+  const handleBlur = (e: React.FocusEvent<HTMLLIElement>) => {
+    if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+      close();
     }
   };
 
-  const handleMouseLeave = () => {
-    if (!disabled) {
-      setIsHovered(false);
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Escape") {
+      close();
+      linkRef.current?.focus();
     }
   };
 
@@ -61,15 +69,21 @@ const MegaMenuItem = ({
     <li
       ref={liRef}
       className={`relative py-2 ${className || ""}`}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onMouseEnter={open}
+      onMouseLeave={close}
+      onBlur={handleBlur}
+      onKeyDown={handleKeyDown}
     >
       <Link
+        ref={linkRef}
         href={href}
+        onFocus={open}
+        aria-haspopup={children || images ? "true" : undefined}
+        aria-expanded={children || images ? isOpen : undefined}
         className={`transition-colors duration-200 pb-1 ${
           disabled
             ? "pointer-events-none text-gray-400"
-            : isHovered
+            : isOpen
             ? "text-primary border-b-2 border-black cursor-default"
             : "text-primary hover:text-accent"
         }`}
@@ -78,14 +92,14 @@ const MegaMenuItem = ({
         {title}
       </Link>
       <AnimatePresence>
-        {isHovered && !disabled && (
+        {isOpen && !disabled && (
           <motion.div
-            style={{ x: dynamicXOffset }} // Apply the dynamic horizontal offset
+            style={{ x: dynamicXOffset }}
             initial="hidden"
             animate="visible"
             exit="exit"
             variants={dropdownVariants}
-            className="absolute top-full left-0 mt-0 p-6 bg-white shadow-xl z-30 text-sm text-primary w-screen min-h-[250px]" // Full width and min height
+            className="absolute top-full left-0 mt-0 p-6 bg-white shadow-xl z-30 text-sm text-primary w-screen min-h-[250px]"
           >
             <div
               className={`flex ${

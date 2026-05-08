@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { libreFranklinFont } from "@/styles/fonts";
 import Link from "next/link";
 
@@ -8,18 +11,26 @@ interface PriceProps {
   finalPriceMessage?: string;
 }
 
+const message = "¡Hola! Estoy interesado en saber más sobre tus servicios.";
+
 const PriceComponent: React.FC<PriceProps> = ({
   promotionalPrice,
   finalPrice,
   promoEndMessage,
   finalPriceMessage,
 }) => {
-  const phoneNumber = "+59899748323";
-  const message = "¡Hola! Estoy interesado en saber más sobre tus servicios."; // Mensaje predeterminado
+  const [phoneNumber, setPhoneNumber] = useState("+59899748323");
 
-  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-    message
-  )}`;
+  useEffect(() => {
+    fetch("/api/config/whatsapp_phone_number")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data?.value) setPhoneNumber(data.value);
+      })
+      .catch(() => {});
+  }, []);
+
+  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
 
   return (
     <div className="flex flex-col gap-8 items-center px-10 py-20">
