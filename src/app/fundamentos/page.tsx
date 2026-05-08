@@ -141,14 +141,16 @@ export default function FundamentosPage() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                   {section.team_members.map((member) => (
                     <div key={member.id} className="text-center space-y-4">
-                      <div className="relative w-64 h-32 mx-auto rounded-lg overflow-hidden">
-                        <Image
-                          src={member.image_url}
-                          alt={member.name}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
+                      {member.image_url && (
+                        <div className="relative w-64 h-32 mx-auto rounded-lg overflow-hidden">
+                          <Image
+                            src={member.image_url}
+                            alt={member.name}
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                      )}
                       <div>
                         <h4 className="text-lg font-semibold text-primary">
                           {member.name}

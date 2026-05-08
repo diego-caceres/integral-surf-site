@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import TripCard from "@/components/trips/TripCard";
 import { Trip } from "@/types/trip";
-import LogoLoader from "./ui/LogoLoader";
+import LogoLoader from "@/components/ui/LogoLoader";
 
 const SectionCalendar: React.FC = () => {
   const [trips, setTrips] = useState<Trip[]>([]);

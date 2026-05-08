@@ -13,20 +13,20 @@ export default function FundamentosImageSlider({
   images,
   alt,
 }: FundamentosImageSliderProps) {
+  const validImages = images.filter((img) => img.image_url);
   const [currentIndex, setCurrentIndex] = useState(0);
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
 
-  // Auto-slide effect
   useEffect(() => {
-    if (images.length <= 1) return;
+    if (validImages.length <= 1) return;
 
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % validImages.length);
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [images.length]);
+  }, [validImages.length]);
 
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
@@ -37,14 +37,14 @@ export default function FundamentosImageSlider({
   };
 
   const handleTouchEnd = () => {
-    if (images.length <= 1) return;
+    if (validImages.length <= 1) return;
     if (touchStartX.current !== null && touchEndX.current !== null) {
       const deltaX = touchStartX.current - touchEndX.current;
       if (deltaX > 50) {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % validImages.length);
       } else if (deltaX < -50) {
         setCurrentIndex(
-          (prevIndex) => (prevIndex - 1 + images.length) % images.length
+          (prevIndex) => (prevIndex - 1 + validImages.length) % validImages.length
         );
       }
     }
@@ -52,7 +52,7 @@ export default function FundamentosImageSlider({
     touchEndX.current = null;
   };
 
-  if (images.length === 0) {
+  if (validImages.length === 0) {
     return (
       <div className="relative h-[500px] rounded-lg overflow-hidden bg-gray-200 flex items-center justify-center">
         <p className="text-gray-500">No images available</p>
@@ -67,7 +67,7 @@ export default function FundamentosImageSlider({
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
-      {images.map((image, index) => (
+      {validImages.map((image, index) => (
         <Image
           key={`${image.id}-${index}`}
           src={image.image_url}
@@ -80,10 +80,9 @@ export default function FundamentosImageSlider({
         />
       ))}
 
-      {/* Navigation dots */}
-      {images.length > 1 && (
+      {validImages.length > 1 && (
         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-          {images.map((_, index) => (
+          {validImages.map((_, index) => (
             <button
               key={`dot-${index}`}
               className={`w-3 h-3 rounded-full transition-all duration-300 ${
