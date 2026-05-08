@@ -53,7 +53,6 @@ export default function NavBar() {
 
   const closeMenu = useCallback(() => {
     setIsOpen(false);
-    hamburgerRef.current?.focus();
   }, []);
 
   // Focus trap + Escape key inside the mobile drawer
@@ -74,6 +73,7 @@ export default function NavBar() {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         closeMenu();
+        hamburgerRef.current?.focus();
         return;
       }
       if (e.key !== "Tab") return;
@@ -167,6 +167,7 @@ export default function NavBar() {
         <button
           ref={hamburgerRef}
           onClick={toggleMenu}
+          onPointerDown={(e) => e.preventDefault()}
           aria-label="Abrir menú"
           aria-expanded={isOpen}
           aria-controls="mobile-nav-drawer"
@@ -214,6 +215,7 @@ export default function NavBar() {
         </div>
         <button
           onClick={closeMenu}
+          onPointerDown={(e) => e.preventDefault()}
           className="self-end mb-8 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
           aria-label="Cerrar menú"
         >
@@ -391,6 +393,7 @@ export default function NavBar() {
             <div className="md:hidden p-4 items-center grid grid-cols-[15%_70%_15%]">
               <button
                 onClick={toggleMenu}
+                onPointerDown={(e) => e.preventDefault()}
                 aria-label="Abrir menú"
                 aria-expanded={isOpen}
                 aria-controls="mobile-nav-drawer"

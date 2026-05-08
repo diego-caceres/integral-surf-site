@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { FaWhatsapp } from "react-icons/fa";
 import React, { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 type WhatsAppButtonProps = {
   onlyBubble?: boolean;
@@ -10,7 +11,7 @@ type WhatsAppButtonProps = {
 const WhatsAppButton: React.FC<WhatsAppButtonProps> = ({
   onlyBubble = false,
 }) => {
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("+59899748323");
   const message = "¡Hola! Estoy interesado en saber más sobre tus servicios."; // Mensaje predeterminado
 
@@ -37,29 +38,33 @@ const WhatsAppButton: React.FC<WhatsAppButtonProps> = ({
   }, []);
 
   useEffect(() => {
+    const heroThreshold = Math.round(window.innerHeight * 0.6);
+
     const handleScroll = () => {
+      const scrollY = window.scrollY;
+
       if (onlyBubble) {
+        setIsVisible(scrollY > heroThreshold);
         return;
       }
 
-      // Verifica si hemos llegado al final de la página
       const scrollPosition =
         window.innerHeight + document.documentElement.scrollTop;
       const bottomPosition = document.documentElement.offsetHeight;
 
-      if (scrollPosition + 150 >= bottomPosition) {
-        setIsVisible(false); // Oculta el botón si llegamos al final de la página
+      if (scrollY <= heroThreshold) {
+        setIsVisible(false);
+      } else if (scrollPosition + 150 >= bottomPosition) {
+        setIsVisible(false);
       } else {
-        setIsVisible(true); // Muestra el botón cuando no estamos al final
+        setIsVisible(true);
       }
     };
-    window.addEventListener("scroll", handleScroll);
 
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [onlyBubble]);
 
   return (
     <>
@@ -79,25 +84,33 @@ const WhatsAppButton: React.FC<WhatsAppButtonProps> = ({
           <span>Contactate para reservar tu lugar</span>
         </a>
       )}
-      {isVisible && (
-        <div className="fixed bottom-6 right-6 md:bottom-8 md:right-8 flex flex-col items-center gap-2">
-          <span
-            aria-hidden="true"
-            className="bg-white text-whatsapp-dark text-xs font-semibold px-3 py-1 rounded-full shadow-md whitespace-nowrap"
+      <AnimatePresence>
+        {isVisible && (
+          <motion.div
+            initial={{ y: 24, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 24, opacity: 0 }}
+            transition={{ duration: 0.35, ease: "easeOut" }}
+            className="fixed bottom-6 right-6 md:bottom-8 md:right-8 flex flex-col items-center gap-2"
           >
-            Viaja al mar con nosotros
-          </span>
-          <Link
-            href={whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Contactar por WhatsApp"
-            className="bg-whatsapp text-white p-4 md:p-5 rounded-full shadow-lg shadow-whatsapp-dark/50 hover:bg-whatsapp-dark transition-transform transform hover:scale-110 cursor-pointer"
-          >
-            <FaWhatsapp className="w-6 h-6 md:w-8 md:h-8" />
-          </Link>
-        </div>
-      )}
+            <span
+              aria-hidden="true"
+              className="bg-white text-whatsapp-dark text-xs font-semibold px-3 py-1 rounded-full shadow-md whitespace-nowrap"
+            >
+              Viaja al mar con nosotros
+            </span>
+            <Link
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Contactar por WhatsApp"
+              className="bg-whatsapp text-white p-4 md:p-5 rounded-full shadow-lg shadow-whatsapp-dark/50 hover:bg-whatsapp-dark transition-transform transform hover:scale-110 cursor-pointer"
+            >
+              <FaWhatsapp className="w-6 h-6 md:w-8 md:h-8" />
+            </Link>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };
