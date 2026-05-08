@@ -3,51 +3,39 @@ import { useEffect, useState } from "react";
 import TripCard from "@/components/trips/TripCard";
 import { Trip } from "@/types/trip";
 import LogoLoader from "@/components/ui/LogoLoader";
+import {
+  fetchTripsOnce,
+  fetchDestinosTitleOnce,
+  getTripsFromCache,
+  getDestinosTitleFromCache,
+} from "@/lib/tripsCache";
 
 const SectionCalendar: React.FC = () => {
-  const [trips, setTrips] = useState<Trip[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [trips, setTrips] = useState<Trip[]>(() => {
+    const cached = getTripsFromCache();
+    return cached ? cached.filter((t) => !t.is_deleted) : [];
+  });
+  const [isLoading, setIsLoading] = useState(() => !getTripsFromCache());
   const [error, setError] = useState<string | null>(null);
-  const [calendarTitle, setCalendarTitle] = useState("{calendarTitle}");
+  const [calendarTitle, setCalendarTitle] = useState(
+    () => getDestinosTitleFromCache() ?? "DESTINOS 2026"
+  );
 
   useEffect(() => {
-    const fetchTrips = async () => {
-      try {
-        setIsLoading(true);
-        const res = await fetch("/api/trips");
-
-        if (!res.ok) {
-          throw new Error("Failed to fetch trips");
-        }
-
-        const data = await res.json();
-        // Filter out soft-deleted trips
-        const activeTrips = data.filter((trip: Trip) => !trip.is_deleted);
-        setTrips(activeTrips);
-      } catch (err) {
+    fetchTripsOnce()
+      .then((data) => {
+        setTrips(data.filter((t) => !t.is_deleted));
+        setIsLoading(false);
+      })
+      .catch((err) => {
         console.error("Error fetching trips:", err);
         setError(err instanceof Error ? err.message : "An error occurred");
-      } finally {
         setIsLoading(false);
-      }
-    };
+      });
 
-    const fetchCalendarTitle = async () => {
-      try {
-        const response = await fetch("/api/config/menu_destinos_title");
-        if (response.ok) {
-          const data = await response.json();
-          if (data.value) {
-            setCalendarTitle(data.value);
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching calendar title:", error);
-      }
-    };
-
-    fetchTrips();
-    fetchCalendarTitle();
+    fetchDestinosTitleOnce()
+      .then((title) => setCalendarTitle(title))
+      .catch((err) => console.error("Error fetching calendar title:", err));
   }, []);
 
   if (isLoading) {

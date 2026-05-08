@@ -13,7 +13,7 @@ const Button: FC<ButtonProps> = ({
   ...props
 }) => {
   const baseStyles =
-    "text-sm px-[50px] py-2 rounded-3xl font-medium focus:outline-none transition-all";
+    "text-sm px-[50px] py-2 rounded-3xl font-medium focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 transition-all";
   const variantStyles = clsx({
     "bg-[#ff3131] text-white hover:bg-red-600": variant === "primary",
     "bg-gray-200 text-gray-700 hover:bg-gray-300": variant === "secondary",
