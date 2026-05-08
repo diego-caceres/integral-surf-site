@@ -157,28 +157,7 @@ export default function NavBar() {
           >
             VIAJES AL MAR
           </Link>
-          <Link
-            href="/productos"
-            prefetch
-            onClick={toggleMenu}
-            className={`text-xl font-semibold hover:text-accent transition ${
-              storeDisabled ? "pointer-events-none" : ""
-            }`}
-            aria-disabled={storeDisabled}
-          >
-            TIENDA
-          </Link>
-          <Link
-            href="/blog"
-            className={`text-xl font-semibold hover:text-accent transition ${
-              blogDisabled ? "pointer-events-none" : ""
-            }`}
-            aria-disabled={blogDisabled}
-            prefetch
-            onClick={toggleMenu}
-          >
-            BLOG
-          </Link>
+          
           <Link
             href="/about"
             className="text-xl font-semibold hover:text-accent transition"
