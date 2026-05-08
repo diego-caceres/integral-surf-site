@@ -2,12 +2,11 @@ import Image from "next/image";
 
 export default function Footer() {
   return (
-    <footer className="py-16 bg-primary text-white mt-auto">
-      <div className="flex flex-row justify-between items-center mx-auto px-10">
+    <footer aria-label="Pie de página" className="py-16 bg-primary text-white mt-auto">
+      <div className="flex flex-row flex-wrap gap-4 justify-between items-center mx-auto px-10">
         <h2 className="uppercase font-[Eckmannpsych] text-white">
           Integral Surf
         </h2>
-        {/* © {new Date().getFullYear()} Dado */}
         <Image
           src="/images/icons/white-logo.png"
           alt="Logo Integral Surf"
@@ -16,8 +15,8 @@ export default function Footer() {
         />
       </div>
       <div className="flex flex-col md:flex-row justify-between items-start mx-auto px-10 mt-6 space-y-6 md:space-y-0 md:space-x-6">
-        {/* Column 1: Siguenos en */}
-        <div className="flex flex-col space-y-2 ">
+        {/* Column 1: Comunidad */}
+        <div className="flex flex-col space-y-2">
           <h3 className="font-bold text-xl text-white font-librefranklin">
             Comunidad
           </h3>
@@ -27,7 +26,9 @@ export default function Footer() {
             rel="noopener noreferrer"
             className="hover:underline"
           >
-            Instagram
+            Instagram{" "}
+            <span aria-hidden="true">↗</span>
+            <span className="sr-only">(abre en nueva pestaña)</span>
           </a>
           <a
             href="https://www.youtube.com/@integralsurf"
@@ -35,7 +36,9 @@ export default function Footer() {
             rel="noopener noreferrer"
             className="hover:underline"
           >
-            YouTube
+            YouTube{" "}
+            <span aria-hidden="true">↗</span>
+            <span className="sr-only">(abre en nueva pestaña)</span>
           </a>
         </div>
 
@@ -52,6 +55,9 @@ export default function Footer() {
           </a>
         </div>
       </div>
+      <p className="text-center text-sm text-white/60 mt-10 px-10">
+        © 2026 Integral Surf
+      </p>
     </footer>
   );
 }

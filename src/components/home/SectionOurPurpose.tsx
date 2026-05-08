@@ -24,10 +24,10 @@ const SectionOurPurpose: React.FC<SectionOurPurposeProps> = ({
 }) => {
   return (
     <section
-      className="w-full min-[1150px]:min-h-[90vh] min-[1150px]:px-20 min-[1150px]:py-20 grid grid-cols-1 min-[1150px]:grid-cols-2 min-[1150px]:gap-10"
+      className="w-full xl-surf:min-h-[90vh] xl-surf:px-20 xl-surf:py-20 grid grid-cols-1 xl-surf:grid-cols-2 xl-surf:gap-10"
       style={{ boxShadow: "0 1px 2px -2px #7f807e" }}
     >
-      <div className="max-w-[660px] mx-auto min-[1150px]:mx-0 px-10 min-[1150px]:px-20 py-10 min-[1150px]:py-20 text-center min-[1150px]:text-left">
+      <div className="max-w-[660px] mx-auto xl-surf:mx-0 px-10 xl-surf:px-20 py-10 xl-surf:py-20 text-center xl-surf:text-left">
         <h2 className="font-[Eckmannpsych]">{title}</h2>
         <p className="mt-6 text-xl tracking-[0.2rem]">{description}</p>
         <p className="mt-10 text-xl tracking-[0.2rem]">
@@ -37,7 +37,7 @@ const SectionOurPurpose: React.FC<SectionOurPurposeProps> = ({
           <Button className="mt-8 text-xl bg-black hover:bg-gray-900">{buttonText}</Button>
         </Link>
       </div>
-      <div className="flex flex-row justify-center items-start min-[1150px]:items-center">
+      <div className="flex flex-row justify-center items-start xl-surf:items-center">
         <HomeSectionSlider images={images} fallbackUrl={imageUrl || ""} alt="Nuestro propósito" />
       </div>
     </section>

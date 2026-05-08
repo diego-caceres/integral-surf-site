@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   fetchTripsOnce,
@@ -45,11 +45,54 @@ export default function NavBar() {
   const [menuItemImages, setMenuItemImages] = useState<MenuImagesData>({});
   const [menuTripItems, setMenuTripItems] = useState<MenuTripItem[]>([]);
   const [destinosTitle, setDestinosTitle] = useState("DESTINOS 2026");
+  const hamburgerRef = useRef<HTMLButtonElement>(null);
+  const drawerRef = useRef<HTMLDivElement>(null);
 
-  const toggleMenu = () => setIsOpen(!isOpen);
+  const toggleMenu = () => setIsOpen((prev) => !prev);
 
-  const storeDisabled = false;
-  const blogDisabled = false;
+  const closeMenu = useCallback(() => {
+    setIsOpen(false);
+    hamburgerRef.current?.focus();
+  }, []);
+
+  // Focus trap + Escape key inside the mobile drawer
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const drawer = drawerRef.current;
+    if (!drawer) return;
+
+    const focusable = drawer.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    );
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+
+    first?.focus();
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        closeMenu();
+        return;
+      }
+      if (e.key !== "Tab") return;
+      if (focusable.length === 0) { e.preventDefault(); return; }
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          e.preventDefault();
+          last?.focus();
+        }
+      } else {
+        if (document.activeElement === last) {
+          e.preventDefault();
+          first?.focus();
+        }
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, closeMenu]);
 
   function tripsToMenuItems(trips: TripData[]): MenuTripItem[] {
     return trips
@@ -94,7 +137,13 @@ export default function NavBar() {
     <>
       {/* Botón de menú para móviles */}
       <div className="md:hidden p-4  items-center grid grid-cols-[15%_70%_15%]">
-        <button onClick={toggleMenu} aria-label="Abrir menú">
+        <button
+          ref={hamburgerRef}
+          onClick={toggleMenu}
+          aria-label="Abrir menú"
+          aria-expanded={isOpen}
+          aria-controls="mobile-nav-drawer"
+        >
           <Bars3Icon className="h-8 w-8 text-primary" />
         </button>
 
@@ -116,6 +165,11 @@ export default function NavBar() {
       <AnimatePresence>
       {isOpen && (
       <motion.div
+        ref={drawerRef}
+        id="mobile-nav-drawer"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Menú de navegación"
         initial={{ x: "-100%" }}
         animate={{ x: "0%" }}
         exit={{ x: "-100%" }}
@@ -131,7 +185,7 @@ export default function NavBar() {
           />
         </div>
         <button
-          onClick={toggleMenu}
+          onClick={closeMenu}
           className="self-end mb-8"
           aria-label="Cerrar menú"
         >
@@ -142,7 +196,7 @@ export default function NavBar() {
           <Link
             href="/"
             className="text-3xl font-serif tracking-wide"
-            onClick={toggleMenu}
+            onClick={closeMenu}
             prefetch
           >
             <span className="text-primary font-[Eckmannpsych] font-size">
@@ -181,7 +235,7 @@ export default function NavBar() {
                           <li key={`${destino.id}-${index}`}>
                             <Link
                               href={destino.url}
-                              onClick={toggleMenu}
+                              onClick={closeMenu}
                               className="text-sm hover:text-accent transition"
                             >
                               {destino.name}
@@ -199,7 +253,7 @@ export default function NavBar() {
                           <li key={item}>
                             <Link
                               href={`/fundamentos#section-${index}`}
-                              onClick={toggleMenu}
+                              onClick={closeMenu}
                               className="text-sm hover:text-accent transition"
                             >
                               {item}
@@ -213,11 +267,11 @@ export default function NavBar() {
               )}
             </AnimatePresence>
           </div>
-          
+
           <Link
             href="/about"
             className="text-xl font-semibold hover:text-accent transition"
-            onClick={toggleMenu}
+            onClick={closeMenu}
             prefetch
           >
             NOSOTROS

@@ -1,5 +1,3 @@
-"use client";
-
 import SectionOurPurpose from "@/components/home/SectionOurPurpose";
 import SectionCalendar from "@/components/home/SectionCalendar";
 import SectionTheRoad from "@/components/home/SectionTheRoad";
@@ -8,40 +6,31 @@ import SectionExperiences from "@/components/home/SectionExperiences";
 import SectionInstagram from "@/components/home/SectionInstagram";
 import WhatsAppButton from "@/components/layout/WhatsAppButton";
 import SectionHeader from "@/components/home/SectionHeader";
-import { useEffect, useState } from "react";
+import { supabaseServer } from "@/lib/supabaseServer";
 import type { HomeSection } from "@/types/homeSections";
 
-const HOME_SECTIONS_CACHE_KEY = "integral_home_sections";
+async function getHomeSections(): Promise<Record<string, HomeSection>> {
+  const { data, error } = await supabaseServer.from("home_sections").select("*");
+  if (error || !data) return {};
 
-function buildSectionsMap(data: HomeSection[]): Record<string, HomeSection> {
+  const enriched = await Promise.all(
+    data.map(async (section) => {
+      const { data: images } = await supabaseServer
+        .from("home_section_images")
+        .select("*")
+        .eq("section_key", section.section_key)
+        .order("order_number", { ascending: true });
+      return { ...section, images: images || [] };
+    })
+  );
+
   const map: Record<string, HomeSection> = {};
-  for (const s of data) map[s.section_key] = s;
+  for (const s of enriched) map[s.section_key] = s;
   return map;
 }
 
-export default function HomePage() {
-  const [homeSections, setHomeSections] = useState<Record<string, HomeSection>>({});
-
-  useEffect(() => {
-    // Load from cache immediately (no flash of defaults)
-    try {
-      const cached = localStorage.getItem(HOME_SECTIONS_CACHE_KEY);
-      if (cached) setHomeSections(buildSectionsMap(JSON.parse(cached)));
-    } catch { /* ignore */ }
-
-    // Fetch fresh data in background; update only if changed
-    fetch("/api/home-sections")
-      .then((res) => res.json())
-      .then((data: HomeSection[]) => {
-        const fresh = JSON.stringify(data);
-        const cached = localStorage.getItem(HOME_SECTIONS_CACHE_KEY);
-        if (fresh !== cached) {
-          localStorage.setItem(HOME_SECTIONS_CACHE_KEY, fresh);
-          setHomeSections(buildSectionsMap(data));
-        }
-      })
-      .catch(() => {/* keep cached data on network error */});
-  }, []);
+export default async function HomePage() {
+  const homeSections = await getHomeSections();
 
   const ourPurpose = homeSections["our_purpose"];
   const theRoad = homeSections["the_road"];
