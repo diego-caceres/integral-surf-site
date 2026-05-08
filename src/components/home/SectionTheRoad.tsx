@@ -39,7 +39,7 @@ export default function SectionTheRoad({
       {/* Background Image */}
       <Image
         src={backgroundImageUrl}
-        alt="Background"
+        alt=""
         fill
         style={{ objectFit: "cover", zIndex: -1 }}
         priority

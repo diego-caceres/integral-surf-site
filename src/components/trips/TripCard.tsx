@@ -5,7 +5,7 @@ import { bebasNeuelFont } from "@/styles/fonts";
 const TripCard = ({ trip }: { trip: Trip }) => {
   return (
     <Link href={`/viajes/${trip.slug}`} passHref className="block h-full">
-      <div className="bg-redColor p-3 h-full uppercase text-white transition-all duration-300 hover:scale-105 cursor-pointer hover:shadow-lg">
+      <div className="bg-redColor p-3 h-full uppercase text-white transition-all duration-300 hover:scale-105 cursor-pointer hover:shadow-lg will-change-transform">
         <div
           className={`${bebasNeuelFont.className} tracking-[0.1rem] text-white grid xl-surf:grid-cols-[18%_82%] xl-surf:gap-10 xl-surf:items-center text-left px-5 xl-surf:px-10 py-1 h-full`}
         >

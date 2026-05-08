@@ -60,12 +60,11 @@ const TripDetail = ({ trip }: { trip: Trip }) => {
         {header_video ? (
           <div className="relative w-full h-[80vh] overflow-hidden">
             <iframe
-              className="absolute top-0 left-0 w-full h-full"
+              className="absolute top-0 left-0 w-full h-full border-0"
               src={`https://www.youtube.com/embed/${extractVideoId(
                 header_video
               )}?autoplay=1&mute=1`}
               title="YouTube video player"
-              frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               referrerPolicy="strict-origin-when-cross-origin"
               allowFullScreen
@@ -176,7 +175,7 @@ const TripDetail = ({ trip }: { trip: Trip }) => {
         finalPriceMessage={trip.price_final_message}
       />
 
-      <FinalImagesSection final_img_1={final_img_1} final_img_2={final_img_2} />
+      <FinalImagesSection final_img_1={final_img_1} final_img_2={final_img_2} title={title} />
 
       <div className="p-6 sm:p-8 max-w-7xl mx-auto">
         {/* Contact Button */}
@@ -369,12 +368,11 @@ const TripVideoDetailSection = ({
 
         <div className="relative w-full min-h-[270px]  md:h-[300px] overflow-hidden rounded-xl">
           <iframe
-            className="absolute top-0 left-0 w-full h-full"
+            className="absolute top-0 left-0 w-full h-full border-0"
             src={`https://www.youtube.com/embed/${extractVideoId(
               videoUrl
             )}?autoplay=1&mute=1`}
             title="YouTube video player"
-            frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             referrerPolicy="strict-origin-when-cross-origin"
             allowFullScreen
@@ -397,9 +395,11 @@ const TripVideoDetailSection = ({
 const FinalImagesSection = ({
   final_img_1,
   final_img_2,
+  title = "",
 }: {
   final_img_1?: string;
   final_img_2?: string;
+  title?: string;
 }) => {
   return (
     <section className="h-[700px] md:min-h-[75vh] w-full flex flex-col md:flex-row items-center justify-center">
@@ -407,7 +407,7 @@ const FinalImagesSection = ({
         {final_img_1 && (
           <Image
             src={final_img_1}
-            alt="Final Image 1"
+            alt={`${title} — imagen 1`}
             width={1920}
             height={700}
             className="w-full h-full object-cover"
@@ -418,7 +418,7 @@ const FinalImagesSection = ({
         {final_img_2 && (
           <Image
             src={final_img_2}
-            alt="Final Image 2"
+            alt={`${title} — imagen 2`}
             width={1920}
             height={700}
             className="w-full h-full object-cover"

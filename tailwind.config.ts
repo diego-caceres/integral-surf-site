@@ -32,6 +32,9 @@ export default {
       spacing: {
         18: "4.5rem",
       },
+      boxShadow: {
+        section: "0 1px 2px -2px #7f807e",
+      },
     },
   },
   plugins: [],

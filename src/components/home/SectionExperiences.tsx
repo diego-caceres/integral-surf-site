@@ -24,7 +24,7 @@ export default function SectionExperiences({
       {/* Background Image */}
       <Image
         src={backgroundImageUrl}
-        alt="Background"
+        alt=""
         fill
         style={{ objectFit: "cover" }}
         priority
@@ -46,10 +46,9 @@ export default function SectionExperiences({
         <div className="flex flex-col items-center w-full justify-center px-10 lg:px-8 pb-10 lg:pb-0">
           <div className="relative w-full aspect-video overflow-hidden rounded-xl">
             <iframe
-              className="absolute top-0 left-0 w-full h-full"
+              className="absolute top-0 left-0 w-full h-full border-0"
               src={buildVideoSrc(videoUrl)}
               title="YouTube video player"
-              frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               referrerPolicy="strict-origin-when-cross-origin"
               allowFullScreen

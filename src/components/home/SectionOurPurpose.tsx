@@ -24,8 +24,7 @@ const SectionOurPurpose: React.FC<SectionOurPurposeProps> = ({
 }) => {
   return (
     <section
-      className="w-full xl-surf:min-h-[90vh] xl-surf:px-20 xl-surf:py-20 grid grid-cols-1 xl-surf:grid-cols-2 xl-surf:gap-10"
-      style={{ boxShadow: "0 1px 2px -2px #7f807e" }}
+      className="w-full xl-surf:min-h-[90vh] xl-surf:px-20 xl-surf:py-20 grid grid-cols-1 xl-surf:grid-cols-2 xl-surf:gap-10 shadow-section"
     >
       <div className="max-w-[660px] mx-auto xl-surf:mx-0 px-10 xl-surf:px-20 py-10 xl-surf:py-20 text-center xl-surf:text-left">
         <h2 className="font-[Eckmannpsych]">{title}</h2>

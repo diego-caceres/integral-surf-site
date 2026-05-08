@@ -199,7 +199,7 @@ export default function NavBar() {
             onClick={closeMenu}
             prefetch
           >
-            <span className="text-primary font-[Eckmannpsych] font-size">
+            <span className="text-primary font-[Eckmannpsych]">
               INTEGRAL SURF
             </span>
           </Link>
@@ -284,7 +284,7 @@ export default function NavBar() {
       {/* Navbar para desktop */}
       <nav className="hidden md:flex justify-between items-center py-8 px-10 relative">
         <Link href="/" className="text-4xl font-serif tracking-wide">
-          <span className="text-primary font-[Eckmannpsych] font-size">
+          <span className="text-primary font-[Eckmannpsych]">
             INTEGRAL SURF
           </span>
         </Link>
