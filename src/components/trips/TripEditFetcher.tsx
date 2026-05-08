@@ -260,7 +260,7 @@ export default function TripEditFetcher(params: TripEditFetcherProps) {
         <p className="text-lg mb-6">{error}</p>
         <button
           onClick={() => router.back()}
-          className="bg-primary text-white px-6 py-2 rounded-md hover:bg-opacity-90"
+          className="bg-primary text-white px-6 py-2 rounded-md hover:bg-opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
         >
           Volver
         </button>
@@ -277,14 +277,14 @@ export default function TripEditFetcher(params: TripEditFetcherProps) {
             type="button"
             onClick={handleSubmit}
             disabled={isLoading}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 disabled:bg-blue-300"
+            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 disabled:bg-blue-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
           >
             {isLoading ? "Guardando..." : "Guardar"}
           </button>
           <button
             type="button"
             onClick={() => router.back()}
-            className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"
+            className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2"
           >
             Cancelar
           </button>
@@ -717,7 +717,7 @@ export default function TripEditFetcher(params: TripEditFetcherProps) {
             <button
               type="button"
               onClick={addContent}
-              className="bg-green-500 text-white p-2 px-4 rounded hover:bg-green-600"
+              className="bg-green-500 text-white p-2 px-4 rounded hover:bg-green-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
             >
               Agregar Contenido
             </button>
@@ -730,7 +730,7 @@ export default function TripEditFetcher(params: TripEditFetcherProps) {
                 <button
                   type="button"
                   onClick={() => removeContent(index)}
-                  className="bg-red-500 text-white p-1 px-3 rounded hover:bg-red-600 text-sm"
+                  className="bg-red-500 text-white p-1 px-3 rounded hover:bg-red-600 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
                 >
                   Eliminar
                 </button>
@@ -823,7 +823,7 @@ export default function TripEditFetcher(params: TripEditFetcherProps) {
                     <button
                       type="button"
                       onClick={() => addContentImage(index)}
-                      className="bg-green-500 text-white p-1 px-3 rounded hover:bg-green-600 text-sm"
+                      className="bg-green-500 text-white p-1 px-3 rounded hover:bg-green-600 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
                     >
                       Agregar Imagen
                     </button>
@@ -837,7 +837,7 @@ export default function TripEditFetcher(params: TripEditFetcherProps) {
                         <button
                           type="button"
                           onClick={() => removeContentImage(index, imageIndex)}
-                          className="bg-red-500 text-white p-1 px-2 rounded hover:bg-red-600 text-xs"
+                          className="bg-red-500 text-white p-1 px-2 rounded hover:bg-red-600 text-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
                         >
                           Quitar
                         </button>
@@ -868,7 +868,7 @@ export default function TripEditFetcher(params: TripEditFetcherProps) {
           <button
             type="submit"
             disabled={isLoading}
-            className="bg-blue-500 text-white px-6 py-3 rounded-md hover:bg-blue-600 disabled:bg-blue-300"
+            className="bg-blue-500 text-white px-6 py-3 rounded-md hover:bg-blue-600 disabled:bg-blue-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
           >
             {isLoading ? "Guardando..." : "Guardar Cambios"}
           </button>

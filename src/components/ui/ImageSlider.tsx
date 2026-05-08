@@ -92,7 +92,7 @@ export default function ImageSlider({
               key={`dot-${index}`}
               aria-label={`Ir a imagen ${index + 1}`}
               aria-current={index === currentIndex ? "true" : undefined}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+              className={`w-3 h-3 rounded-full transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-1 ${
                 index === currentIndex ? "bg-white scale-125" : "bg-gray-400"
               }`}
               onClick={() => setCurrentIndex(index)}

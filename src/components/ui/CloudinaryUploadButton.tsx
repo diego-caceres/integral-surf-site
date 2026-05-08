@@ -69,7 +69,7 @@ export default function CloudinaryUploadButton({
                 open();
               }}
               disabled={uploading}
-              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-400 transition-colors"
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-400 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
             >
               {uploading ? "Cargando..." : "Cargar Imagen"}
             </button>
@@ -81,7 +81,7 @@ export default function CloudinaryUploadButton({
           <button
             type="button"
             onClick={() => onChange("")}
-            className="px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
+            className="px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
           >
             Limpiar
           </button>
