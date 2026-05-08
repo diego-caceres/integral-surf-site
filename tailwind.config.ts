@@ -15,6 +15,13 @@ export default {
         background: "#FFFFFF", // Fondo claro "#F9F6F1",
         textPrimary: "#0E1A1B", // Texto principal
         redColor: "#FF3131", // Rojo
+        whatsapp: {
+          DEFAULT: "#4dc247",
+          dark: "#128C7E",
+        },
+      },
+      screens: {
+        "xl-surf": "1190px",
       },
       fontFamily: {
         serif: ['"Playfair Display"', "serif"],

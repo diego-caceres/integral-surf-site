@@ -68,7 +68,7 @@ const WhatsAppButton: React.FC<WhatsAppButtonProps> = ({
           href={whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-center bg-[#4dc247] text-white font-semibold py-3 px-6 rounded-full shadow-md hover:bg-[#128C7E] focus:outline-none transition-all duration-300"
+          className="flex items-center justify-center bg-whatsapp text-white font-semibold py-3 px-6 rounded-full shadow-md hover:bg-whatsapp-dark focus:outline-none transition-all duration-300"
         >
           <svg viewBox="0 0 32 32" className="whatsapp-ico">
             <path
@@ -83,7 +83,7 @@ const WhatsAppButton: React.FC<WhatsAppButtonProps> = ({
         <div className="fixed bottom-6 right-6 md:bottom-8 md:right-8 flex flex-col items-center gap-2">
           <span
             aria-hidden="true"
-            className="bg-white text-green-700 text-xs font-semibold px-3 py-1 rounded-full shadow-md whitespace-nowrap"
+            className="bg-white text-whatsapp-dark text-xs font-semibold px-3 py-1 rounded-full shadow-md whitespace-nowrap"
           >
             Viaja al mar con nosotros
           </span>
@@ -92,7 +92,7 @@ const WhatsAppButton: React.FC<WhatsAppButtonProps> = ({
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Contactar por WhatsApp"
-            className="bg-green-500 text-white p-4 md:p-5 rounded-full shadow-lg shadow-green-700/50 hover:bg-green-600 transition-transform transform hover:scale-110 cursor-pointer"
+            className="bg-whatsapp text-white p-4 md:p-5 rounded-full shadow-lg shadow-whatsapp-dark/50 hover:bg-whatsapp-dark transition-transform transform hover:scale-110 cursor-pointer"
           >
             <FaWhatsapp className="w-6 h-6 md:w-8 md:h-8" />
           </Link>

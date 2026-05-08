@@ -8,10 +8,15 @@ interface SectionExperiencesProps {
   backgroundImageUrl?: string;
 }
 
+function buildVideoSrc(url: string): string {
+  const separator = url.includes("?") ? "&" : "?";
+  return `${url}${separator}autoplay=1&mute=1`;
+}
+
 export default function SectionExperiences({
   title = "Experiencias Integrales",
   description = "En este ciclo de entrevistas a viajeros, Federico García nos cuenta sobre su experiencia aprendiendo a surfear con Integral en Perú",
-  videoUrl = "https://www.youtube.com/embed/EDKX-i1_yMI?si=CLg0ghvuidtUVpG9&autoplay=1&mute=1",
+  videoUrl = "https://www.youtube.com/embed/EDKX-i1_yMI?si=CLg0ghvuidtUVpG9",
   backgroundImageUrl = "/images/home/experiences-background.jpg",
 }: SectionExperiencesProps) {
   return (
@@ -42,7 +47,7 @@ export default function SectionExperiences({
           <div className="relative w-full aspect-video overflow-hidden rounded-xl">
             <iframe
               className="absolute top-0 left-0 w-full h-full"
-              src={videoUrl}
+              src={buildVideoSrc(videoUrl)}
               title="YouTube video player"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

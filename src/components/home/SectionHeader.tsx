@@ -59,6 +59,7 @@ const SectionHeader: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
+  const prevActiveImagesRef = useRef<SectionImage[]>(defaultSectionImages);
 
   // Effect for fetching images and title
   useEffect(() => {
@@ -171,12 +172,9 @@ const SectionHeader: React.FC = () => {
       }
 
       setActiveImages(imagesToSet);
-      // Only reset currentIndex if the actual image set content changes to avoid unnecessary flicker
-      // This requires comparing imagesToSet with previous activeImages, which can be complex.
-      // For simplicity, resetting index is safer if image set *might* have changed.
-      if (activeImages !== imagesToSet) {
-        // Basic check, might need deep comparison for stability
+      if (prevActiveImagesRef.current !== imagesToSet) {
         setCurrentIndex(0);
+        prevActiveImagesRef.current = imagesToSet;
       }
     };
 
@@ -186,8 +184,7 @@ const SectionHeader: React.FC = () => {
     return () => {
       mediaQuery.removeEventListener("change", handleResize);
     };
-    // Rerun when fetched image data changes, or loading state transitions
-  }, [webImages, mobileImages, isLoading, activeImages]); // isLoading here refers to the combined loading state
+  }, [webImages, mobileImages, isLoading]);
 
   // Effect for slideshow interval
   useEffect(() => {

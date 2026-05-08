@@ -21,14 +21,14 @@ export default function SectionCoaching({
   images = [],
 }: SectionCoachingProps) {
   return (
-    <div className="w-full min-[1150px]:min-h-[90vh] min-[1150px]:px-20 min-[1150px]:py-20 pb-10 min-[1150px]:pb-20 grid grid-cols-1 min-[1150px]:grid-cols-2 min-[1150px]:gap-10">
+    <div className="w-full xl-surf:min-h-[90vh] xl-surf:px-20 xl-surf:py-20 pb-10 xl-surf:pb-20 grid grid-cols-1 xl-surf:grid-cols-2 xl-surf:gap-10">
       {/* Left Column - Slideshow (below text on mobile) */}
-      <div className="flex flex-row justify-center items-start min-[1150px]:items-center order-2 min-[1150px]:order-1">
+      <div className="flex flex-row justify-center items-start xl-surf:items-center order-2 xl-surf:order-1">
         <HomeSectionSlider images={images} fallbackUrl={imageUrl || ""} alt="Coaching" />
       </div>
 
       {/* Right Column - Text (above image on mobile) */}
-      <div className="max-w-[660px] mx-auto min-[1150px]:mx-0 px-10 min-[1150px]:px-20 py-10 min-[1150px]:py-20 text-center min-[1150px]:text-left order-1 min-[1150px]:order-2">
+      <div className="max-w-[660px] mx-auto xl-surf:mx-0 px-10 xl-surf:px-20 py-10 xl-surf:py-20 text-center xl-surf:text-left order-1 xl-surf:order-2">
         <h2 className="uppercase font-[Eckmannpsych]">{title}</h2>
         <p className="mt-6 text-xl tracking-[0.2rem]">{description}</p>
         <Link href="/fundamentos">

@@ -1,56 +1,32 @@
-"use client";
-
 import Image from "next/image";
 import WhatsAppButton from "@/components/layout/WhatsAppButton";
-import { useEffect, useState } from "react";
+import { supabaseServer } from "@/lib/supabaseServer";
 import type { AboutPage } from "@/types/about";
 
-export default function AboutPage() {
-  const [aboutData, setAboutData] = useState<AboutPage | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+async function getAboutData(): Promise<AboutPage | null> {
+  const { data: aboutData, error: aboutError } = await supabaseServer
+    .from("about_page")
+    .select("*")
+    .single();
 
-  useEffect(() => {
-    const fetchAboutData = async () => {
-      try {
-        const response = await fetch("/api/about");
-        if (!response.ok) {
-          throw new Error("Failed to fetch about data");
-        }
-        const data = await response.json();
-        setAboutData(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "An error occurred");
-      } finally {
-        setLoading(false);
-      }
-    };
+  if (aboutError || !aboutData) return null;
 
-    fetchAboutData();
-  }, []);
+  const { data: instructorsData } = await supabaseServer
+    .from("about_instructors")
+    .select("*")
+    .order("order_number", { ascending: true });
 
-  if (loading) {
+  return { ...aboutData, instructors: instructorsData || [] };
+}
+
+export default async function AboutPage() {
+  const aboutData = await getAboutData();
+
+  if (!aboutData) {
     return (
       <div className="flex flex-col min-h-screen">
         <div className="container mx-auto px-4 py-16 text-center">
-          <div className="animate-pulse">
-            <div className="h-16 bg-gray-200 rounded mb-8"></div>
-            <div className="space-y-4">
-              <div className="h-4 bg-gray-200 rounded"></div>
-              <div className="h-4 bg-gray-200 rounded"></div>
-              <div className="h-4 bg-gray-200 rounded"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (error || !aboutData) {
-    return (
-      <div className="flex flex-col min-h-screen">
-        <div className="container mx-auto px-4 py-16 text-center">
-          <p className="text-red-500">Error loading about page: {error}</p>
+          <p className="text-red-500">Error loading about page</p>
         </div>
       </div>
     );

@@ -1,66 +1,56 @@
-"use client";
-
 import Image from "next/image";
 import WhatsAppButton from "@/components/layout/WhatsAppButton";
 import FundamentosImageSlider from "@/components/fundamentos/FundamentosImageSlider";
-import { useEffect, useState } from "react";
+import HashScroller from "./HashScroller";
+import { supabaseServer } from "@/lib/supabaseServer";
 import type { FundamentosPage } from "@/types/fundamentos";
 
-export default function FundamentosPage() {
-  const [fundamentosData, setFundamentosData] =
-    useState<FundamentosPage | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+async function getFundamentosData(): Promise<FundamentosPage | null> {
+  const { data: sectionsData, error: sectionsError } = await supabaseServer
+    .from("fundamentos_sections")
+    .select("*")
+    .order("order_number", { ascending: true });
 
-  useEffect(() => {
-    if (!loading && fundamentosData && window.location.hash) {
-      const el = document.getElementById(window.location.hash.slice(1));
-      if (el) el.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [loading, fundamentosData]);
+  if (sectionsError) return null;
 
-  useEffect(() => {
-    const fetchFundamentosData = async () => {
-      try {
-        const response = await fetch("/api/fundamentos");
-        if (!response.ok) {
-          throw new Error("Failed to fetch fundamentos data");
-        }
-        const data = await response.json();
-        setFundamentosData(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "An error occurred");
-      } finally {
-        setLoading(false);
-      }
-    };
+  const sectionsWithTeam = await Promise.all(
+    (sectionsData || []).map(async (section) => {
+      const { data: sectionImages } = await supabaseServer
+        .from("fundamentos_section_images")
+        .select("*")
+        .eq("section_id", section.id)
+        .order("order_number", { ascending: true });
 
-    fetchFundamentosData();
-  }, []);
+      const { data: teamMembers } = await supabaseServer
+        .from("fundamentos_team_members")
+        .select("*")
+        .eq("section_id", section.id)
+        .order("order_number", { ascending: true });
 
-  if (loading) {
+      return {
+        ...section,
+        images: sectionImages || [],
+        team_members: teamMembers || [],
+      };
+    })
+  );
+
+  return {
+    id: "default",
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    sections: sectionsWithTeam,
+  };
+}
+
+export default async function FundamentosPage() {
+  const fundamentosData = await getFundamentosData();
+
+  if (!fundamentosData) {
     return (
       <div className="flex flex-col min-h-screen">
         <div className="container mx-auto px-4 py-16 text-center">
-          <div className="animate-pulse">
-            <div className="space-y-4">
-              <div className="h-4 bg-gray-200 rounded"></div>
-              <div className="h-4 bg-gray-200 rounded"></div>
-              <div className="h-4 bg-gray-200 rounded"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (error || !fundamentosData) {
-    return (
-      <div className="flex flex-col min-h-screen">
-        <div className="container mx-auto px-4 py-16 text-center">
-          <p className="text-red-500">
-            Error loading fundamentos page: {error}
-          </p>
+          <p className="text-red-500">Error loading fundamentos page</p>
         </div>
       </div>
     );
@@ -68,6 +58,7 @@ export default function FundamentosPage() {
 
   return (
     <div className="flex flex-col min-h-screen">
+      <HashScroller />
       {/* Sections */}
       {fundamentosData.sections.map((section, index) => (
         <section
