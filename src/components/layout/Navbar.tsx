@@ -45,6 +45,7 @@ export default function NavBar() {
   const [menuItemImages, setMenuItemImages] = useState<MenuImagesData>({});
   const [menuTripItems, setMenuTripItems] = useState<MenuTripItem[]>([]);
   const [destinosTitle, setDestinosTitle] = useState("DESTINOS 2026");
+  const [showStickyNav, setShowStickyNav] = useState(false);
   const hamburgerRef = useRef<HTMLButtonElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
 
@@ -105,6 +106,32 @@ export default function NavBar() {
   }
 
   useEffect(() => {
+    let lastY = window.scrollY;
+    let ticking = false;
+
+    const handleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const currentY = window.scrollY;
+          if (currentY < 80) {
+            setShowStickyNav(false);
+          } else if (currentY < lastY) {
+            setShowStickyNav(true);
+          } else if (currentY > lastY) {
+            setShowStickyNav(false);
+          }
+          lastY = currentY;
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
     // Populate from cache immediately after mount, then refresh in background
     const cachedTrips = getTripsFromCache();
     if (cachedTrips) setMenuTripItems(tripsToMenuItems(cachedTrips));
@@ -143,6 +170,7 @@ export default function NavBar() {
           aria-label="Abrir menú"
           aria-expanded={isOpen}
           aria-controls="mobile-nav-drawer"
+          className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
         >
           <Bars3Icon className="h-8 w-8 text-primary" />
         </button>
@@ -186,7 +214,7 @@ export default function NavBar() {
         </div>
         <button
           onClick={closeMenu}
-          className="self-end mb-8"
+          className="self-end mb-8 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
           aria-label="Cerrar menú"
         >
           <XMarkIcon className="h-8 w-8 text-primary" />
@@ -207,7 +235,7 @@ export default function NavBar() {
           <div className="flex flex-col w-full">
             <button
               onClick={() => setViajesOpen((v) => !v)}
-              className="flex items-center justify-between w-full text-xl font-semibold hover:text-accent transition"
+              className="flex items-center justify-between w-full text-xl font-semibold hover:text-accent transition rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               aria-expanded={viajesOpen}
             >
               <span>VIAJES AL MAR</span>
@@ -348,6 +376,107 @@ export default function NavBar() {
           ></MegaMenuItem>
         </ul>
       </nav>
+
+      {/* Sticky navbar — slides in from top when scrolling up, hidden at top */}
+      <AnimatePresence>
+        {showStickyNav && (
+          <motion.div
+            initial={{ y: "-100%" }}
+            animate={{ y: 0 }}
+            exit={{ y: "-100%" }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="fixed top-0 left-0 right-0 z-40 bg-white shadow-md"
+          >
+            {/* Mobile sticky bar */}
+            <div className="md:hidden p-4 items-center grid grid-cols-[15%_70%_15%]">
+              <button
+                onClick={toggleMenu}
+                aria-label="Abrir menú"
+                aria-expanded={isOpen}
+                aria-controls="mobile-nav-drawer"
+                className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              >
+                <Bars3Icon className="h-8 w-8 text-primary" />
+              </button>
+              <Link href="/" className="flex justify-center">
+                <Image
+                  src="/images/icons/logo.png"
+                  alt="Logo Integral Surf"
+                  width={55}
+                  height={55}
+                />
+              </Link>
+            </div>
+
+            {/* Desktop sticky nav */}
+            <nav className="hidden md:flex justify-between items-center py-4 px-10 relative">
+              <Link href="/" className="text-3xl font-serif tracking-wide">
+                <span className="text-primary font-[Eckmannpsych]">
+                  INTEGRAL SURF
+                </span>
+              </Link>
+              <div className="absolute left-1/2 transform -translate-x-1/2 z-40">
+                <Image
+                  src="/images/icons/logo.png"
+                  alt="Logo Integral Surf"
+                  width={80}
+                  height={80}
+                />
+              </div>
+              <ul className="flex gap-x-8 text-xl items-center">
+                <MegaMenuItem
+                  title="VIAJES AL MAR"
+                  href="/viajes"
+                  images={menuItemImages["VIAJES AL MAR"]}
+                >
+                  <div className="grid grid-cols-2 gap-x-8">
+                    <div>
+                      <h3 className="font-semibold text-lg mb-3 text-primary">
+                        {destinosTitle}
+                      </h3>
+                      <ul className="space-y-2">
+                        {menuTripItems.map((destino, index) => (
+                          <li key={`sticky-${destino.id}-${index}`}>
+                            <Link
+                              href={destino.url}
+                              className="hover:text-accent text-sm"
+                            >
+                              {destino.name}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-lg mb-3 text-primary">
+                        FUNDAMENTOS
+                      </h3>
+                      <ul className="space-y-2">
+                        {["Surfing", "Yoga", "Naturaleza", "Arte"].map((item, index) => (
+                          <li key={`sticky-fund-${item}`}>
+                            <Link
+                              href={`/fundamentos#section-${index}`}
+                              className="hover:text-accent text-sm"
+                            >
+                              {item}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </MegaMenuItem>
+
+                <MegaMenuItem
+                  title="NOSOTROS"
+                  href="/about"
+                  images={menuItemImages["NOSOTROS"]}
+                ></MegaMenuItem>
+              </ul>
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }
