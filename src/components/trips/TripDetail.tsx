@@ -4,9 +4,9 @@ import { Trip, TripContentImage } from "@/types/trip";
 import { bebasNeuelFont } from "@/styles/fonts";
 import { libreFranklinFont } from "@/styles/fonts";
 
-import PriceComponent from "@/components/PriceComponent";
-import WhatsAppButton from "@/components/WhatsAppButton";
-import TripContentImageSlider from "@/components/TripContentImageSlider";
+import PriceComponent from "@/components/trips/PriceComponent";
+import WhatsAppButton from "@/components/layout/WhatsAppButton";
+import TripContentImageSlider from "@/components/trips/TripContentImageSlider";
 
 interface TripContentSectionProps {
   title: string;
@@ -205,7 +205,7 @@ const TripDetailSection = ({
     <section className="min-h-[75vh] md:flex items-center gap-4 p-6 md:p-12 md:px-20">
       {/* Left Column */}
       <div className="md:w-[60%] w-full mb-5 md:mb-0">
-        <h2 className="font-[Eckmannpsych] tracking-[0.1rem] uppercase text-redColor text-3xl font-bold mb-4">
+        <h2 className="font-[Eckmannpsych] tracking-[0.1rem] uppercase text-3xl font-bold mb-4">
           {title}
         </h2>
         <p
@@ -259,7 +259,7 @@ const TripDetailImageSection = ({
 
       {/* Title and Description */}
       <div className="flex flex-col items-center justify-center m-10 max-w-[700px]">
-        <h2 className="font-[Eckmannpsych] tracking-[0.1rem] uppercase text-redColor text-3xl font-bold mb-4 max-w-[300px]">
+        <h2 className="font-[Eckmannpsych] tracking-[0.1rem] uppercase text-3xl font-bold mb-4 max-w-[300px]">
           {title}
         </h2>
         <p

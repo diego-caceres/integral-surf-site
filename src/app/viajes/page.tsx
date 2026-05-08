@@ -1,7 +1,7 @@
 "use client";
 // import { useEffect, useState } from "react"; // No longer needed
 
-import SectionCalendar from "@/components/SectionCalendar";
+import SectionCalendar from "@/components/home/SectionCalendar";
 
 export default function Viajes() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

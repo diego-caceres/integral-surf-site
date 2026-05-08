@@ -3,7 +3,7 @@
 import Button from "@/components/ui/Button";
 import Link from "next/link";
 import Image from "next/image";
-import HomeSectionSlider from "@/components/HomeSectionSlider";
+import HomeSectionSlider from "@/components/home/HomeSectionSlider";
 import type { HomeSectionImage } from "@/types/homeSections";
 
 interface SectionTheRoadProps {

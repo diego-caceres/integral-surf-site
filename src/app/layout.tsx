@@ -1,10 +1,10 @@
 "use client";
 import { GoogleTagManager } from "@next/third-parties/google";
 import "../styles/globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
 import { libreFranklinFont } from "@/styles/fonts";
-import ToastProvider from "@/lib/react-toastify/ToastProvider";
+import ToastProvider from "@/components/ui/ToastProvider";
 
 export default function RootLayout({
   children,

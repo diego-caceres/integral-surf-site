@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { InstagramPost } from "../types/instagramPost";
+import { InstagramPost } from "../../types/instagramPost";
 
 export default function SectionInstagram() {
   const [posts, setPosts] = useState<InstagramPost[]>([]);

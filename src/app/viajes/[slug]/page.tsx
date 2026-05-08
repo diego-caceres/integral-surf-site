@@ -1,4 +1,4 @@
-import TripDetailFetcher from "@/components/TripDetailFetcher";
+import TripDetailFetcher from "@/components/trips/TripDetailFetcher";
 
 export default async function TripPage({
   params,

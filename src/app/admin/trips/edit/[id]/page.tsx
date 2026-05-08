@@ -1,4 +1,4 @@
-import TripEditFetcher from "@/components/TripEditFetcher";
+import TripEditFetcher from "@/components/trips/TripEditFetcher";
 
 export default async function EditTrip({
   params,

@@ -2,7 +2,7 @@
 
 import Button from "@/components/ui/Button";
 import Link from "next/link";
-import HomeSectionSlider from "@/components/HomeSectionSlider";
+import HomeSectionSlider from "@/components/home/HomeSectionSlider";
 import type { HomeSectionImage } from "@/types/homeSections";
 
 interface SectionCoachingProps {

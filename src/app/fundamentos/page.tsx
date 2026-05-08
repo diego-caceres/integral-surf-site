@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import WhatsAppButton from "@/components/WhatsAppButton";
-import FundamentosImageSlider from "@/components/FundamentosImageSlider";
+import WhatsAppButton from "@/components/layout/WhatsAppButton";
+import FundamentosImageSlider from "@/components/fundamentos/FundamentosImageSlider";
 import { useEffect, useState } from "react";
 import type { FundamentosPage } from "@/types/fundamentos";
 

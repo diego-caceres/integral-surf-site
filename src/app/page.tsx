@@ -1,13 +1,13 @@
 "use client";
 
-import SectionOurPurpose from "@/components/SectionOurPurpose";
-import SectionCalendar from "@/components/SectionCalendar";
-import SectionTheRoad from "@/components/SectionTheRoad";
-import SectionCoaching from "@/components/SectionCoaching";
-import SectionExperiences from "@/components/SectionExperiences";
-import SectionInstagram from "@/components/SectionInstagram";
-import WhatsAppButton from "@/components/WhatsAppButton";
-import SectionHeader from "@/components/SectionHeader";
+import SectionOurPurpose from "@/components/home/SectionOurPurpose";
+import SectionCalendar from "@/components/home/SectionCalendar";
+import SectionTheRoad from "@/components/home/SectionTheRoad";
+import SectionCoaching from "@/components/home/SectionCoaching";
+import SectionExperiences from "@/components/home/SectionExperiences";
+import SectionInstagram from "@/components/home/SectionInstagram";
+import WhatsAppButton from "@/components/layout/WhatsAppButton";
+import SectionHeader from "@/components/home/SectionHeader";
 import { useEffect, useState } from "react";
 import type { HomeSection } from "@/types/homeSections";
 

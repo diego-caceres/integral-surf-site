@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import TripCard from "@/components/TripCard";
+import TripCard from "@/components/trips/TripCard";
 import { Trip } from "@/types/trip";
 import LogoLoader from "./ui/LogoLoader";
 
