@@ -8,7 +8,7 @@ import {
   getTripsFromCache,
   getDestinosTitleFromCache,
 } from "@/lib/tripsCache";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
+import { Bars3Icon, XMarkIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import Image from "next/image";
 import MegaMenuItem from "./MegaMenuItem";
@@ -41,6 +41,7 @@ interface TripData {
 
 export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [viajesOpen, setViajesOpen] = useState(true);
   const [menuItemImages, setMenuItemImages] = useState<MenuImagesData>({});
   const [menuTripItems, setMenuTripItems] = useState<MenuTripItem[]>([]);
   const [destinosTitle, setDestinosTitle] = useState("DESTINOS 2026");
@@ -149,14 +150,69 @@ export default function NavBar() {
             </span>
           </Link>
 
-          <Link
-            href="/viajes"
-            onClick={toggleMenu}
-            prefetch
-            className="text-xl font-semibold hover:text-accent transition"
-          >
-            VIAJES AL MAR
-          </Link>
+          <div className="flex flex-col w-full">
+            <button
+              onClick={() => setViajesOpen((v) => !v)}
+              className="flex items-center justify-between w-full text-xl font-semibold hover:text-accent transition"
+              aria-expanded={viajesOpen}
+            >
+              <span>VIAJES AL MAR</span>
+              <ChevronDownIcon
+                className={`h-5 w-5 transition-transform duration-300 ${viajesOpen ? "rotate-180" : ""}`}
+              />
+            </button>
+
+            <AnimatePresence initial={false}>
+              {viajesOpen && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  className="overflow-hidden"
+                >
+                  <div className="pl-3 pt-4 flex flex-col gap-4">
+                    <div>
+                      <p className="text-xs font-semibold text-primary/60 mb-2 tracking-widest">
+                        {destinosTitle}
+                      </p>
+                      <ul className="flex flex-col gap-1.5">
+                        {menuTripItems.map((destino, index) => (
+                          <li key={`${destino.id}-${index}`}>
+                            <Link
+                              href={destino.url}
+                              onClick={toggleMenu}
+                              className="text-sm hover:text-accent transition"
+                            >
+                              {destino.name}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold text-primary/60 mb-2 tracking-widest">
+                        FUNDAMENTOS
+                      </p>
+                      <ul className="flex flex-col gap-1.5">
+                        {["Surfing", "Yoga", "Naturaleza", "Arte"].map((item, index) => (
+                          <li key={item}>
+                            <Link
+                              href={`/fundamentos#section-${index}`}
+                              onClick={toggleMenu}
+                              className="text-sm hover:text-accent transition"
+                            >
+                              {item}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
           
           <Link
             href="/about"
