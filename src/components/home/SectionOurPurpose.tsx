@@ -29,8 +29,8 @@ const SectionOurPurpose: React.FC<SectionOurPurposeProps> = ({
     >
       <div className="max-w-[660px] mx-auto xl-surf:mx-0 px-10 xl-surf:px-20 py-10 xl-surf:py-20 text-center xl-surf:text-left">
         <h2 id="section-purpose-heading" className="font-[Eckmannpsych]">{title}</h2>
-        <p className="mt-6 text-xl tracking-[0.2rem]">{description}</p>
-        <p className="mt-10 text-xl tracking-[0.2rem]">
+        <p className="mt-6 text-base xl-surf:text-xl tracking-wide xl-surf:tracking-[0.2rem]">{description}</p>
+        <p className="mt-8 text-base xl-surf:text-xl tracking-wide xl-surf:tracking-[0.2rem] italic">
           &ldquo;{quote}&rdquo;.
         </p>
         <Link href="/about">

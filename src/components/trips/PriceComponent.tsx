@@ -37,7 +37,7 @@ const PriceComponent: React.FC<PriceProps> = ({
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
 
   return (
-    <div className="flex flex-col gap-8 items-center px-10 py-20">
+    <div className="flex flex-col gap-8 items-center px-6 py-10 md:px-10 md:py-20">
       <h2 className="font-[Eckmannpsych] tracking-[0.1rem] uppercase text-redColor text-3xl font-bold mb-4">
         Reserva tu lugar
       </h2>

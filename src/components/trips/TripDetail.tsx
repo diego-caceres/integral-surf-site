@@ -202,7 +202,7 @@ const TripDetailSection = ({
   imageUrl?: string;
 }) => {
   return (
-    <section className="min-h-[75vh] md:flex items-center gap-4 p-6 md:p-12 md:px-20">
+    <section className="md:min-h-[75vh] md:flex items-center gap-4 p-6 md:p-12 md:px-20">
       {/* Left Column */}
       <div className="md:w-[60%] w-full mb-5 md:mb-0">
         <h2 className="font-[Eckmannpsych] tracking-[0.1rem] uppercase text-3xl font-bold mb-4">
@@ -248,7 +248,7 @@ const TripDetailImageSection = ({
   imageUrl?: string;
 }) => {
   return (
-    <section className="min-h-[75vh] w-full flex flex-col items-center justify-center shadow-md shadow-gray-200">
+    <section className="md:min-h-[75vh] w-full flex flex-col items-center justify-center shadow-md shadow-gray-200">
       {/* Full-width Image */}
       {imageUrl && (
         <div className="w-full h-[300px] overflow-hidden">
@@ -264,7 +264,7 @@ const TripDetailImageSection = ({
       )}
 
       {/* Title and Description */}
-      <div className="flex flex-col items-center justify-center m-10 max-w-[700px]">
+      <div className="flex flex-col items-center justify-center m-6 md:m-10 max-w-[700px]">
         <h2 className="font-[Eckmannpsych] tracking-[0.1rem] uppercase text-3xl font-bold mb-4 max-w-[300px]">
           {title}
         </h2>
@@ -307,7 +307,7 @@ const TripContentSection: React.FC<TripContentSectionProps> = ({
         </div>
       )}
 
-      <div className="w-full md:w-1/2 flex flex-col justify-center md:text-left p-12">
+      <div className="w-full md:w-1/2 flex flex-col justify-center md:text-left p-6 md:p-12">
         <h2 className="font-[Eckmannpsych] tracking-[0.1rem] uppercase text-3xl font-bold mb-4">
           {title}
         </h2>
@@ -362,9 +362,9 @@ const TripVideoDetailSection = ({
   videoUrl: string;
 }) => {
   return (
-    <section className="min-h-[75vh] md:flex items-center gap-4  md:px-20 shadow-lg shadow-gray-100">
+    <section className="md:min-h-[75vh] md:flex items-center gap-4  md:px-20 shadow-lg shadow-gray-100">
       {/* Left Column */}
-      <div className="md:w-[40%] w-full mb-5 md:mb-0 p-12">
+      <div className="md:w-[40%] w-full mb-5 md:mb-0 p-6 md:p-12">
         <h3 className="font-[Eckmannpsych] tracking-[0.1rem] uppercase text-xl font-semibold mb-4">
           {title}
         </h3>
@@ -384,7 +384,7 @@ const TripVideoDetailSection = ({
       </div>
 
       {/* Right Column */}
-      <div className="md:w-[60%] w-full flex justify-center items-center p-12">
+      <div className="md:w-[60%] w-full flex justify-center items-center p-6 md:p-12">
         <p
           className={`${libreFranklinFont.className} tracking-[0.2rem] text-lg`}
         >
@@ -405,8 +405,8 @@ const FinalImagesSection = ({
   title?: string;
 }) => {
   return (
-    <section className="h-[300px] md:h-[700px] w-full flex flex-col md:flex-row items-center justify-center">
-      <div className="w-full h-[300px] md:h-[700px] overflow-hidden">
+    <section className="w-full flex flex-col md:flex-row">
+      <div className="w-full h-[220px] md:h-[700px] overflow-hidden">
         {final_img_1 && (
           <Image
             src={final_img_1}
@@ -418,7 +418,7 @@ const FinalImagesSection = ({
           />
         )}
       </div>
-      <div className="w-full h-[300px] md:h-[700px] overflow-hidden">
+      <div className="w-full h-[220px] md:h-[700px] overflow-hidden">
         {final_img_2 && (
           <Image
             src={final_img_2}

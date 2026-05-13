@@ -53,7 +53,7 @@ export default function SectionTheRoad({
       {/* Right Column - Text (above images on mobile) */}
       <div className="max-w-[660px] mx-auto xl-surf:mx-0 px-10 xl-surf:px-20 py-10 xl-surf:py-20 text-center xl-surf:text-left order-1 xl-surf:order-2 text-white">
         <h2 id="section-road-heading" className="uppercase font-[Eckmannpsych] text-white">{title}</h2>
-        <p className="mt-6 text-xl tracking-[0.2rem]">{description}</p>
+        <p className="mt-6 text-base xl-surf:text-xl tracking-wide xl-surf:tracking-[0.2rem]">{description}</p>
         <Link href="/fundamentos">
           <Button className="mt-8 text-xl bg-black hover:bg-gray-900">{buttonText}</Button>
         </Link>
