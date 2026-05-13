@@ -7,30 +7,70 @@ import SectionInstagram from "@/components/home/SectionInstagram";
 import WhatsAppButton from "@/components/layout/WhatsAppButton";
 import SectionHeader from "@/components/home/SectionHeader";
 import { supabaseServer } from "@/lib/supabaseServer";
-import type { HomeSection } from "@/types/homeSections";
+import type { HomeSection, HomeSectionImage } from "@/types/homeSections";
+
+interface SectionHeaderImage {
+  image_url: string;
+  alt_text: string | null;
+  device_type: string;
+}
+
+async function getHeaderData() {
+  const [imagesResult, titleResult] = await Promise.all([
+    supabaseServer
+      .from("section_header_images")
+      .select("image_url, alt_text, device_type")
+      .order("device_type", { ascending: true })
+      .order("display_order", { ascending: true }),
+    supabaseServer
+      .from("configurations")
+      .select("value")
+      .eq("key", "section_header_main_title")
+      .maybeSingle(),
+  ]);
+
+  const images = (imagesResult.data || []) as SectionHeaderImage[];
+  return {
+    web: images
+      .filter((img) => img.device_type === "web")
+      .map(({ image_url, alt_text }) => ({ image_url, alt_text })),
+    mobile: images
+      .filter((img) => img.device_type === "mobile")
+      .map(({ image_url, alt_text }) => ({ image_url, alt_text })),
+    title: titleResult.data?.value || "Viajes al Mar",
+  };
+}
 
 async function getHomeSections(): Promise<Record<string, HomeSection>> {
-  const { data, error } = await supabaseServer.from("home_sections").select("*");
-  if (error || !data) return {};
+  const [sectionsResult, imagesResult] = await Promise.all([
+    supabaseServer.from("home_sections").select("*"),
+    supabaseServer
+      .from("home_section_images")
+      .select("id, image_url, alt_text, order_number, section_key")
+      .order("order_number", { ascending: true }),
+  ]);
 
-  const enriched = await Promise.all(
-    data.map(async (section) => {
-      const { data: images } = await supabaseServer
-        .from("home_section_images")
-        .select("*")
-        .eq("section_key", section.section_key)
-        .order("order_number", { ascending: true });
-      return { ...section, images: images || [] };
-    })
-  );
+  if (sectionsResult.error || !sectionsResult.data) return {};
+
+  const imageMap: Record<string, HomeSectionImage[]> = {};
+  for (const img of (imagesResult.data || []) as (HomeSectionImage & { section_key: string })[]) {
+    const key = img.section_key;
+    if (!imageMap[key]) imageMap[key] = [];
+    imageMap[key].push({ id: img.id, image_url: img.image_url, alt_text: img.alt_text, order_number: img.order_number });
+  }
 
   const map: Record<string, HomeSection> = {};
-  for (const s of enriched) map[s.section_key] = s;
+  for (const s of sectionsResult.data) {
+    map[s.section_key] = { ...s, images: imageMap[s.section_key] || [] };
+  }
   return map;
 }
 
 export default async function HomePage() {
-  const homeSections = await getHomeSections();
+  const [homeSections, headerData] = await Promise.all([
+    getHomeSections(),
+    getHeaderData(),
+  ]);
 
   const ourPurpose = homeSections["our_purpose"];
   const theRoad = homeSections["the_road"];
@@ -39,8 +79,11 @@ export default async function HomePage() {
 
   return (
     <section className="mx-auto text-center">
-      {/* Hero Image Section */}
-      <SectionHeader />
+      <SectionHeader
+        initialWebImages={headerData.web}
+        initialMobileImages={headerData.mobile}
+        initialTitle={headerData.title}
+      />
 
       <SectionOurPurpose
         title={ourPurpose?.title ?? undefined}

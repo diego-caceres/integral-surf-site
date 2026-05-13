@@ -1,5 +1,6 @@
 import { libreFranklinFont } from "@/styles/fonts";
 import Image from "next/image";
+import LazyYouTubeEmbed from "@/components/ui/LazyYouTubeEmbed";
 
 interface SectionExperiencesProps {
   title?: string;
@@ -27,7 +28,6 @@ export default function SectionExperiences({
         alt=""
         fill
         style={{ objectFit: "cover" }}
-        priority
       />
 
       {/* Content Overlay */}
@@ -44,16 +44,7 @@ export default function SectionExperiences({
 
         {/* Right Column */}
         <div className="flex flex-col items-center w-full justify-center px-10 lg:px-8 pb-10 lg:pb-0">
-          <div className="relative w-full aspect-video overflow-hidden rounded-xl">
-            <iframe
-              className="absolute top-0 left-0 w-full h-full border-0"
-              src={buildVideoSrc(videoUrl)}
-              title="YouTube video player"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerPolicy="strict-origin-when-cross-origin"
-              allowFullScreen
-            ></iframe>
-          </div>
+          <LazyYouTubeEmbed src={buildVideoSrc(videoUrl)} title="YouTube video player" />
         </div>
       </div>
     </div>

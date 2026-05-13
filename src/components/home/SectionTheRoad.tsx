@@ -42,7 +42,6 @@ export default function SectionTheRoad({
         alt=""
         fill
         style={{ objectFit: "cover", zIndex: -1 }}
-        priority
       />
 
       {/* Left Column - Slideshow (below text on mobile) */}
