@@ -201,11 +201,10 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({
 
   if (error) {
     return (
-      <section className="relative w-full h-[75vh] flex items-center justify-center bg-gray-100">
-        <p className="text-red-500 text-xl">Error: {error}</p>
+      <section className="relative w-full h-[75vh] flex items-center justify-center bg-secondary/30">
         <div className="absolute inset-0 flex items-end md:items-center justify-center">
-          <h1 className="uppercase text-gray-700 text-4xl md:text-7xl drop-shadow-lg font-[Eckmannpsych] mb-20 md:mb-0">
-            {headerTitle || "Error Loading Title"}
+          <h1 className="uppercase text-primary text-4xl md:text-7xl drop-shadow-lg font-[Eckmannpsych] mb-20 md:mb-0">
+            {headerTitle || "Viajes al Mar"}
           </h1>
         </div>
       </section>
@@ -214,9 +213,9 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({
 
   if (activeImages.length === 0 && !isLoading && !error) {
     return (
-      <section className="relative w-full h-[75vh] flex items-center justify-center bg-gray-300">
+      <section className="relative w-full h-[75vh] flex items-center justify-center bg-secondary/50">
         <div className="absolute inset-0 flex items-end md:items-center justify-center">
-          <h1 className="uppercase text-gray-700 text-4xl md:text-7xl drop-shadow-lg font-[Eckmannpsych] mb-20 md:mb-0">
+          <h1 className="uppercase text-primary text-4xl md:text-7xl drop-shadow-lg font-[Eckmannpsych] mb-20 md:mb-0">
             {headerTitle || " "}
           </h1>
         </div>

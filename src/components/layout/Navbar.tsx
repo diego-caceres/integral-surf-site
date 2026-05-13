@@ -299,7 +299,7 @@ export default function NavBar() {
         initial={{ x: "-100%" }}
         animate={{ x: "0%" }}
         exit={{ x: "-100%" }}
-        transition={{ duration: 0.4, ease: "easeInOut" }}
+        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
         className="fixed inset-0 z-50 bg-background text-primary w-64 shadow-lg flex flex-col p-6 md:hidden"
       >
         <div className="absolute left-2.5 top-2.5">

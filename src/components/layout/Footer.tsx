@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Footer() {
   return (
@@ -24,7 +25,7 @@ export default function Footer() {
             href="https://www.instagram.com/integralsurf/"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:underline"
+            className="text-white/70 hover:text-white transition-colors"
           >
             Instagram{" "}
             <span aria-hidden="true">↗</span>
@@ -34,7 +35,7 @@ export default function Footer() {
             href="https://www.youtube.com/@integralsurf"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:underline"
+            className="text-white/70 hover:text-white transition-colors"
           >
             YouTube{" "}
             <span aria-hidden="true">↗</span>
@@ -47,12 +48,28 @@ export default function Footer() {
           <h3 className="font-bold text-xl text-white font-librefranklin">
             Nuestro contacto
           </h3>
-          <a href="mailto:integralsurfuy@gmail.com" className="hover:underline">
+          <a href="mailto:integralsurfuy@gmail.com" className="text-white/70 hover:text-white transition-colors">
             integralsurfuy@gmail.com
           </a>
-          <a href="tel:+59898449641" className="hover:underline">
+          <a href="tel:+59898449641" className="text-white/70 hover:text-white transition-colors">
             +598 98449641
           </a>
+        </div>
+
+        {/* Column 3: Navegar */}
+        <div className="flex flex-col space-y-2">
+          <h3 className="font-bold text-xl text-white font-librefranklin">
+            Navegar
+          </h3>
+          <Link href="/viajes" className="text-white/70 hover:text-white transition-colors">
+            Viajes al Mar
+          </Link>
+          <Link href="/fundamentos" className="text-white/70 hover:text-white transition-colors">
+            Fundamentos
+          </Link>
+          <Link href="/about" className="text-white/70 hover:text-white transition-colors">
+            Nosotros
+          </Link>
         </div>
       </div>
       <p className="text-center text-sm text-white/60 mt-10 px-10">

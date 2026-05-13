@@ -1,7 +1,13 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import WhatsAppButton from "@/components/layout/WhatsAppButton";
 import { supabaseServer } from "@/lib/supabaseServer";
 import type { AboutPage } from "@/types/about";
+
+export const metadata: Metadata = {
+  title: "Nosotros",
+  description: "Conocé al equipo de Integral Surf: instructores apasionados por el surf, el yoga y la naturaleza.",
+};
 
 async function getAboutData(): Promise<AboutPage | null> {
   const { data: aboutData, error: aboutError } = await supabaseServer
@@ -97,6 +103,7 @@ export default async function AboutPage() {
                       src={instructor.image_url}
                       alt={instructor.name}
                       fill
+                      sizes="(max-width: 768px) 100vw, 50vw"
                       className="object-cover"
                     />
                   </div>

@@ -54,7 +54,7 @@ export default function SectionTheRoad({
         <h2 id="section-road-heading" className="uppercase font-[Eckmannpsych] text-white">{title}</h2>
         <p className="mt-6 text-base xl-surf:text-xl tracking-wide xl-surf:tracking-[0.2rem]">{description}</p>
         <Link href="/fundamentos">
-          <Button className="mt-8 text-xl bg-black hover:bg-gray-900">{buttonText}</Button>
+          <Button className="mt-8 text-xl bg-primary hover:bg-primary/85">{buttonText}</Button>
         </Link>
       </div>
     </section>

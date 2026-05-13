@@ -17,7 +17,10 @@ export default function SectionInstagram() {
   if (posts.length === 0) return null;
 
   return (
-    <div className="w-full p-4">
+    <section aria-labelledby="instagram-heading" className="w-full py-6 px-4">
+      <h2 id="instagram-heading" className="font-[Eckmannpsych] text-center mb-2">
+        Síguenos
+      </h2>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4">
         {posts.map((post, index) => (
           <a
@@ -39,6 +42,6 @@ export default function SectionInstagram() {
           </a>
         ))}
       </div>
-    </div>
+    </section>
   );
 }

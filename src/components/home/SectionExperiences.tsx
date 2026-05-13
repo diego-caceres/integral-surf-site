@@ -21,7 +21,7 @@ export default function SectionExperiences({
   backgroundImageUrl = "/images/home/experiences-background.jpg",
 }: SectionExperiencesProps) {
   return (
-    <div className="relative w-full lg:h-screen overflow-hidden">
+    <section aria-labelledby="section-experiences-heading" className="relative w-full lg:h-screen overflow-hidden">
       {/* Background Image */}
       <Image
         src={backgroundImageUrl}
@@ -34,7 +34,7 @@ export default function SectionExperiences({
       <div className="relative z-10 flex flex-col lg:grid lg:grid-cols-[35%_65%] lg:absolute lg:inset-0 lg:pl-[100px] w-full lg:h-full gap-6 lg:items-center">
         {/* Left Column */}
         <div className="flex flex-col gap-4 lg:gap-8 justify-center px-10 lg:px-0 py-10 lg:py-0 text-left">
-          <h2 className="uppercase font-[Eckmannpsych] text-white">{title}</h2>
+          <h2 id="section-experiences-heading" className="uppercase font-[Eckmannpsych] text-white">{title}</h2>
           <p
             className={`${libreFranklinFont.className} tracking-[0.2rem] text-xl text-white`}
           >
@@ -47,6 +47,6 @@ export default function SectionExperiences({
           <LazyYouTubeEmbed src={buildVideoSrc(videoUrl)} title="YouTube video player" />
         </div>
       </div>
-    </div>
+    </section>
   );
 }

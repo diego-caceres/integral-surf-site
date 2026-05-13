@@ -1,8 +1,14 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import WhatsAppButton from "@/components/layout/WhatsAppButton";
 import FundamentosImageSlider from "@/components/fundamentos/FundamentosImageSlider";
 import HashScroller from "./HashScroller";
 import { supabaseServer } from "@/lib/supabaseServer";
+
+export const metadata: Metadata = {
+  title: "Fundamentos",
+  description: "Explorá los pilares de Integral Surf: surfing, yoga, naturaleza y arte. Los fundamentos de una experiencia integral.",
+};
 import type { FundamentosPage } from "@/types/fundamentos";
 
 async function getFundamentosData(): Promise<FundamentosPage | null> {
@@ -133,11 +139,12 @@ export default async function FundamentosPage() {
                   {section.team_members.map((member) => (
                     <div key={member.id} className="text-center space-y-4">
                       {member.image_url && (
-                        <div className="relative w-64 h-32 mx-auto rounded-lg overflow-hidden">
+                        <div className="relative w-48 h-48 mx-auto rounded-full overflow-hidden">
                           <Image
                             src={member.image_url}
                             alt={member.name}
                             fill
+                            sizes="192px"
                             className="object-cover"
                           />
                         </div>
