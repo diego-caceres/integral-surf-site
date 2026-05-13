@@ -25,6 +25,7 @@ export default function SectionInstagram() {
             href={post.post_url}
             target="_blank"
             rel="noopener noreferrer"
+            aria-label={`Ver post de Instagram ${index + 1}`}
           >
             <div className="relative w-full aspect-square">
               <Image

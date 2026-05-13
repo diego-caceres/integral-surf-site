@@ -24,10 +24,11 @@ const SectionOurPurpose: React.FC<SectionOurPurposeProps> = ({
 }) => {
   return (
     <section
+      aria-labelledby="section-purpose-heading"
       className="w-full xl-surf:min-h-[90vh] xl-surf:px-20 xl-surf:py-20 grid grid-cols-1 xl-surf:grid-cols-2 xl-surf:gap-10 shadow-section"
     >
       <div className="max-w-[660px] mx-auto xl-surf:mx-0 px-10 xl-surf:px-20 py-10 xl-surf:py-20 text-center xl-surf:text-left">
-        <h2 className="font-[Eckmannpsych]">{title}</h2>
+        <h2 id="section-purpose-heading" className="font-[Eckmannpsych]">{title}</h2>
         <p className="mt-6 text-xl tracking-[0.2rem]">{description}</p>
         <p className="mt-10 text-xl tracking-[0.2rem]">
           &ldquo;{quote}&rdquo;.

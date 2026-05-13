@@ -85,6 +85,7 @@ export default async function AboutPage() {
                       src={instructor.image_url}
                       alt={instructor.name}
                       fill
+                      sizes="(max-width: 768px) 100vw, 50vw"
                       className="object-cover"
                     />
                   </div>

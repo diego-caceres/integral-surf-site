@@ -47,9 +47,9 @@ const defaultSectionImages: SectionImage[] = defaultImageUrls.map(
   })
 );
 
-// Adjust to not expect title prop
 const SectionHeader: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [prevIndex, setPrevIndex] = useState<number | null>(null);
   const [activeImages, setActiveImages] =
     useState<SectionImage[]>(defaultSectionImages);
   const [webImages, setWebImages] = useState<SectionImage[]>([]);
@@ -91,9 +91,6 @@ const SectionHeader: React.FC = () => {
         );
         if (!titleResponse.ok) {
           if (titleResponse.status === 404) {
-            console.warn(
-              "Main title configuration not found, using empty title."
-            );
             freshTitle = "";
           } else {
             throw new Error(
@@ -121,7 +118,9 @@ const SectionHeader: React.FC = () => {
       } catch (e) {
         const errorMessage =
           e instanceof Error ? e.message : "An unknown error occurred";
-        console.error("Error fetching section header data:", errorMessage);
+        if (process.env.NODE_ENV !== "production") {
+          console.error("Error fetching section header data:", errorMessage);
+        }
         // Only show error state if we have no cached data to display
         if (!loadHeaderCache()) {
           setError(errorMessage);
@@ -142,31 +141,26 @@ const SectionHeader: React.FC = () => {
       let imagesToSet: SectionImage[];
 
       if (isLoading) {
-        // Data is still fetching, ensure defaults are shown.
-        // (activeImages is already initialized to defaultSectionImages)
         imagesToSet = defaultSectionImages;
       } else {
-        // Fetching is complete, use fetched images or fall back appropriately.
         const currentWeb = webImages;
         const currentMobile = mobileImages;
 
         if (mediaQuery.matches) {
-          // Mobile view
           if (currentMobile.length > 0) {
             imagesToSet = currentMobile;
           } else if (currentWeb.length > 0) {
-            imagesToSet = currentWeb; // Fallback to web images on mobile if no mobile images
+            imagesToSet = currentWeb;
           } else {
-            imagesToSet = []; // No fetched images for mobile or web
+            imagesToSet = [];
           }
         } else {
-          // Desktop view
           if (currentWeb.length > 0) {
             imagesToSet = currentWeb;
           } else if (currentMobile.length > 0) {
-            imagesToSet = currentMobile; // Fallback to mobile images on desktop if no web images
+            imagesToSet = currentMobile;
           } else {
-            imagesToSet = []; // No fetched images for web or mobile
+            imagesToSet = [];
           }
         }
       }
@@ -174,6 +168,7 @@ const SectionHeader: React.FC = () => {
       setActiveImages(imagesToSet);
       if (prevActiveImagesRef.current !== imagesToSet) {
         setCurrentIndex(0);
+        setPrevIndex(null);
         prevActiveImagesRef.current = imagesToSet;
       }
     };
@@ -188,16 +183,18 @@ const SectionHeader: React.FC = () => {
 
   // Effect for slideshow interval
   useEffect(() => {
-    // Do not start slideshow if images are effectively empty or still in initial loading phase (handled by activeImages content)
     if (activeImages.length === 0) return;
-    // if (isLoading && activeImages === defaultSectionImages) return; // More explicit check if needed
 
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % activeImages.length);
+      setCurrentIndex((cur) => {
+        const next = (cur + 1) % activeImages.length;
+        setPrevIndex(cur);
+        return next;
+      });
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [activeImages]); // Depend on activeImages directly
+  }, [activeImages]);
 
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
@@ -212,11 +209,12 @@ const SectionHeader: React.FC = () => {
     if (touchStartX.current !== null && touchEndX.current !== null) {
       const deltaX = touchStartX.current - touchEndX.current;
       if (deltaX > 50) {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % activeImages.length);
+        setPrevIndex(currentIndex);
+        setCurrentIndex((cur) => (cur + 1) % activeImages.length);
       } else if (deltaX < -50) {
+        setPrevIndex(currentIndex);
         setCurrentIndex(
-          (prevIndex) =>
-            (prevIndex - 1 + activeImages.length) % activeImages.length
+          (cur) => (cur - 1 + activeImages.length) % activeImages.length
         );
       }
     }
@@ -224,16 +222,12 @@ const SectionHeader: React.FC = () => {
     touchEndX.current = null;
   };
 
-  // No longer show "Loading images..." text directly, as default images are shown.
-  // if (isLoading) { ... }
-
   if (error) {
     return (
       <section className="relative w-full h-[75vh] flex items-center justify-center bg-gray-100">
         <p className="text-red-500 text-xl">Error: {error}</p>
         <div className="absolute inset-0 flex items-end md:items-center justify-center">
-          <h1 className="uppercase text-gray-700 text-7xl drop-shadow-lg font-[Eckmannpsych] mb-20 md:mb-0">
-            {/* Display fetched title or a fallback if error specifically affected title and not images */}
+          <h1 className="uppercase text-gray-700 text-4xl md:text-7xl drop-shadow-lg font-[Eckmannpsych] mb-20 md:mb-0">
             {headerTitle || "Error Loading Title"}
           </h1>
         </div>
@@ -241,15 +235,12 @@ const SectionHeader: React.FC = () => {
     );
   }
 
-  // Show if there are no images to display AFTER loading/fetching attempt and no error
-  // This condition might need adjustment if title is critical for display
   if (activeImages.length === 0 && !isLoading && !error) {
     return (
       <section className="relative w-full h-[75vh] flex items-center justify-center bg-gray-300">
         <p className="text-gray-800 text-xl">No images to display.</p>
         <div className="absolute inset-0 flex items-end md:items-center justify-center">
-          <h1 className="uppercase text-gray-700 text-7xl drop-shadow-lg font-[Eckmannpsych] mb-20 md:mb-0">
-            {/* Display fetched title or a fallback */}
+          <h1 className="uppercase text-gray-700 text-4xl md:text-7xl drop-shadow-lg font-[Eckmannpsych] mb-20 md:mb-0">
             {headerTitle || " "}
           </h1>
         </div>
@@ -264,22 +255,25 @@ const SectionHeader: React.FC = () => {
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
-      {activeImages.map((image, index) => (
-        <Image
-          key={`${image.image_url}-${index}`}
-          src={image.image_url}
-          alt={image.alt_text || "Viajes al Mar"}
-          fill
-          priority={index === 0}
-          className={`absolute inset-0 object-cover transition-opacity duration-1000 ${
-            index === currentIndex ? "opacity-100" : "opacity-0"
-          }
-          }`}
-        />
-      ))}
+      {activeImages.map((image, index) => {
+        if (index !== currentIndex && index !== prevIndex) return null;
+        return (
+          <Image
+            key={`${image.image_url}-${index}`}
+            src={image.image_url}
+            alt={image.alt_text || "Viajes al Mar"}
+            fill
+            priority={index === currentIndex}
+            sizes="100vw"
+            className={`absolute inset-0 object-cover transition-opacity duration-1000 ${
+              index === currentIndex ? "opacity-100" : "opacity-0"
+            }`}
+          />
+        );
+      })}
 
       <div className="absolute inset-0 flex items-end md:items-center justify-center">
-        <h1 className="uppercase text-white text-7xl drop-shadow-2xl font-[Eckmannpsych] mb-20 md:mb-0">
+        <h1 className="uppercase text-white text-4xl md:text-7xl drop-shadow-2xl font-[Eckmannpsych] mb-20 md:mb-0">
           {headerTitle}
         </h1>
       </div>
@@ -290,12 +284,14 @@ const SectionHeader: React.FC = () => {
             <button
               key={`dot-${index}`}
               aria-label={`Ir a imagen ${index + 1}`}
-              aria-current={index === currentIndex ? "true" : undefined}
+              aria-current={index === currentIndex ? true : undefined}
               className={`w-3 h-3 rounded-full transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-1 ${
                 index === currentIndex ? "bg-white scale-125" : "bg-gray-400"
-              }
               }`}
-              onClick={() => setCurrentIndex(index)}
+              onClick={() => {
+                setPrevIndex(currentIndex);
+                setCurrentIndex(index);
+              }}
             />
           ))}
         </div>

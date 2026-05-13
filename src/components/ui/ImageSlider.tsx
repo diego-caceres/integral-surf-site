@@ -15,6 +15,7 @@ interface ImageSliderProps {
   alt: string;
   className?: string;
   fallbackUrl?: string;
+  sizes?: string;
 }
 
 export default function ImageSlider({
@@ -22,6 +23,7 @@ export default function ImageSlider({
   alt,
   className = "relative w-full h-full overflow-hidden",
   fallbackUrl,
+  sizes = "100vw",
 }: ImageSliderProps) {
   const validImages = images.filter((img) => img.image_url);
   const effectiveImages: SliderImage[] =
@@ -80,6 +82,7 @@ export default function ImageSlider({
           alt={image.alt_text || alt}
           fill
           priority={index === 0}
+          sizes={sizes}
           className={`absolute inset-0 object-cover transition-opacity duration-1000 ${
             index === currentIndex ? "opacity-100" : "opacity-0"
           }`}

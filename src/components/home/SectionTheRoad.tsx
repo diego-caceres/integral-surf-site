@@ -35,7 +35,7 @@ export default function SectionTheRoad({
         ].filter(Boolean) as HomeSectionImage[];
 
   return (
-    <div className="relative w-full xl-surf:min-h-[90vh] xl-surf:px-20 xl-surf:py-20 pb-10 xl-surf:pb-20 grid grid-cols-1 xl-surf:grid-cols-2 xl-surf:gap-10">
+    <section aria-labelledby="section-road-heading" className="relative w-full xl-surf:min-h-[90vh] xl-surf:px-20 xl-surf:py-20 pb-10 xl-surf:pb-20 grid grid-cols-1 xl-surf:grid-cols-2 xl-surf:gap-10">
       {/* Background Image */}
       <Image
         src={backgroundImageUrl}
@@ -52,12 +52,12 @@ export default function SectionTheRoad({
 
       {/* Right Column - Text (above images on mobile) */}
       <div className="max-w-[660px] mx-auto xl-surf:mx-0 px-10 xl-surf:px-20 py-10 xl-surf:py-20 text-center xl-surf:text-left order-1 xl-surf:order-2 text-white">
-        <h2 className="uppercase font-[Eckmannpsych] text-white">{title}</h2>
+        <h2 id="section-road-heading" className="uppercase font-[Eckmannpsych] text-white">{title}</h2>
         <p className="mt-6 text-xl tracking-[0.2rem]">{description}</p>
         <Link href="/fundamentos">
           <Button className="mt-8 text-xl bg-black hover:bg-gray-900">{buttonText}</Button>
         </Link>
       </div>
-    </div>
+    </section>
   );
 }

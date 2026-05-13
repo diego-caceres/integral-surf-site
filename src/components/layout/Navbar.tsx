@@ -39,6 +39,96 @@ interface TripData {
   is_deleted?: boolean;
 }
 
+interface DesktopNavContentProps {
+  compact?: boolean;
+  destinosTitle: string;
+  menuTripItems: MenuTripItem[];
+  menuItemImages: MenuImagesData;
+}
+
+function DesktopNavContent({
+  compact = false,
+  destinosTitle,
+  menuTripItems,
+  menuItemImages,
+}: DesktopNavContentProps) {
+  const logoSize = compact ? 80 : 100;
+
+  return (
+    <nav
+      className={`hidden md:flex justify-between items-center ${
+        compact ? "py-4" : "py-8"
+      } px-10 relative`}
+    >
+      <Link
+        href="/"
+        className={`${compact ? "text-3xl" : "text-4xl"} font-serif tracking-wide`}
+      >
+        <span className="text-primary font-[Eckmannpsych]">INTEGRAL SURF</span>
+      </Link>
+      <div className="absolute left-1/2 transform -translate-x-1/2 z-40">
+        <Image
+          src="/images/icons/logo.png"
+          alt="Logo Integral Surf"
+          width={logoSize}
+          height={logoSize}
+          className="z-40"
+        />
+      </div>
+      <ul className="flex gap-x-8 text-xl items-center">
+        <MegaMenuItem
+          title="VIAJES AL MAR"
+          href="/viajes"
+          images={menuItemImages["VIAJES AL MAR"]}
+        >
+          <div className="grid grid-cols-2 gap-x-8">
+            <div>
+              <h3 className="font-semibold text-lg mb-3 text-primary">
+                {destinosTitle}
+              </h3>
+              <ul className="space-y-2">
+                {menuTripItems.map((destino, index) => (
+                  <li key={`${destino.id}-${index}`}>
+                    <Link
+                      href={destino.url}
+                      className="hover:text-accent text-sm"
+                    >
+                      {destino.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold text-lg mb-3 text-primary">
+                FUNDAMENTOS
+              </h3>
+              <ul className="space-y-2">
+                {["Surfing", "Yoga", "Naturaleza", "Arte"].map((item, index) => (
+                  <li key={item}>
+                    <Link
+                      href={`/fundamentos#section-${index}`}
+                      className="hover:text-accent text-sm"
+                    >
+                      {item}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </MegaMenuItem>
+
+        <MegaMenuItem
+          title="NOSOTROS"
+          href="/about"
+          images={menuItemImages["NOSOTROS"]}
+        ></MegaMenuItem>
+      </ul>
+    </nav>
+  );
+}
+
 export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const [viajesOpen, setViajesOpen] = useState(true);
@@ -145,7 +235,9 @@ export default function NavBar() {
         const data: MenuImagesData = await response.json();
         setMenuItemImages(data);
       } catch (error) {
-        console.error("Error fetching menu images:", error);
+        if (process.env.NODE_ENV !== "production") {
+          console.error("Error fetching menu images:", error);
+        }
       }
     };
 
@@ -153,11 +245,19 @@ export default function NavBar() {
 
     fetchTripsOnce()
       .then((trips) => setMenuTripItems(tripsToMenuItems(trips)))
-      .catch((err) => console.error("Error fetching trips:", err));
+      .catch((err) => {
+        if (process.env.NODE_ENV !== "production") {
+          console.error("Error fetching trips:", err);
+        }
+      });
 
     fetchDestinosTitleOnce()
       .then((title) => setDestinosTitle(title))
-      .catch((err) => console.error("Error fetching destinos title:", err));
+      .catch((err) => {
+        if (process.env.NODE_ENV !== "production") {
+          console.error("Error fetching destinos title:", err);
+        }
+      });
   }, []);
 
   return (
@@ -184,9 +284,6 @@ export default function NavBar() {
             height={65}
             className="self-end"
           />
-          {/* <span className="text-primary font-[Eckmannpsych] text-2xl">
-            INTEGRAL SURF
-          </span> */}
         </Link>
       </div>
 
@@ -239,6 +336,7 @@ export default function NavBar() {
               onClick={() => setViajesOpen((v) => !v)}
               className="flex items-center justify-between w-full text-xl font-semibold hover:text-accent transition rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               aria-expanded={viajesOpen}
+              aria-controls="viajes-submenu"
             >
               <span>VIAJES AL MAR</span>
               <ChevronDownIcon
@@ -249,6 +347,7 @@ export default function NavBar() {
             <AnimatePresence initial={false}>
               {viajesOpen && (
                 <motion.div
+                  id="viajes-submenu"
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: "auto", opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
@@ -312,72 +411,11 @@ export default function NavBar() {
       </AnimatePresence>
 
       {/* Navbar para desktop */}
-      <nav className="hidden md:flex justify-between items-center py-8 px-10 relative">
-        <Link href="/" className="text-4xl font-serif tracking-wide">
-          <span className="text-primary font-[Eckmannpsych]">
-            INTEGRAL SURF
-          </span>
-        </Link>
-        <div className="absolute left-1/2 transform -translate-x-1/2 z-40">
-          <Image
-            src="/images/icons/logo.png"
-            alt="Logo Integral Surf"
-            width={100}
-            height={100}
-            className="pos z-40"
-          />
-        </div>
-        <ul className="flex gap-x-8 text-xl items-center">
-          <MegaMenuItem
-            title="VIAJES AL MAR"
-            href="/viajes"
-            images={menuItemImages["VIAJES AL MAR"]}
-          >
-            <div className="grid grid-cols-2 gap-x-8">
-              <div>
-                <h3 className="font-semibold text-lg mb-3 text-primary">
-                  {destinosTitle}
-                </h3>
-                <ul className="space-y-2">
-                  {menuTripItems.map((destino, index) => (
-                    <li key={`${destino.id}-${index}`}>
-                      <Link
-                        href={destino.url}
-                        className="hover:text-accent text-sm"
-                      >
-                        {destino.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <h3 className="font-semibold text-lg mb-3 text-primary">
-                  FUNDAMENTOS
-                </h3>
-                <ul className="space-y-2">
-                  {["Surfing", "Yoga", "Naturaleza", "Arte"].map((item, index) => (
-                    <li key={item}>
-                      <Link
-                        href={`/fundamentos#section-${index}`}
-                        className="hover:text-accent text-sm"
-                      >
-                        {item}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </MegaMenuItem>
-
-          <MegaMenuItem
-            title="NOSOTROS"
-            href="/about"
-            images={menuItemImages["NOSOTROS"]}
-          ></MegaMenuItem>
-        </ul>
-      </nav>
+      <DesktopNavContent
+        destinosTitle={destinosTitle}
+        menuTripItems={menuTripItems}
+        menuItemImages={menuItemImages}
+      />
 
       {/* Sticky navbar — slides in from top when scrolling up, hidden at top */}
       <AnimatePresence>
@@ -412,71 +450,12 @@ export default function NavBar() {
             </div>
 
             {/* Desktop sticky nav */}
-            <nav className="hidden md:flex justify-between items-center py-4 px-10 relative">
-              <Link href="/" className="text-3xl font-serif tracking-wide">
-                <span className="text-primary font-[Eckmannpsych]">
-                  INTEGRAL SURF
-                </span>
-              </Link>
-              <div className="absolute left-1/2 transform -translate-x-1/2 z-40">
-                <Image
-                  src="/images/icons/logo.png"
-                  alt="Logo Integral Surf"
-                  width={80}
-                  height={80}
-                />
-              </div>
-              <ul className="flex gap-x-8 text-xl items-center">
-                <MegaMenuItem
-                  title="VIAJES AL MAR"
-                  href="/viajes"
-                  images={menuItemImages["VIAJES AL MAR"]}
-                >
-                  <div className="grid grid-cols-2 gap-x-8">
-                    <div>
-                      <h3 className="font-semibold text-lg mb-3 text-primary">
-                        {destinosTitle}
-                      </h3>
-                      <ul className="space-y-2">
-                        {menuTripItems.map((destino, index) => (
-                          <li key={`sticky-${destino.id}-${index}`}>
-                            <Link
-                              href={destino.url}
-                              className="hover:text-accent text-sm"
-                            >
-                              {destino.name}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-lg mb-3 text-primary">
-                        FUNDAMENTOS
-                      </h3>
-                      <ul className="space-y-2">
-                        {["Surfing", "Yoga", "Naturaleza", "Arte"].map((item, index) => (
-                          <li key={`sticky-fund-${item}`}>
-                            <Link
-                              href={`/fundamentos#section-${index}`}
-                              className="hover:text-accent text-sm"
-                            >
-                              {item}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </MegaMenuItem>
-
-                <MegaMenuItem
-                  title="NOSOTROS"
-                  href="/about"
-                  images={menuItemImages["NOSOTROS"]}
-                ></MegaMenuItem>
-              </ul>
-            </nav>
+            <DesktopNavContent
+              compact
+              destinosTitle={destinosTitle}
+              menuTripItems={menuTripItems}
+              menuItemImages={menuItemImages}
+            />
           </motion.div>
         )}
       </AnimatePresence>

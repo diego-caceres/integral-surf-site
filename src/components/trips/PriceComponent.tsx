@@ -9,6 +9,7 @@ interface PriceProps {
   finalPrice: number;
   promoEndMessage?: string;
   finalPriceMessage?: string;
+  phoneNumber?: string;
 }
 
 const message = "¡Hola! Estoy interesado en saber más sobre tus servicios.";
@@ -18,16 +19,19 @@ const PriceComponent: React.FC<PriceProps> = ({
   finalPrice,
   promoEndMessage,
   finalPriceMessage,
+  phoneNumber: initialPhoneNumber,
 }) => {
-  const [phoneNumber, setPhoneNumber] = useState("+59899748323");
+  const [phoneNumber, setPhoneNumber] = useState(initialPhoneNumber ?? "+59899748323");
 
   useEffect(() => {
+    if (initialPhoneNumber) return;
     fetch("/api/config/whatsapp_phone_number")
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
         if (data?.value) setPhoneNumber(data.value);
       })
       .catch(() => {});
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;

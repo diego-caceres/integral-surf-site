@@ -25,7 +25,7 @@ function extractVideoId(url: string): string {
   return match && match[2].length === 11 ? match[2] : "";
 }
 
-const TripDetail = ({ trip }: { trip: Trip }) => {
+const TripDetail = ({ trip, phoneNumber }: { trip: Trip; phoneNumber?: string }) => {
   if (!trip) {
     return <p className="text-center text-gray-500">Viaje no encontrado.</p>;
   }
@@ -111,11 +111,11 @@ const TripDetail = ({ trip }: { trip: Trip }) => {
               {title_2}
             </h2>
           )}
-          <h2
+          <h1
             className={`font-[Eckmannpsych] drop-shadow-2xl uppercase text-white ${fontTitleIfVideo} leading-[0.5] mb-5 md:mb-[50px]`}
           >
             {title}
-          </h2>
+          </h1>
           <span
             className={`${bebasNeuelFont.className} tracking-[0.2rem] uppercase text-white text-2xl md:text-3xl`}
           >
@@ -173,6 +173,7 @@ const TripDetail = ({ trip }: { trip: Trip }) => {
         finalPrice={trip.price_final}
         promoEndMessage={trip.price_promo_message}
         finalPriceMessage={trip.price_final_message}
+        phoneNumber={phoneNumber}
       />
 
       <FinalImagesSection final_img_1={final_img_1} final_img_2={final_img_2} title={title} />
@@ -180,7 +181,7 @@ const TripDetail = ({ trip }: { trip: Trip }) => {
       <div className="p-6 sm:p-8 max-w-7xl mx-auto">
         {/* Contact Button */}
         <div className="m-auto max-w-[400px] mt-10">
-          <WhatsAppButton />
+          <WhatsAppButton phoneNumber={phoneNumber} />
         </div>
       </div>
     </div>
@@ -227,6 +228,7 @@ const TripDetailSection = ({
             alt={title}
             width={400}
             height={500}
+            sizes="(max-width: 768px) 100vw, 40vw"
             className="object-cover max-h-[500px]"
           />
         </div>
@@ -255,6 +257,7 @@ const TripDetailImageSection = ({
             alt={title}
             width={1920}
             height={300}
+            sizes="100vw"
             className="w-full h-full object-cover"
           />
         </div>
@@ -295,7 +298,7 @@ const TripContentSection: React.FC<TripContentSectionProps> = ({
         />
       </div>
       {imageLeft && (
-        <div className="hidden md:block w-full md:w-1/2 h-[700px]">
+        <div className="hidden md:block w-full md:w-1/2 min-h-[500px] max-h-[80vh]">
           <TripContentImageSlider
             images={images}
             fallbackImageUrl={imageUrl}
@@ -337,7 +340,7 @@ const TripContentSection: React.FC<TripContentSectionProps> = ({
       </div>
 
       {!imageLeft && (
-        <div className="hidden md:block w-full md:w-1/2 h-[700px]">
+        <div className="hidden md:block w-full md:w-1/2 min-h-[500px] max-h-[80vh]">
           <TripContentImageSlider
             images={images}
             fallbackImageUrl={imageUrl}
@@ -402,25 +405,27 @@ const FinalImagesSection = ({
   title?: string;
 }) => {
   return (
-    <section className="h-[700px] md:min-h-[75vh] w-full flex flex-col md:flex-row items-center justify-center">
-      <div className="w-full h-[700px] overflow-hidden">
+    <section className="h-[300px] md:h-[700px] w-full flex flex-col md:flex-row items-center justify-center">
+      <div className="w-full h-[300px] md:h-[700px] overflow-hidden">
         {final_img_1 && (
           <Image
             src={final_img_1}
             alt={`${title} — imagen 1`}
             width={1920}
             height={700}
+            sizes="(max-width: 768px) 100vw, 50vw"
             className="w-full h-full object-cover"
           />
         )}
       </div>
-      <div className="w-full h-[700px] overflow-hidden">
+      <div className="w-full h-[300px] md:h-[700px] overflow-hidden">
         {final_img_2 && (
           <Image
             src={final_img_2}
             alt={`${title} — imagen 2`}
             width={1920}
             height={700}
+            sizes="(max-width: 768px) 100vw, 50vw"
             className="w-full h-full object-cover"
           />
         )}

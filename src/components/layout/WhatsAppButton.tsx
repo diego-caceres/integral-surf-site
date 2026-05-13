@@ -6,20 +6,23 @@ import { motion, AnimatePresence } from "framer-motion";
 
 type WhatsAppButtonProps = {
   onlyBubble?: boolean;
+  phoneNumber?: string;
 };
 
 const WhatsAppButton: React.FC<WhatsAppButtonProps> = ({
   onlyBubble = false,
+  phoneNumber: initialPhoneNumber,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [phoneNumber, setPhoneNumber] = useState("+59899748323");
-  const message = "¡Hola! Estoy interesado en saber más sobre tus servicios."; // Mensaje predeterminado
+  const [phoneNumber, setPhoneNumber] = useState(initialPhoneNumber ?? "+59899748323");
+  const message = "¡Hola! Estoy interesado en saber más sobre tus servicios.";
 
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
     message
   )}`;
 
   useEffect(() => {
+    if (initialPhoneNumber) return;
     const fetchPhoneNumber = async () => {
       try {
         const response = await fetch("/api/config/whatsapp_phone_number");
@@ -30,11 +33,14 @@ const WhatsAppButton: React.FC<WhatsAppButtonProps> = ({
           }
         }
       } catch (error) {
-        console.error("Error fetching WhatsApp phone number:", error);
+        if (process.env.NODE_ENV !== "production") {
+          console.error("Error fetching WhatsApp phone number:", error);
+        }
       }
     };
 
     fetchPhoneNumber();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -73,7 +79,7 @@ const WhatsAppButton: React.FC<WhatsAppButtonProps> = ({
           href={whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-center bg-whatsapp text-white font-semibold py-3 px-6 rounded-full shadow-md hover:bg-whatsapp-dark focus:outline-none transition-all duration-300"
+          className="flex items-center justify-center bg-whatsapp text-white font-semibold py-3 px-6 rounded-full shadow-md hover:bg-whatsapp-dark focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 transition-all duration-300"
         >
           <svg viewBox="0 0 32 32" className="whatsapp-ico">
             <path
@@ -104,7 +110,7 @@ const WhatsAppButton: React.FC<WhatsAppButtonProps> = ({
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Contactar por WhatsApp"
-              className="bg-whatsapp text-white p-4 md:p-5 rounded-full shadow-lg shadow-whatsapp-dark/50 hover:bg-whatsapp-dark transition-transform transform hover:scale-110 cursor-pointer"
+              className="bg-whatsapp text-white p-4 md:p-5 rounded-full shadow-lg shadow-whatsapp-dark/50 hover:bg-whatsapp-dark transition-transform transform hover:scale-110 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
             >
               <FaWhatsapp className="w-6 h-6 md:w-8 md:h-8" />
             </Link>

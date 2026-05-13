@@ -3,7 +3,7 @@ import Image from "next/image";
 export default function Footer() {
   return (
     <footer aria-label="Pie de página" className="py-16 bg-primary text-white mt-auto">
-      <div className="flex flex-row flex-wrap gap-4 justify-between items-center mx-auto px-10">
+      <div className="max-w-7xl mx-auto flex flex-row flex-wrap gap-4 justify-between items-center px-10">
         <h2 className="uppercase font-[Eckmannpsych] text-white">
           Integral Surf
         </h2>
@@ -14,7 +14,7 @@ export default function Footer() {
           height={65}
         />
       </div>
-      <div className="flex flex-col md:flex-row justify-between items-start mx-auto px-10 mt-6 space-y-6 md:space-y-0 md:space-x-6">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start px-10 mt-6 space-y-6 md:space-y-0 md:space-x-6">
         {/* Column 1: Comunidad */}
         <div className="flex flex-col space-y-2">
           <h3 className="font-bold text-xl text-white font-librefranklin">

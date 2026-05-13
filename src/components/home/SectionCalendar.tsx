@@ -32,14 +32,20 @@ const SectionCalendar: React.FC = () => {
         setIsLoading(false);
       })
       .catch((err) => {
-        console.error("Error fetching trips:", err);
+        if (process.env.NODE_ENV !== "production") {
+          console.error("Error fetching trips:", err);
+        }
         setError(err instanceof Error ? err.message : "An error occurred");
         setIsLoading(false);
       });
 
     fetchDestinosTitleOnce()
       .then((title) => setCalendarTitle(title))
-      .catch((err) => console.error("Error fetching calendar title:", err));
+      .catch((err) => {
+        if (process.env.NODE_ENV !== "production") {
+          console.error("Error fetching calendar title:", err);
+        }
+      });
   }, []);
 
   if (isLoading) {

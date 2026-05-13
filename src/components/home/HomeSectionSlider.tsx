@@ -18,6 +18,7 @@ export default function HomeSectionSlider({
       alt={alt}
       fallbackUrl={fallbackUrl}
       className="relative w-full max-w-[500px] aspect-[5/6] overflow-hidden"
+      sizes="(max-width: 768px) 100vw, 500px"
     />
   );
 }
