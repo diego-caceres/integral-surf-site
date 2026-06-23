@@ -1,5 +1,40 @@
 import { unstable_cache } from "next/cache";
 import { supabaseServer } from "@/lib/supabaseServer";
+import { Trip } from "@/types/trip";
+
+/**
+ * Fetches a trip (with its ordered contents and content images) by slug,
+ * directly from Supabase. Used by Server Components so the data — and the
+ * header image URL in particular — is present in the initial HTML.
+ */
+export async function getTripBySlug(slug: string): Promise<Trip | null> {
+  const { data: tripData, error: tripError } = await supabaseServer
+    .from("trips")
+    .select("*")
+    .eq("slug", slug)
+    .single();
+
+  if (tripError || !tripData) return null;
+
+  const { data: contentData } = await supabaseServer
+    .from("trip_contents")
+    .select("*")
+    .eq("trip_id", tripData.id)
+    .order("order", { ascending: true });
+
+  const enrichedContents = await Promise.all(
+    (contentData || []).map(async (content) => {
+      const { data: images } = await supabaseServer
+        .from("trip_content_images")
+        .select("*")
+        .eq("trip_content_id", content.id)
+        .order("order_number", { ascending: true });
+      return { ...content, images: images || [] };
+    })
+  );
+
+  return { ...tripData, trip_contents: enrichedContents };
+}
 
 /**
  * Reads a single value from the general_configurations table.

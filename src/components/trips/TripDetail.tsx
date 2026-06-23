@@ -4,6 +4,7 @@ import { Trip, TripContentImage } from "@/types/trip";
 import { bebasNeuelFont } from "@/styles/fonts";
 import { libreFranklinFont } from "@/styles/fonts";
 
+import { cloudinaryUrl, cloudinarySrcSet } from "@/lib/cloudinary";
 import PriceComponent from "@/components/trips/PriceComponent";
 import WhatsAppButton from "@/components/layout/WhatsAppButton";
 import TripContentImageSlider from "@/components/trips/TripContentImageSlider";
@@ -76,20 +77,27 @@ const TripDetail = ({ trip, phoneNumber }: { trip: Trip; phoneNumber?: string })
               {trip.header_mobile_image && (
                 <source
                   media="(max-width: 768px)"
-                  srcSet={trip.header_mobile_image}
+                  srcSet={
+                    cloudinarySrcSet(trip.header_mobile_image, [480, 640, 768, 1024]) ||
+                    trip.header_mobile_image
+                  }
+                  sizes="100vw"
                 />
               )}
-              <source
-                media="(min-width: 769px)"
-                srcSet={trip.header_image || "/images/placeholder.jpg"}
-              />
-              <Image
-                src={trip.header_image || "/images/placeholder.jpg"}
-                alt={`${title} - Header`}
-                fill
+              <img
+                src={cloudinaryUrl(
+                  trip.header_image || "/images/placeholder.jpg",
+                  "f_auto,q_auto,c_limit,w_1920"
+                )}
+                srcSet={cloudinarySrcSet(
+                  trip.header_image || "",
+                  [768, 1280, 1920, 2560]
+                )}
                 sizes="100vw"
-                className="object-cover"
-                priority
+                alt={`${title} - Header`}
+                className="absolute inset-0 w-full h-full object-cover"
+                fetchPriority="high"
+                decoding="async"
               />
             </picture>
           </div>
