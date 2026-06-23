@@ -93,6 +93,7 @@ export default async function AboutPage() {
                       fill
                       sizes="(max-width: 768px) 100vw, 50vw"
                       className="object-cover"
+                      priority={index === 0}
                     />
                   </div>
                 </>
@@ -105,6 +106,7 @@ export default async function AboutPage() {
                       fill
                       sizes="(max-width: 768px) 100vw, 50vw"
                       className="object-cover"
+                      priority={index === 0}
                     />
                   </div>
                   <div className="space-y-6 order-1 md:order-2">

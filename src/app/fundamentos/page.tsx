@@ -98,6 +98,7 @@ export default async function FundamentosPage() {
                   <FundamentosImageSlider
                     images={section.images}
                     alt={section.title}
+                    priority={index === 0}
                   />
                 </>
               ) : (
@@ -106,6 +107,7 @@ export default async function FundamentosPage() {
                     <FundamentosImageSlider
                       images={section.images}
                       alt={section.title}
+                      priority={index === 0}
                     />
                   </div>
                   <div className="space-y-6 order-1 md:order-2">
