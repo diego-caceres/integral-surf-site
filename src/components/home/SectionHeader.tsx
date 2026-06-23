@@ -57,11 +57,18 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({
 }) => {
   const hasServerData = Boolean(initialWebImages?.length);
 
+  // Seed with the server-provided web images so the first slide is present in
+  // the initial SSR HTML — otherwise the hero stays blank until JS hydrates and
+  // the resize effect runs, delaying the LCP. The resize effect below swaps to
+  // the mobile set after mount when appropriate.
+  const initialActiveImages = hasServerData
+    ? initialWebImages ?? []
+    : defaultSectionImages;
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [prevIndex, setPrevIndex] = useState<number | null>(null);
-  const [activeImages, setActiveImages] = useState<SectionImage[]>(
-    hasServerData ? [] : defaultSectionImages
-  );
+  const [activeImages, setActiveImages] =
+    useState<SectionImage[]>(initialActiveImages);
   const [webImages, setWebImages] = useState<SectionImage[]>(initialWebImages ?? []);
   const [mobileImages, setMobileImages] = useState<SectionImage[]>(initialMobileImages ?? []);
   const [isLoading, setIsLoading] = useState(!hasServerData);
@@ -69,9 +76,7 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({
   const [error, setError] = useState<string | null>(null);
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
-  const prevActiveImagesRef = useRef<SectionImage[]>(
-    hasServerData ? [] : defaultSectionImages
-  );
+  const prevActiveImagesRef = useRef<SectionImage[]>(initialActiveImages);
 
   // Fetch fresh data from API (background refresh)
   useEffect(() => {

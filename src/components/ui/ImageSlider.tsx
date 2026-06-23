@@ -16,6 +16,12 @@ interface ImageSliderProps {
   className?: string;
   fallbackUrl?: string;
   sizes?: string;
+  /**
+   * Mark the first slide as high priority (preloaded, eager). Only enable this
+   * for an above-the-fold/LCP slider — otherwise these images compete with the
+   * real LCP. Off by default so below-the-fold sliders lazy-load.
+   */
+  priority?: boolean;
 }
 
 export default function ImageSlider({
@@ -24,6 +30,7 @@ export default function ImageSlider({
   className = "relative w-full h-full overflow-hidden",
   fallbackUrl,
   sizes = "100vw",
+  priority = false,
 }: ImageSliderProps) {
   const validImages = images.filter((img) => img.image_url);
   const effectiveImages: SliderImage[] =
@@ -81,7 +88,8 @@ export default function ImageSlider({
           src={image.image_url}
           alt={image.alt_text || alt}
           fill
-          priority={index === 0}
+          priority={priority && index === 0}
+          loading={priority && index === 0 ? "eager" : "lazy"}
           sizes={sizes}
           className={`absolute inset-0 object-cover transition-opacity duration-1000 ${
             index === currentIndex ? "opacity-100" : "opacity-0"
