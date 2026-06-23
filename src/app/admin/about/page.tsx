@@ -4,6 +4,54 @@ import { useState, useEffect, FormEvent } from "react";
 import type { AboutPage, AboutInstructor } from "@/types/about";
 import CloudinaryUploadButton from "@/components/ui/CloudinaryUploadButton";
 
+// Renders an image preview that mirrors how the photo is cropped on the public
+// /about page. The live image uses `object-cover` inside a fixed-height container,
+// so the visible crop differs between desktop (~6:5) and mobile (~3:4).
+function ImagePreview({
+  src,
+  alt,
+  aspect,
+  caption,
+}: {
+  src: string;
+  alt: string;
+  aspect: string;
+  caption: string;
+}) {
+  return (
+    <div>
+      <div
+        className={`relative ${aspect} w-full rounded-lg overflow-hidden border border-gray-300 bg-gray-100`}
+      >
+        {src ? (
+          <img
+            key={src}
+            src={src}
+            alt={alt}
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              target.style.display = "none";
+              target.nextElementSibling?.classList.remove("hidden");
+            }}
+          />
+        ) : null}
+        <div
+          className={`absolute inset-0 flex items-center justify-center text-gray-500 ${
+            src ? "hidden" : ""
+          }`}
+        >
+          <div className="text-center">
+            <div className="text-3xl mb-1">📷</div>
+            <div className="text-xs">No image</div>
+          </div>
+        </div>
+      </div>
+      <p className="mt-1 text-xs text-center text-gray-500">{caption}</p>
+    </div>
+  );
+}
+
 export default function ManageAboutPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -230,29 +278,19 @@ export default function ManageAboutPage() {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Image Preview
                 </label>
-                <div className="relative h-48 w-full rounded-lg overflow-hidden border border-gray-300 bg-gray-100">
-                  {newInstructor.image_url ? (
-                    <img
-                      src={newInstructor.image_url}
-                      alt="Preview"
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.style.display = "none";
-                        target.nextElementSibling?.classList.remove("hidden");
-                      }}
-                    />
-                  ) : null}
-                  <div
-                    className={`absolute inset-0 flex items-center justify-center text-gray-500 ${
-                      newInstructor.image_url ? "hidden" : ""
-                    }`}
-                  >
-                    <div className="text-center">
-                      <div className="text-4xl mb-2">📷</div>
-                      <div className="text-sm">No image</div>
-                    </div>
-                  </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <ImagePreview
+                    src={newInstructor.image_url}
+                    alt="Preview"
+                    aspect="aspect-[6/5]"
+                    caption="Desktop"
+                  />
+                  <ImagePreview
+                    src={newInstructor.image_url}
+                    alt="Preview"
+                    aspect="aspect-[3/4]"
+                    caption="Mobile"
+                  />
                 </div>
               </div>
 
@@ -361,31 +399,19 @@ export default function ManageAboutPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Image Preview
                     </label>
-                    <div className="relative h-48 w-full rounded-lg overflow-hidden border border-gray-300 bg-gray-100">
-                      {instructor.image_url ? (
-                        <img
-                          src={instructor.image_url}
-                          alt={instructor.name}
-                          className="w-full h-full object-cover"
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            target.style.display = "none";
-                            target.nextElementSibling?.classList.remove(
-                              "hidden"
-                            );
-                          }}
-                        />
-                      ) : null}
-                      <div
-                        className={`absolute inset-0 flex items-center justify-center text-gray-500 ${
-                          instructor.image_url ? "hidden" : ""
-                        }`}
-                      >
-                        <div className="text-center">
-                          <div className="text-4xl mb-2">📷</div>
-                          <div className="text-sm">No image</div>
-                        </div>
-                      </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <ImagePreview
+                        src={instructor.image_url}
+                        alt={instructor.name}
+                        aspect="aspect-[6/5]"
+                        caption="Desktop"
+                      />
+                      <ImagePreview
+                        src={instructor.image_url}
+                        alt={instructor.name}
+                        aspect="aspect-[3/4]"
+                        caption="Mobile"
+                      />
                     </div>
                   </div>
 
