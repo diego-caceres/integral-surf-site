@@ -1,4 +1,10 @@
-"use client";
+import type { Metadata } from "next";
+
+// Placeholder page — keep out of search results until it has real content.
+export const metadata: Metadata = {
+  robots: { index: false, follow: true },
+};
+
 const products = [
   { id: 1, name: "Remera Surf", price: "$25" },
   { id: 2, name: "Gorra Aloha", price: "$15" },

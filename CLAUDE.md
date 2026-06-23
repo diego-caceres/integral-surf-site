@@ -27,7 +27,12 @@ NEXT_PUBLIC_CLOUDINARY_API_KEY=your_cloudinary_api_key
 CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 ADMIN_USERNAME=your_admin_username
 ADMIN_PASSWORD=your_admin_password
+NEXT_PUBLIC_SITE_URL=https://integralsurf.com.uy
 ```
+
+**SEO / Site URL:**
+- `NEXT_PUBLIC_SITE_URL` is the canonical production origin used for metadata, canonical tags, sitemap and robots (see `src/lib/site.ts`). Defaults to `https://integralsurf.com.uy` if unset.
+- Sitemap and robots are generated dynamically by the App Router (`src/app/sitemap.ts`, `src/app/robots.ts`) — `sitemap.ts` queries Supabase so trip pages are always included. There is no static sitemap/robots in `public/`.
 
 **Cloudinary Configuration:**
 - Uses signed uploads for security (API key/secret required)
