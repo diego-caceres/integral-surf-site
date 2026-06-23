@@ -94,8 +94,22 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [prevIndex, setPrevIndex] = useState<number | null>(null);
+  // The slide we want to advance to next. We mount it hidden and only crossfade
+  // once its image has finished downloading, so the first pass never flashes the
+  // empty (white) background while a fresh image loads. Later passes are instant
+  // because the image is already cached.
+  const [pendingIndex, setPendingIndex] = useState<number | null>(null);
+  const [loaded, setLoaded] = useState<Set<number>>(() => new Set());
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
+
+  const markLoaded = (index: number) =>
+    setLoaded((prev) => (prev.has(index) ? prev : new Set(prev).add(index)));
+
+  const goTo = (index: number) => {
+    if (index === currentIndex) return;
+    setPendingIndex(index);
+  };
 
   // Background refresh from the API (and localStorage cache when there's no
   // server data) so admin edits show up without a redeploy.
@@ -152,23 +166,33 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Keep the active index in bounds if the slide count changes on refresh.
+  // Keep the active index in bounds if the slides change on refresh, and drop
+  // any stale loaded/pending state since the images themselves may have changed.
   useEffect(() => {
     setCurrentIndex((cur) => (cur < slides.length ? cur : 0));
     setPrevIndex(null);
-  }, [slides.length]);
+    setPendingIndex(null);
+    setLoaded(new Set());
+  }, [slides]);
 
-  // Slideshow interval
+  // Schedule the next advance 3s after each slide settles. We only set the
+  // pending index here; the actual crossfade waits until the image has loaded.
   useEffect(() => {
     if (slides.length <= 1) return;
-    const interval = setInterval(() => {
-      setCurrentIndex((cur) => {
-        setPrevIndex(cur);
-        return (cur + 1) % slides.length;
-      });
+    const timer = setTimeout(() => {
+      setPendingIndex((currentIndex + 1) % slides.length);
     }, 3000);
-    return () => clearInterval(interval);
-  }, [slides.length]);
+    return () => clearTimeout(timer);
+  }, [currentIndex, slides.length]);
+
+  // Commit the pending slide once its image has finished loading (or instantly
+  // on later passes when it's already cached).
+  useEffect(() => {
+    if (pendingIndex === null || !loaded.has(pendingIndex)) return;
+    setPrevIndex(currentIndex);
+    setCurrentIndex(pendingIndex);
+    setPendingIndex(null);
+  }, [pendingIndex, loaded, currentIndex]);
 
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
@@ -181,11 +205,9 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({
     if (touchStartX.current !== null && touchEndX.current !== null) {
       const deltaX = touchStartX.current - touchEndX.current;
       if (deltaX > 50) {
-        setPrevIndex(currentIndex);
-        setCurrentIndex((cur) => (cur + 1) % slides.length);
+        goTo((currentIndex + 1) % slides.length);
       } else if (deltaX < -50) {
-        setPrevIndex(currentIndex);
-        setCurrentIndex((cur) => (cur - 1 + slides.length) % slides.length);
+        goTo((currentIndex - 1 + slides.length) % slides.length);
       }
     }
     touchStartX.current = null;
@@ -212,7 +234,12 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({
       onTouchEnd={handleTouchEnd}
     >
       {slides.map((slide, index) => {
-        if (index !== currentIndex && index !== prevIndex) return null;
+        if (
+          index !== currentIndex &&
+          index !== prevIndex &&
+          index !== pendingIndex
+        )
+          return null;
         const isFirst = index === 0;
         return (
           <picture key={`${slide.web.image_url}-${index}`}>
@@ -240,6 +267,7 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({
               fetchPriority={isFirst ? "high" : undefined}
               loading={isFirst ? "eager" : "lazy"}
               decoding="async"
+              onLoad={() => markLoaded(index)}
               className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
                 index === currentIndex ? "opacity-100" : "opacity-0"
               }`}
@@ -264,10 +292,7 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({
               className={`w-3 h-3 rounded-full transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-1 ${
                 index === currentIndex ? "bg-white scale-125" : "bg-gray-400"
               }`}
-              onClick={() => {
-                setPrevIndex(currentIndex);
-                setCurrentIndex(index);
-              }}
+              onClick={() => goTo(index)}
             />
           ))}
         </div>
