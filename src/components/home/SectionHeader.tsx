@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
+import { cloudinaryUrl, cloudinarySrcSet } from "@/lib/cloudinary";
 
 interface SectionImage {
   image_url: string;
@@ -19,6 +19,11 @@ interface HeaderCache {
   title: string;
 }
 
+interface Slide {
+  web: SectionImage;
+  mobile?: SectionImage;
+}
+
 export interface SectionHeaderProps {
   initialWebImages?: SectionImage[];
   initialMobileImages?: SectionImage[];
@@ -32,7 +37,9 @@ function loadHeaderCache(): HeaderCache | null {
   try {
     const cached = localStorage.getItem(HEADER_CACHE_KEY);
     if (cached) return JSON.parse(cached);
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
   return null;
 }
 
@@ -50,6 +57,17 @@ const defaultSectionImages: SectionImage[] = defaultImageUrls.map(
   })
 );
 
+// Pair each web image with its matching mobile crop (by order) so every slide
+// can be rendered as an art-directed <picture>: the browser downloads only the
+// source that matches the viewport, with no JS device detection.
+function buildSlides(web: SectionImage[], mobile: SectionImage[]): Slide[] {
+  const base = web.length > 0 ? web : mobile;
+  return base.map((img, i) => ({
+    web: web[i] ?? mobile[i] ?? img,
+    mobile: mobile[i],
+  }));
+}
+
 const SectionHeader: React.FC<SectionHeaderProps> = ({
   initialWebImages,
   initialMobileImages,
@@ -57,42 +75,41 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({
 }) => {
   const hasServerData = Boolean(initialWebImages?.length);
 
-  // Seed with the server-provided web images so the first slide is present in
-  // the initial SSR HTML — otherwise the hero stays blank until JS hydrates and
-  // the resize effect runs, delaying the LCP. The resize effect below swaps to
-  // the mobile set after mount when appropriate.
-  const initialActiveImages = hasServerData
-    ? initialWebImages ?? []
-    : defaultSectionImages;
+  // Seed from server data (or local defaults) so the first slide is present in
+  // the initial SSR HTML and the browser can start the LCP download right away.
+  const [webImages, setWebImages] = useState<SectionImage[]>(
+    hasServerData ? initialWebImages! : defaultSectionImages
+  );
+  const [mobileImages, setMobileImages] = useState<SectionImage[]>(
+    initialMobileImages ?? []
+  );
+  const [headerTitle, setHeaderTitle] = useState<string>(
+    initialTitle ?? "Viajes al Mar"
+  );
+
+  const slides = useMemo(
+    () => buildSlides(webImages, mobileImages),
+    [webImages, mobileImages]
+  );
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [prevIndex, setPrevIndex] = useState<number | null>(null);
-  const [activeImages, setActiveImages] =
-    useState<SectionImage[]>(initialActiveImages);
-  const [webImages, setWebImages] = useState<SectionImage[]>(initialWebImages ?? []);
-  const [mobileImages, setMobileImages] = useState<SectionImage[]>(initialMobileImages ?? []);
-  const [isLoading, setIsLoading] = useState(!hasServerData);
-  const [headerTitle, setHeaderTitle] = useState<string>(initialTitle ?? "Viajes al Mar");
-  const [error, setError] = useState<string | null>(null);
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
-  const prevActiveImagesRef = useRef<SectionImage[]>(initialActiveImages);
 
-  // Fetch fresh data from API (background refresh)
+  // Background refresh from the API (and localStorage cache when there's no
+  // server data) so admin edits show up without a redeploy.
   useEffect(() => {
-    // If no server data, check localStorage cache first
     if (!hasServerData) {
       const cached = loadHeaderCache();
       if (cached) {
-        setWebImages(cached.web);
-        setMobileImages(cached.mobile);
+        if (cached.web?.length) setWebImages(cached.web);
+        setMobileImages(cached.mobile ?? []);
         setHeaderTitle(cached.title);
-        setIsLoading(false);
       }
     }
 
     const fetchData = async () => {
-      setError(null);
       try {
         const [imageResponse, titleResponse] = await Promise.all([
           fetch("/api/section-header-images"),
@@ -120,7 +137,7 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({
         const existing = localStorage.getItem(HEADER_CACHE_KEY);
         if (JSON.stringify(freshCache) !== existing) {
           localStorage.setItem(HEADER_CACHE_KEY, JSON.stringify(freshCache));
-          setWebImages(freshCache.web);
+          if (freshCache.web.length) setWebImages(freshCache.web);
           setMobileImages(freshCache.mobile);
           setHeaderTitle(freshTitle);
         }
@@ -129,58 +146,29 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({
         if (process.env.NODE_ENV !== "production") {
           console.error("Error fetching section header data:", msg);
         }
-        if (!hasServerData && !loadHeaderCache()) setError(msg);
-      } finally {
-        setIsLoading(false);
       }
     };
     fetchData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Set active images based on screen size
+  // Keep the active index in bounds if the slide count changes on refresh.
   useEffect(() => {
-    const mediaQuery = window.matchMedia("(max-width: 768px)");
-
-    const handleResize = () => {
-      let imagesToSet: SectionImage[];
-
-      if (isLoading) {
-        imagesToSet = defaultSectionImages;
-      } else {
-        const isMobile = mediaQuery.matches;
-        if (isMobile) {
-          imagesToSet = mobileImages.length > 0 ? mobileImages : webImages.length > 0 ? webImages : [];
-        } else {
-          imagesToSet = webImages.length > 0 ? webImages : mobileImages.length > 0 ? mobileImages : [];
-        }
-      }
-
-      setActiveImages(imagesToSet);
-      if (prevActiveImagesRef.current !== imagesToSet) {
-        setCurrentIndex(0);
-        setPrevIndex(null);
-        prevActiveImagesRef.current = imagesToSet;
-      }
-    };
-
-    handleResize();
-    mediaQuery.addEventListener("change", handleResize);
-    return () => mediaQuery.removeEventListener("change", handleResize);
-  }, [webImages, mobileImages, isLoading]);
+    setCurrentIndex((cur) => (cur < slides.length ? cur : 0));
+    setPrevIndex(null);
+  }, [slides.length]);
 
   // Slideshow interval
   useEffect(() => {
-    if (activeImages.length === 0) return;
+    if (slides.length <= 1) return;
     const interval = setInterval(() => {
       setCurrentIndex((cur) => {
-        const next = (cur + 1) % activeImages.length;
         setPrevIndex(cur);
-        return next;
+        return (cur + 1) % slides.length;
       });
     }, 3000);
     return () => clearInterval(interval);
-  }, [activeImages]);
+  }, [slides.length]);
 
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
@@ -189,39 +177,27 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({
     touchEndX.current = e.touches[0].clientX;
   };
   const handleTouchEnd = () => {
-    if (activeImages.length === 0) return;
+    if (slides.length <= 1) return;
     if (touchStartX.current !== null && touchEndX.current !== null) {
       const deltaX = touchStartX.current - touchEndX.current;
       if (deltaX > 50) {
         setPrevIndex(currentIndex);
-        setCurrentIndex((cur) => (cur + 1) % activeImages.length);
+        setCurrentIndex((cur) => (cur + 1) % slides.length);
       } else if (deltaX < -50) {
         setPrevIndex(currentIndex);
-        setCurrentIndex((cur) => (cur - 1 + activeImages.length) % activeImages.length);
+        setCurrentIndex((cur) => (cur - 1 + slides.length) % slides.length);
       }
     }
     touchStartX.current = null;
     touchEndX.current = null;
   };
 
-  if (error) {
+  if (slides.length === 0) {
     return (
       <section className="relative w-full h-[75vh] flex items-center justify-center bg-secondary/30">
         <div className="absolute inset-0 flex items-end md:items-center justify-center">
           <h1 className="uppercase text-primary text-4xl md:text-7xl drop-shadow-lg font-[Eckmannpsych] mb-20 md:mb-0">
             {headerTitle || "Viajes al Mar"}
-          </h1>
-        </div>
-      </section>
-    );
-  }
-
-  if (activeImages.length === 0 && !isLoading && !error) {
-    return (
-      <section className="relative w-full h-[75vh] flex items-center justify-center bg-secondary/50">
-        <div className="absolute inset-0 flex items-end md:items-center justify-center">
-          <h1 className="uppercase text-primary text-4xl md:text-7xl drop-shadow-lg font-[Eckmannpsych] mb-20 md:mb-0">
-            {headerTitle || " "}
           </h1>
         </div>
       </section>
@@ -235,20 +211,40 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
-      {activeImages.map((image, index) => {
+      {slides.map((slide, index) => {
         if (index !== currentIndex && index !== prevIndex) return null;
+        const isFirst = index === 0;
         return (
-          <Image
-            key={`${image.image_url}-${index}`}
-            src={image.image_url}
-            alt={image.alt_text || "Viajes al Mar"}
-            fill
-            priority={index === currentIndex}
-            sizes="100vw"
-            className={`absolute inset-0 object-cover transition-opacity duration-1000 ${
-              index === currentIndex ? "opacity-100" : "opacity-0"
-            }`}
-          />
+          <picture key={`${slide.web.image_url}-${index}`}>
+            {slide.mobile && (
+              <source
+                media="(max-width: 768px)"
+                srcSet={
+                  cloudinarySrcSet(slide.mobile.image_url, [480, 640, 768, 1024]) ||
+                  slide.mobile.image_url
+                }
+                sizes="100vw"
+              />
+            )}
+            <img
+              src={cloudinaryUrl(
+                slide.web.image_url,
+                "f_auto,q_auto,c_limit,w_1920"
+              )}
+              srcSet={
+                cloudinarySrcSet(slide.web.image_url, [768, 1280, 1920, 2560]) ||
+                undefined
+              }
+              sizes="100vw"
+              alt={slide.web.alt_text || slide.mobile?.alt_text || "Viajes al Mar"}
+              fetchPriority={isFirst ? "high" : undefined}
+              loading={isFirst ? "eager" : "lazy"}
+              decoding="async"
+              className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+                index === currentIndex ? "opacity-100" : "opacity-0"
+              }`}
+            />
+          </picture>
         );
       })}
 
@@ -258,9 +254,9 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({
         </h1>
       </div>
 
-      {activeImages.length > 1 && (
+      {slides.length > 1 && (
         <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex space-x-2">
-          {activeImages.map((_, index) => (
+          {slides.map((_, index) => (
             <button
               key={`dot-${index}`}
               aria-label={`Ir a imagen ${index + 1}`}
