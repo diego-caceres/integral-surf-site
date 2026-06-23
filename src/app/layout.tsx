@@ -11,6 +11,7 @@ import {
   DEFAULT_OG_IMAGE,
   CONTACT_EMAIL,
   SOCIAL_PROFILES,
+  absoluteUrl,
 } from "@/lib/site";
 
 const DEFAULT_DESCRIPTION =
@@ -46,7 +47,7 @@ const organizationJsonLd = {
   description: DEFAULT_DESCRIPTION,
   url: SITE_URL,
   logo: `${SITE_URL}/icon.png`,
-  image: `${SITE_URL}${DEFAULT_OG_IMAGE}`,
+  image: absoluteUrl(DEFAULT_OG_IMAGE),
   email: CONTACT_EMAIL,
   sameAs: SOCIAL_PROFILES,
   sport: "Surfing",
