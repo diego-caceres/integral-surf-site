@@ -1,7 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
+import { getCachedConfigValue } from "@/lib/trips";
 
-export default function Footer() {
+const DEFAULT_PHONE = "+59899748323";
+
+export default async function Footer() {
+  const phoneNumber =
+    (await getCachedConfigValue("whatsapp_phone_number")) ?? DEFAULT_PHONE;
+  const telHref = `tel:${phoneNumber.replace(/\s+/g, "")}`;
+
   return (
     <footer aria-label="Pie de página" className="py-16 bg-primary text-white mt-auto">
       <div className="max-w-7xl mx-auto flex flex-row flex-wrap gap-4 justify-between items-center px-10">
@@ -51,8 +58,8 @@ export default function Footer() {
           <a href="mailto:integralsurfuy@gmail.com" className="text-white/70 hover:text-white transition-colors">
             integralsurfuy@gmail.com
           </a>
-          <a href="tel:+59898449641" className="text-white/70 hover:text-white transition-colors">
-            +598 98449641
+          <a href={telHref} className="text-white/70 hover:text-white transition-colors">
+            {phoneNumber}
           </a>
         </div>
 
