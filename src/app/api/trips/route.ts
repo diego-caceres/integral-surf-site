@@ -2,6 +2,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabaseServer";
 import { apiError } from "@/lib/apiError";
+import { revalidateTripPages } from "@/lib/revalidate";
+
+// Serve public reads from Vercel's edge cache to cut Supabase egress + latency.
+const READ_CACHE = "public, s-maxage=300, stale-while-revalidate=600";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -19,7 +23,9 @@ export async function GET(request: NextRequest) {
       return apiError("GET /api/trips:", error);
     }
 
-    return NextResponse.json(data);
+    return NextResponse.json(data, {
+      headers: { "Cache-Control": READ_CACHE },
+    });
   } catch (error) {
     return apiError("GET /api/trips (unexpected):", error);
   }
@@ -57,6 +63,7 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    revalidateTripPages();
     return NextResponse.json({ success: true, viaje });
   } catch (error) {
     return apiError("POST /api/trips (unexpected):", error);

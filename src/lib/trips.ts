@@ -1,7 +1,7 @@
 import { unstable_cache } from "next/cache";
 import { supabaseServer } from "@/lib/supabaseServer";
 import { isSupabaseAuthError, SUPABASE_KEY_HINT } from "@/lib/supabaseError";
-import { Trip } from "@/types/trip";
+import { Trip, TripContent, TripContentImage } from "@/types/trip";
 
 /**
  * Fetches a trip (with its ordered contents and content images) by slug,
@@ -9,9 +9,11 @@ import { Trip } from "@/types/trip";
  * header image URL in particular — is present in the initial HTML.
  */
 export async function getTripBySlug(slug: string): Promise<Trip | null> {
+  // Single round-trip: trip + its contents + each content's images, instead of
+  // one query per content block (the previous N+1).
   const { data: tripData, error: tripError } = await supabaseServer
     .from("trips")
-    .select("*")
+    .select("*, trip_contents(*, trip_content_images(*))")
     .eq("slug", slug)
     .single();
 
@@ -21,24 +23,26 @@ export async function getTripBySlug(slug: string): Promise<Trip | null> {
     return null;
   }
 
-  const { data: contentData } = await supabaseServer
-    .from("trip_contents")
-    .select("*")
-    .eq("trip_id", tripData.id)
-    .order("order", { ascending: true });
+  // Supabase doesn't guarantee nested ordering, so sort in memory.
+  type NestedContent = TripContent & {
+    trip_content_images?: TripContentImage[];
+  };
+  const { trip_contents, ...tripFields } = tripData as Omit<
+    Trip,
+    "trip_contents"
+  > & { trip_contents?: NestedContent[] };
 
-  const enrichedContents = await Promise.all(
-    (contentData || []).map(async (content) => {
-      const { data: images } = await supabaseServer
-        .from("trip_content_images")
-        .select("*")
-        .eq("trip_content_id", content.id)
-        .order("order_number", { ascending: true });
-      return { ...content, images: images || [] };
-    })
-  );
+  const enrichedContents = (trip_contents ?? [])
+    .slice()
+    .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+    .map(({ trip_content_images, ...content }) => ({
+      ...content,
+      images: (trip_content_images ?? [])
+        .slice()
+        .sort((a, b) => (a.order_number ?? 0) - (b.order_number ?? 0)),
+    }));
 
-  return { ...tripData, trip_contents: enrichedContents };
+  return { ...tripFields, trip_contents: enrichedContents };
 }
 
 /**

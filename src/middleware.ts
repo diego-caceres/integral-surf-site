@@ -11,10 +11,12 @@ import { ADMIN_AUTH_COOKIE_NAME, verifySessionToken } from "@/lib/auth";
  * - `/api/admin/*` and `/api/cloudinary/*`  -> always require a valid session
  *   (login/logout are explicitly exempt).
  * - `/api/trips/*` and `/api/config/*`      -> public GET/HEAD, auth for writes.
+ * - protected pages (e.g. `/nuevo-viaje`)   -> redirect to /admin login.
  */
 
 const ALWAYS_PROTECTED = ["/api/admin", "/api/cloudinary"];
 const WRITE_PROTECTED = ["/api/trips", "/api/config"];
+const PROTECTED_PAGES = ["/nuevo-viaje"];
 const PUBLIC_API = ["/api/admin/login", "/api/admin/logout"];
 
 const READ_METHODS = new Set(["GET", "HEAD", "OPTIONS"]);
@@ -27,12 +29,15 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  const isProtectedPage = PROTECTED_PAGES.some(
+    (p) => pathname === p || pathname.startsWith(`${p}/`)
+  );
   const isAlwaysProtected = ALWAYS_PROTECTED.some((p) => pathname.startsWith(p));
   const isWriteProtected =
     WRITE_PROTECTED.some((p) => pathname.startsWith(p)) &&
     !READ_METHODS.has(request.method);
 
-  if (!isAlwaysProtected && !isWriteProtected) {
+  if (!isProtectedPage && !isAlwaysProtected && !isWriteProtected) {
     return NextResponse.next();
   }
 
@@ -41,6 +46,13 @@ export async function middleware(request: NextRequest) {
   );
 
   if (!authorized) {
+    // Pages get redirected to the login UI; APIs get a 401.
+    if (isProtectedPage) {
+      const loginUrl = request.nextUrl.clone();
+      loginUrl.pathname = "/admin";
+      loginUrl.search = "";
+      return NextResponse.redirect(loginUrl);
+    }
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -53,5 +65,6 @@ export const config = {
     "/api/cloudinary/:path*",
     "/api/trips/:path*",
     "/api/config/:path*",
+    "/nuevo-viaje/:path*",
   ],
 };

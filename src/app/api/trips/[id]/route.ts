@@ -2,6 +2,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabaseServer";
 import { apiError } from "@/lib/apiError";
+import { revalidateTripPages } from "@/lib/revalidate";
 
 // GET a single trip by ID
 export async function GET(
@@ -158,6 +159,7 @@ export async function PUT(
       await supabaseServer.from("trip_contents").delete().eq("trip_id", id);
     }
 
+    revalidateTripPages();
     return NextResponse.json({
       success: true,
       message: "Trip updated successfully",
@@ -202,6 +204,7 @@ export async function DELETE(
       );
     }
 
+    revalidateTripPages();
     return NextResponse.json({
       success: true,
       message: "Trip marked as deleted successfully",

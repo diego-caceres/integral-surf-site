@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabaseServer";
+import { revalidateTripPages } from "@/lib/revalidate";
 import { v4 as uuidv4 } from "uuid";
 
 export async function POST(
@@ -104,6 +105,7 @@ export async function POST(
       }
     }
 
+    revalidateTripPages();
     return NextResponse.json({
       success: true,
       message: "Trip cloned successfully",

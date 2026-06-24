@@ -2,9 +2,27 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import TripDetail from "@/components/trips/TripDetail";
 import { getTripBySlug, getConfigValue } from "@/lib/trips";
+import { supabaseServer } from "@/lib/supabaseServer";
 import { SITE_NAME, SITE_URL, absoluteUrl } from "@/lib/site";
 
 const DEFAULT_PHONE = "+59899748323";
+
+// Render trip pages as ISR: statically generated, served from the edge cache,
+// and revalidated hourly — instead of querying Supabase on every request.
+export const revalidate = 3600;
+
+// Prebuild the known trip slugs at build time. Unknown slugs still render
+// on-demand (dynamicParams defaults to true) and are then cached.
+export async function generateStaticParams() {
+  const { data } = await supabaseServer
+    .from("trips")
+    .select("slug")
+    .eq("is_deleted", false);
+
+  return (data ?? [])
+    .filter((t): t is { slug: string } => Boolean(t?.slug))
+    .map((t) => ({ slug: t.slug }));
+}
 
 /** Strips HTML tags and collapses whitespace, then truncates for meta tags. */
 function toPlainText(html: string | undefined, max = 160): string {

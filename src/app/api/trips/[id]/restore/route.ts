@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabaseServer";
+import { revalidateTripPages } from "@/lib/revalidate";
 
 export async function POST(
   request: NextRequest, // Added request parameter, even if not used, to match convention
@@ -26,6 +27,7 @@ export async function POST(
       );
     }
 
+    revalidateTripPages();
     return NextResponse.json({
       success: true,
       message: "Trip restored successfully",

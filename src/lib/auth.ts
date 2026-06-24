@@ -98,3 +98,20 @@ export async function isAuthenticatedRequest(
 ): Promise<boolean> {
   return verifySessionToken(request.cookies.get(ADMIN_AUTH_COOKIE_NAME)?.value);
 }
+
+/**
+ * Constant-time string comparison. Hashes both inputs to fixed-length digests
+ * first so neither the length nor the content of the secret leaks via timing.
+ */
+export async function safeEqual(a: string, b: string): Promise<boolean> {
+  const enc = new TextEncoder();
+  const [da, db] = await Promise.all([
+    crypto.subtle.digest("SHA-256", enc.encode(a)),
+    crypto.subtle.digest("SHA-256", enc.encode(b)),
+  ]);
+  const va = new Uint8Array(da);
+  const vb = new Uint8Array(db);
+  let diff = 0;
+  for (let i = 0; i < va.length; i++) diff |= va[i] ^ vb[i];
+  return diff === 0;
+}

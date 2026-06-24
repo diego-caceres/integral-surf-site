@@ -40,7 +40,15 @@ export async function GET(
       );
     }
 
-    return NextResponse.json({ value: data.config_value });
+    return NextResponse.json(
+      { value: data.config_value },
+      {
+        headers: {
+          // Edge-cache config reads; they change rarely and feed shared chrome.
+          "Cache-Control": "public, s-maxage=300, stale-while-revalidate=600",
+        },
+      }
+    );
   } catch (error) {
     return apiError("GET /api/config/[key] (unexpected):", error);
   }
