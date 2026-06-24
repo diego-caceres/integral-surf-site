@@ -6,6 +6,7 @@ import SectionExperiences from "@/components/home/SectionExperiences";
 import SectionInstagram from "@/components/home/SectionInstagram";
 import WhatsAppButton from "@/components/layout/WhatsAppButton";
 import SectionHeader from "@/components/home/SectionHeader";
+import ErrorBoundary from "@/components/ui/ErrorBoundary";
 import { supabaseServer } from "@/lib/supabaseServer";
 import type { HomeSection, HomeSectionImage } from "@/types/homeSections";
 
@@ -79,46 +80,63 @@ export default async function HomePage() {
 
   return (
     <section className="mx-auto text-center">
-      <SectionHeader
-        initialWebImages={headerData.web}
-        initialMobileImages={headerData.mobile}
-        initialTitle={headerData.title}
-      />
+      {/* Each section is isolated: if one throws, the others still render. */}
+      <ErrorBoundary name="SectionHeader">
+        <SectionHeader
+          initialWebImages={headerData.web}
+          initialMobileImages={headerData.mobile}
+          initialTitle={headerData.title}
+        />
+      </ErrorBoundary>
 
-      <SectionOurPurpose
-        title={ourPurpose?.title ?? undefined}
-        description={ourPurpose?.description ?? undefined}
-        quote={ourPurpose?.extra_text ?? undefined}
-        buttonText={ourPurpose?.button_text ?? undefined}
-        imageUrl={ourPurpose?.image_url || undefined}
-        images={ourPurpose?.images ?? []}
-      />
-      <SectionCalendar />
-      <SectionTheRoad
-        title={theRoad?.title ?? undefined}
-        description={theRoad?.description ?? undefined}
-        buttonText={theRoad?.button_text ?? undefined}
-        imageUrl={theRoad?.image_url || undefined}
-        image2Url={theRoad?.image_2_url || undefined}
-        backgroundImageUrl={theRoad?.background_image_url || undefined}
-        images={theRoad?.images ?? []}
-      />
-      <SectionCoaching
-        title={coaching?.title ?? undefined}
-        description={coaching?.description ?? undefined}
-        buttonText={coaching?.button_text ?? undefined}
-        imageUrl={coaching?.image_url || undefined}
-        images={coaching?.images ?? []}
-      />
-      <SectionExperiences
-        title={experiences?.title ?? undefined}
-        description={experiences?.description ?? undefined}
-        videoUrl={experiences?.video_url || undefined}
-        backgroundImageUrl={experiences?.background_image_url || undefined}
-      />
-      <SectionInstagram />
+      <ErrorBoundary name="SectionOurPurpose">
+        <SectionOurPurpose
+          title={ourPurpose?.title ?? undefined}
+          description={ourPurpose?.description ?? undefined}
+          quote={ourPurpose?.extra_text ?? undefined}
+          buttonText={ourPurpose?.button_text ?? undefined}
+          imageUrl={ourPurpose?.image_url || undefined}
+          images={ourPurpose?.images ?? []}
+        />
+      </ErrorBoundary>
+      <ErrorBoundary name="SectionCalendar">
+        <SectionCalendar />
+      </ErrorBoundary>
+      <ErrorBoundary name="SectionTheRoad">
+        <SectionTheRoad
+          title={theRoad?.title ?? undefined}
+          description={theRoad?.description ?? undefined}
+          buttonText={theRoad?.button_text ?? undefined}
+          imageUrl={theRoad?.image_url || undefined}
+          image2Url={theRoad?.image_2_url || undefined}
+          backgroundImageUrl={theRoad?.background_image_url || undefined}
+          images={theRoad?.images ?? []}
+        />
+      </ErrorBoundary>
+      <ErrorBoundary name="SectionCoaching">
+        <SectionCoaching
+          title={coaching?.title ?? undefined}
+          description={coaching?.description ?? undefined}
+          buttonText={coaching?.button_text ?? undefined}
+          imageUrl={coaching?.image_url || undefined}
+          images={coaching?.images ?? []}
+        />
+      </ErrorBoundary>
+      <ErrorBoundary name="SectionExperiences">
+        <SectionExperiences
+          title={experiences?.title ?? undefined}
+          description={experiences?.description ?? undefined}
+          videoUrl={experiences?.video_url || undefined}
+          backgroundImageUrl={experiences?.background_image_url || undefined}
+        />
+      </ErrorBoundary>
+      <ErrorBoundary name="SectionInstagram">
+        <SectionInstagram />
+      </ErrorBoundary>
 
-      <WhatsAppButton onlyBubble />
+      <ErrorBoundary name="WhatsAppButton">
+        <WhatsAppButton onlyBubble />
+      </ErrorBoundary>
     </section>
   );
 }

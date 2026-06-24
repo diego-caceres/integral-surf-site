@@ -56,18 +56,9 @@ const SectionCalendar: React.FC = () => {
     );
   }
 
-  if (error) {
-    return (
-      <div className="w-full xl-surf:min-h-[90vh] md:px-20 pt-10 pb-10 md:py-20 flex justify-center items-center">
-        <div className="text-red-500 text-center">
-          <p className="text-xl font-bold">Error loading trips</p>
-          <p>{error}</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (trips.length === 0) {
+  // On error, degrade to the same friendly empty state rather than a technical
+  // message — the rest of the page stays usable.
+  if (error || trips.length === 0) {
     return (
       <section className="w-full xl-surf:min-h-[90vh] md:px-20 pt-10 pb-10 md:py-20">
         <div className="px-2 md:px-5">

@@ -9,8 +9,10 @@ export default function SectionInstagram() {
 
   useEffect(() => {
     fetch("/api/instagram-posts")
-      .then((res) => res.json())
-      .then((data: InstagramPost[]) => setPosts(data))
+      .then((res) => (res.ok ? res.json() : []))
+      // The API returns an error object on failure — only ever store an array
+      // so a degraded response can't crash the render with `posts.map`.
+      .then((data) => setPosts(Array.isArray(data) ? data : []))
       .catch(() => {});
   }, []);
 

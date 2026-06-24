@@ -1,5 +1,6 @@
 import { unstable_cache } from "next/cache";
 import { supabaseServer } from "@/lib/supabaseServer";
+import { isSupabaseAuthError, SUPABASE_KEY_HINT } from "@/lib/supabaseError";
 import { Trip } from "@/types/trip";
 
 /**
@@ -14,7 +15,11 @@ export async function getTripBySlug(slug: string): Promise<Trip | null> {
     .eq("slug", slug)
     .single();
 
-  if (tripError || !tripData) return null;
+  if (tripError || !tripData) {
+    // A rejected key would otherwise silently 404 every trip page — make it loud.
+    if (isSupabaseAuthError(tripError)) console.error(SUPABASE_KEY_HINT, tripError);
+    return null;
+  }
 
   const { data: contentData } = await supabaseServer
     .from("trip_contents")
@@ -40,11 +45,13 @@ export async function getTripBySlug(slug: string): Promise<Trip | null> {
  * Reads a single value from the general_configurations table.
  */
 export async function getConfigValue(key: string): Promise<string | null> {
-  const { data } = await supabaseServer
+  const { data, error } = await supabaseServer
     .from("general_configurations")
     .select("config_value")
     .eq("config_key", key)
     .single();
+
+  if (isSupabaseAuthError(error)) console.error(SUPABASE_KEY_HINT, error);
 
   return data?.config_value ?? null;
 }

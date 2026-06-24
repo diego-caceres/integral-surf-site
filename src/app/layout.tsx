@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "../styles/globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import ErrorBoundary from "@/components/ui/ErrorBoundary";
 import ClientGTM from "@/components/layout/ClientGTM";
 import { libreFranklinFont } from "@/styles/fonts";
 import ToastProvider from "@/components/ui/ToastProvider";
@@ -75,11 +76,15 @@ export default function RootLayout({
             __html: JSON.stringify(organizationJsonLd),
           }}
         />
-        <Navbar />
+        <ErrorBoundary name="Navbar">
+          <Navbar />
+        </ErrorBoundary>
         <ToastProvider>
           <main>{children}</main>
         </ToastProvider>
-        <Footer />
+        <ErrorBoundary name="Footer">
+          <Footer />
+        </ErrorBoundary>
       </body>
       <ClientGTM />
     </html>
