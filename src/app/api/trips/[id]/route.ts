@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabaseServer";
+import { apiError } from "@/lib/apiError";
 
 // GET a single trip by ID
 export async function GET(
@@ -19,7 +20,7 @@ export async function GET(
       .single();
 
     if (tripError) {
-      return NextResponse.json({ error: tripError.message }, { status: 500 });
+      return apiError("GET /api/trips/[id] (trip):", tripError);
     }
 
     if (!trip) {
@@ -34,10 +35,7 @@ export async function GET(
       .order("order", { ascending: true });
 
     if (contentsError) {
-      return NextResponse.json(
-        { error: contentsError.message },
-        { status: 500 }
-      );
+      return apiError("GET /api/trips/[id] (contents):", contentsError);
     }
 
     // Enrich each content with its images
@@ -54,11 +52,7 @@ export async function GET(
 
     return NextResponse.json({ trip, contents: enrichedContents });
   } catch (error) {
-    console.error("Error fetching trip:", error);
-    return NextResponse.json(
-      { error: "Error processing request", details: String(error) },
-      { status: 500 }
-    );
+    return apiError("GET /api/trips/[id] (unexpected):", error);
   }
 }
 

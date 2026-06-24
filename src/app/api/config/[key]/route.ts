@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseServer } from "../../../../lib/supabaseServer"; // Using Supabase client
+import { apiError } from "@/lib/apiError";
 
 export async function GET(
   request: NextRequest,
@@ -22,23 +23,17 @@ export async function GET(
       .single(); // Use .single() if the key is unique and you expect one or zero rows
 
     if (dbError) {
-      console.error("Supabase error fetching configuration:", dbError);
-      // Check for specific errors, e.g., PostgREST error P0002 (row_not_found for .single())
+      // PGRST116 means no rows found for .single() — a normal "not found".
       if (dbError.code === "PGRST116") {
-        // PGRST116 often means no rows found for .single() or .maybeSingle()
         return NextResponse.json(
           { error: "Configuration not found" },
           { status: 404 }
         );
       }
-      return NextResponse.json(
-        { error: "Failed to fetch configuration", details: dbError.message },
-        { status: 500 }
-      );
+      return apiError("GET /api/config/[key]:", dbError);
     }
 
     if (!data) {
-      // This case might also be covered by dbError.code PGRST116 with .single()
       return NextResponse.json(
         { error: "Configuration not found" },
         { status: 404 }
@@ -47,14 +42,7 @@ export async function GET(
 
     return NextResponse.json({ value: data.config_value });
   } catch (error) {
-    // Catch any other unexpected errors
-    console.error("Unexpected error fetching configuration:", error);
-    const errorMessage =
-      error instanceof Error ? error.message : "An unknown error occurred";
-    return NextResponse.json(
-      { error: "Internal Server Error", details: errorMessage },
-      { status: 500 }
-    );
+    return apiError("GET /api/config/[key] (unexpected):", error);
   }
 }
 

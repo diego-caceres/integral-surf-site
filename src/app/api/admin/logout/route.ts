@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-
-const ADMIN_AUTH_COOKIE_NAME = "integralsurf-admin-auth";
+import { ADMIN_AUTH_COOKIE_NAME } from "@/lib/auth";
 
 export async function POST(_request: NextRequest) {
   try {

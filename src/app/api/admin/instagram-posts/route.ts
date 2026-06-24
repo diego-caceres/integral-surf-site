@@ -1,13 +1,11 @@
 import { NextResponse, NextRequest } from "next/server";
 import { supabaseServer } from "../../../../lib/supabaseServer";
 import { InstagramPost } from "../../../../types/instagramPost";
+import { isAuthenticatedRequest } from "@/lib/auth";
 
-async function isAdmin(_request: NextRequest): Promise<boolean> {
-  console.warn(
-    "TODO: Implement proper admin authentication for /api/admin/instagram-posts. Placeholder usage of _request.url:",
-    _request.url
-  );
-  return true;
+// Enforced centrally in middleware.ts; checked again here as defense in depth.
+async function isAdmin(request: NextRequest): Promise<boolean> {
+  return isAuthenticatedRequest(request);
 }
 
 export async function GET(request: NextRequest) {

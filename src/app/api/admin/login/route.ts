@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-// import { cookies } from "next/headers"; // cookies() from next/headers is for reading in route handlers
-
-const ADMIN_AUTH_COOKIE_NAME = "integralsurf-admin-auth";
+import {
+  ADMIN_AUTH_COOKIE_NAME,
+  createSessionToken,
+  SESSION_TTL_MS,
+} from "@/lib/auth";
 
 export async function POST(request: NextRequest) {
   try {
@@ -26,12 +28,13 @@ export async function POST(request: NextRequest) {
         message: "Login successful",
       });
 
-      response.cookies.set(ADMIN_AUTH_COOKIE_NAME, "true", {
+      // Signed, expiring session token — not a guessable static value.
+      response.cookies.set(ADMIN_AUTH_COOKIE_NAME, await createSessionToken(), {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         path: "/", // Cookie accessible for all paths
         sameSite: "lax",
-        maxAge: 60 * 60 * 24 * 7, // Example: 7 days expiry
+        maxAge: Math.floor(SESSION_TTL_MS / 1000),
       });
       return response;
     } else {

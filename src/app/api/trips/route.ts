@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabaseServer";
+import { apiError } from "@/lib/apiError";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -15,15 +16,12 @@ export async function GET(request: NextRequest) {
     const { data, error } = await query;
 
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      return apiError("GET /api/trips:", error);
     }
 
     return NextResponse.json(data);
   } catch (error) {
-    return NextResponse.json(
-      { error: "Error processing request", details: error },
-      { status: 500 }
-    );
+    return apiError("GET /api/trips (unexpected):", error);
   }
 }
 
@@ -40,7 +38,7 @@ export async function POST(req: NextRequest) {
       .single();
 
     if (viajeError) {
-      return NextResponse.json({ error: viajeError.message }, { status: 500 });
+      return apiError("POST /api/trips (insert trip):", viajeError);
     }
 
     // 2️⃣ Insertar los contenidos relacionados (si existen)
@@ -55,18 +53,12 @@ export async function POST(req: NextRequest) {
         .insert(contentsData);
 
       if (contentsError) {
-        return NextResponse.json(
-          { error: contentsError.message },
-          { status: 500 }
-        );
+        return apiError("POST /api/trips (insert contents):", contentsError);
       }
     }
 
     return NextResponse.json({ success: true, viaje });
   } catch (error) {
-    return NextResponse.json(
-      { error: "Error al procesar la solicitud", originalError: error },
-      { status: 500 }
-    );
+    return apiError("POST /api/trips (unexpected):", error);
   }
 }

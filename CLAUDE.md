@@ -27,8 +27,13 @@ NEXT_PUBLIC_CLOUDINARY_API_KEY=your_cloudinary_api_key
 CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 ADMIN_USERNAME=your_admin_username
 ADMIN_PASSWORD=your_admin_password
+ADMIN_SESSION_SECRET=long_random_string_used_to_sign_admin_sessions
 NEXT_PUBLIC_SITE_URL=https://integralsurf.com.uy
 ```
+
+**Admin auth / sessions:**
+- Admin access uses an HMAC-signed, expiring session cookie (`integralsurf-admin-auth`). Signing/verification lives in `src/lib/auth.ts` and is enforced centrally by `src/middleware.ts` for `/api/admin/*`, `/api/cloudinary/*`, and write methods on `/api/trips/*` and `/api/config/*`.
+- `ADMIN_SESSION_SECRET` signs the session token. If unset it falls back to `ADMIN_PASSWORD`, but set a dedicated random secret in production (rotating it invalidates all existing sessions).
 
 **SEO / Site URL:**
 - `NEXT_PUBLIC_SITE_URL` is the canonical production origin used for metadata, canonical tags, sitemap and robots (see `src/lib/site.ts`). Defaults to `https://integralsurf.com.uy` if unset.

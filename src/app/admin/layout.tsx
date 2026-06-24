@@ -1,9 +1,7 @@
 import { cookies } from "next/headers";
-// import { redirect } from "next/navigation"; // Removed unused import
 import AdminLoginForm from "./components/AdminLoginForm"; // We will create this component
 import AdminNavbar from "./components/AdminNavbar"; // We will create this component
-
-const ADMIN_AUTH_COOKIE_NAME = "integralsurf-admin-auth";
+import { ADMIN_AUTH_COOKIE_NAME, verifySessionToken } from "@/lib/auth";
 
 export default async function AdminLayout({
   children,
@@ -11,8 +9,9 @@ export default async function AdminLayout({
   children: React.ReactNode;
 }) {
   const cookieStore = await cookies();
-  const isAuthenticated =
-    cookieStore.get(ADMIN_AUTH_COOKIE_NAME)?.value === "true";
+  const isAuthenticated = await verifySessionToken(
+    cookieStore.get(ADMIN_AUTH_COOKIE_NAME)?.value
+  );
 
   if (!isAuthenticated) {
     // If not authenticated, show the login form.

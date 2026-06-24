@@ -1,5 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
 import { supabaseServer } from "../../../../lib/supabaseServer"; // Adjusted path
+import { isAuthenticatedRequest } from "@/lib/auth";
 
 interface MenuItemImage {
   url: string;
@@ -10,19 +11,9 @@ interface MenuImagesData {
   [key: string]: MenuItemImage[];
 }
 
-// IMPORTANT: Protect this route! Ensure only admins can call it.
-// This is a placeholder for actual authentication/authorization logic.
-async function isAdmin(_request: NextRequest): Promise<boolean> {
-  // Example: Check for a session, user role, or a secret header.
-  // const session = await getSession(request); // Your session management
-  // if (!session || session.user.role !== 'admin') return false;
-  // For now, let's assume it's protected and return true for development.
-  // In production, IMPLEMENT REAL AUTH CHECKS.
-  console.warn(
-    "TODO: Implement proper admin authentication for /api/admin/menu-images. Placeholder usage of _request.url:",
-    _request.url
-  );
-  return true;
+// Enforced centrally in middleware.ts; checked again here as defense in depth.
+async function isAdmin(request: NextRequest): Promise<boolean> {
+  return isAuthenticatedRequest(request);
 }
 
 export async function PUT(request: NextRequest) {
