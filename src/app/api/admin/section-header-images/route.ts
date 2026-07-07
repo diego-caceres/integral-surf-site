@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabaseServer";
+import { revalidateHome } from "@/lib/revalidate";
+import { getSectionHeaderImages } from "@/lib/sectionHeaderImages";
+import { apiError } from "@/lib/apiError";
 
 interface SectionHeaderImageFromDB {
   id: string; // Assuming UUIDs are strings here
@@ -23,43 +26,10 @@ interface UpdatePayload {
 
 export async function GET() {
   try {
-    const { data, error } = await supabaseServer
-      .from("section_header_images")
-      .select("id, image_url, alt_text, device_type, display_order")
-      .order("device_type", { ascending: true })
-      .order("display_order", { ascending: true });
-
-    if (error) {
-      console.error("Error fetching section header images for admin:", error);
-      throw error; // Propagate error to be caught by catch block
-    }
-
-    const webImages = (data as SectionHeaderImageFromDB[])
-      .filter((img) => img.device_type === "web")
-      .map(({ id, image_url, alt_text, display_order }) => ({
-        id,
-        image_url,
-        alt_text,
-        display_order,
-      }));
-    const mobileImages = (data as SectionHeaderImageFromDB[])
-      .filter((img) => img.device_type === "mobile")
-      .map(({ id, image_url, alt_text, display_order }) => ({
-        id,
-        image_url,
-        alt_text,
-        display_order,
-      }));
-
-    return NextResponse.json({ web: webImages, mobile: mobileImages });
+    const images = await getSectionHeaderImages(true);
+    return NextResponse.json(images);
   } catch (err) {
-    const message =
-      err instanceof Error ? err.message : "An unknown error occurred";
-    console.error("GET /api/admin/section-header-images error:", message);
-    return NextResponse.json(
-      { error: "Failed to fetch section header images", details: message },
-      { status: 500 }
-    );
+    return apiError("GET /api/admin/section-header-images (unexpected):", err);
   }
 }
 
@@ -88,7 +58,6 @@ export async function PUT(request: Request) {
       .neq("id", "00000000-0000-0000-0000-000000000000"); // Delete all rows trick if no specific condition
 
     if (deleteError) {
-      console.error("Error deleting old section header images:", deleteError);
       throw deleteError;
     }
 
@@ -127,24 +96,15 @@ export async function PUT(request: Request) {
         .insert(imagesToInsert);
 
       if (insertError) {
-        console.error(
-          "Error inserting new section header images:",
-          insertError
-        );
         throw insertError;
       }
     }
 
+    revalidateHome();
     return NextResponse.json({
       message: "Section header images updated successfully.",
     });
   } catch (err) {
-    const message =
-      err instanceof Error ? err.message : "An unknown error occurred";
-    console.error("PUT /api/admin/section-header-images error:", message);
-    return NextResponse.json(
-      { error: "Failed to update section header images", details: message },
-      { status: 500 }
-    );
+    return apiError("PUT /api/admin/section-header-images:", err);
   }
 }

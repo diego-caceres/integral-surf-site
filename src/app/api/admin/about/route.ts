@@ -1,7 +1,9 @@
 import { NextResponse, NextRequest } from "next/server";
 import { supabaseServer } from "../../../../lib/supabaseServer";
-import type { AboutPage } from "@/types/about";
 import { isAuthenticatedRequest } from "@/lib/auth";
+import { revalidateAbout } from "@/lib/revalidate";
+import { getAboutPage } from "@/lib/about";
+import { apiError } from "@/lib/apiError";
 
 // Enforced centrally in middleware.ts; checked again here as defense in depth.
 async function isAdmin(request: NextRequest): Promise<boolean> {
@@ -14,19 +16,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    // Fetch the main about page content
-    const { data: aboutData, error: aboutError } = await supabaseServer
-      .from("about_page")
-      .select("*")
-      .single();
-
-    if (aboutError) {
-      console.error("Error fetching about page:", aboutError);
-      return NextResponse.json(
-        { error: "Failed to fetch about page", details: aboutError.message },
-        { status: 500 }
-      );
-    }
+    const aboutData = await getAboutPage();
 
     if (!aboutData) {
       return NextResponse.json(
@@ -35,39 +25,9 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Fetch the instructors
-    const { data: instructorsData, error: instructorsError } =
-      await supabaseServer
-        .from("about_instructors")
-        .select("*")
-        .order("order_number", { ascending: true });
-
-    if (instructorsError) {
-      console.error("Error fetching instructors:", instructorsError);
-      return NextResponse.json(
-        {
-          error: "Failed to fetch instructors",
-          details: instructorsError.message,
-        },
-        { status: 500 }
-      );
-    }
-
-    // Combine the data
-    const fullAboutPage: AboutPage = {
-      ...aboutData,
-      instructors: instructorsData || [],
-    };
-
-    return NextResponse.json(fullAboutPage);
+    return NextResponse.json(aboutData);
   } catch (error) {
-    console.error("Unexpected error in GET /api/admin/about:", error);
-    const errorMessage =
-      error instanceof Error ? error.message : "An unexpected error occurred";
-    return NextResponse.json(
-      { error: "Internal Server Error", details: errorMessage },
-      { status: 500 }
-    );
+    return apiError("GET /api/admin/about (unexpected):", error);
   }
 }
 
@@ -99,11 +59,7 @@ export async function PUT(request: NextRequest) {
       .single();
 
     if (fetchError) {
-      console.error("Error fetching about page:", fetchError);
-      return NextResponse.json(
-        { error: "Failed to fetch about page", details: fetchError.message },
-        { status: 500 }
-      );
+      return apiError("PUT /api/admin/about (fetch existing):", fetchError);
     }
 
     if (!existingAbout) {
@@ -127,11 +83,7 @@ export async function PUT(request: NextRequest) {
       .single();
 
     if (aboutError) {
-      console.error("Error updating about page:", aboutError);
-      return NextResponse.json(
-        { error: "Failed to update about page", details: aboutError.message },
-        { status: 500 }
-      );
+      return apiError("PUT /api/admin/about (update):", aboutError);
     }
 
     // Update instructors if provided
@@ -143,14 +95,7 @@ export async function PUT(request: NextRequest) {
         .neq("id", "00000000-0000-0000-0000-000000000000"); // Delete all trick
 
       if (deleteError) {
-        console.error("Error deleting instructors:", deleteError);
-        return NextResponse.json(
-          {
-            error: "Failed to delete instructors",
-            details: deleteError.message,
-          },
-          { status: 500 }
-        );
+        return apiError("PUT /api/admin/about (delete instructors):", deleteError);
       }
 
       // Insert new instructors
@@ -174,30 +119,18 @@ export async function PUT(request: NextRequest) {
           .insert(instructorsToInsert);
 
         if (insertError) {
-          console.error("Error inserting instructors:", insertError);
-          return NextResponse.json(
-            {
-              error: "Failed to insert instructors",
-              details: insertError.message,
-            },
-            { status: 500 }
-          );
+          return apiError("PUT /api/admin/about (insert instructors):", insertError);
         }
       }
     }
 
+    revalidateAbout();
     return NextResponse.json({
       success: true,
       message: "About page updated successfully",
       data: updatedAbout,
     });
   } catch (error) {
-    console.error("Unexpected error in PUT /api/admin/about:", error);
-    const errorMessage =
-      error instanceof Error ? error.message : "An unexpected error occurred";
-    return NextResponse.json(
-      { error: "Internal Server Error", details: errorMessage },
-      { status: 500 }
-    );
+    return apiError("PUT /api/admin/about (unexpected):", error);
   }
 }
