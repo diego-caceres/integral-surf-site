@@ -29,6 +29,7 @@ ADMIN_USERNAME=your_admin_username
 ADMIN_PASSWORD=your_admin_password
 ADMIN_SESSION_SECRET=long_random_string_used_to_sign_admin_sessions
 NEXT_PUBLIC_SITE_URL=https://integralsurf.com.uy
+NEXT_PUBLIC_GTM_ID=GTM-XXXXXXX
 ```
 
 **Admin auth / sessions:**
@@ -38,6 +39,11 @@ NEXT_PUBLIC_SITE_URL=https://integralsurf.com.uy
 **SEO / Site URL:**
 - `NEXT_PUBLIC_SITE_URL` is the canonical production origin used for metadata, canonical tags, sitemap and robots (see `src/lib/site.ts`). Defaults to `https://integralsurf.com.uy` if unset.
 - Sitemap and robots are generated dynamically by the App Router (`src/app/sitemap.ts`, `src/app/robots.ts`) — `sitemap.ts` queries Supabase so trip pages are always included. There is no static sitemap/robots in `public/`.
+
+**Analytics (Google Tag Manager):**
+- `NEXT_PUBLIC_GTM_ID` sets the GTM container id (see `src/components/layout/ClientGTM.tsx`). Falls back to the production container id if unset, so it's optional in most environments.
+- GTM is not loaded on `/admin/*` or `/nuevo-viaje` — admin traffic shouldn't pollute conversion analytics.
+- The WhatsApp CTAs (floating bubble, trip inline button, both price cards) push a `whatsapp_click` event to `dataLayer` on click, via `src/lib/analytics.ts#trackWhatsAppClick`. Params: `location` (`floating_bubble` | `trip_inline_cta` | `price_promo` | `price_final`), `tripSlug`, `tripDestiny`, and `price` (price-card clicks only).
 
 **Cloudinary Configuration:**
 - Uses signed uploads for security (API key/secret required)
@@ -67,18 +73,24 @@ Admin authentication is cookie-based:
 
 ### Database (Supabase)
 
-Two Supabase client instances:
-1. **Server client** (`src/lib/supabaseServer.ts`): Uses service role key, no session persistence, for API routes
-2. **Public client**: Uses anon key for public data fetching
+One Supabase client (`src/lib/supabaseServer.ts`): uses the service role key,
+no session persistence, and is used for every read and write — public pages,
+public API routes, and admin API routes alike. There is no separate anon-key
+client; the service role bypasses Row-Level Security, so `src/middleware.ts`
+is the only thing standing between an anonymous request and full database
+write access (see the comment at the top of that file).
 
 Main database tables:
 - `trips`: Main trip data with extensive fields (slug, title, destiny, dates, pricing, section content, images)
 - `trip_contents`: Related content blocks for trips (one-to-many relationship)
-- `about`: About page content
-- `fundamentos`: Fundamentos page content with images
-- `configurations`: Site-wide configuration key-value pairs
-- `menu_images`: Navigation menu images
-- `section_header_images`: Section header images
+- `trip_content_images`: Slideshow images for a trip_content block (one-to-many relationship)
+- `about_page`: About page hero content (single row); `about_instructors`: instructor cards
+- `fundamentos_sections`: Fundamentos page sections; `fundamentos_section_images` and `fundamentos_team_members` per section
+- `home_sections`: Homepage section text/CTA content by `section_key`; `home_section_images`: per-section slideshow images
+- `general_configurations`: Site-wide configuration key/value pairs (columns: `config_key`, `config_value`) — the single source of truth for config; there is no separate `configurations` table
+- `menu_item_images`: Navigation mega-menu images, grouped by `menu_item_title`
+- `section_header_images`: Homepage hero carousel images (web/mobile variants)
+- `instagram_posts`: Instagram grid on the homepage
 
 ### Data Flow Patterns
 
@@ -125,7 +137,7 @@ Main database tables:
 **Styling Approach:**
 - Tailwind utility classes throughout
 - Use `cn()` utility from `src/lib/utils.ts` for conditional class merging
-- Framer Motion for animations
+- Framer Motion for animations — used in `Navbar` (sticky bar, mobile drawer), `WhatsAppButton` (bubble), `MegaMenuItem` (dropdown). Costs ~39 kB gzipped (measured via `ANALYZE=true npm run build`, `.next/analyze/client.html`) and loads on nearly every page since `Navbar` sits in the root layout. Deliberately kept over a CSS-transition rewrite — the maintainer values the current animation feel over the bundle savings. Re-evaluate only if a future perf budget forces the issue.
 
 ### TypeScript Configuration
 
