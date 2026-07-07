@@ -1,12 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getCachedConfigValue } from "@/lib/trips";
-
-const DEFAULT_PHONE = "+59899748323";
+import { DEFAULT_WHATSAPP_PHONE } from "@/lib/site";
 
 export default async function Footer() {
   const phoneNumber =
-    (await getCachedConfigValue("whatsapp_phone_number")) ?? DEFAULT_PHONE;
+    (await getCachedConfigValue("whatsapp_phone_number")) ?? DEFAULT_WHATSAPP_PHONE;
   const telHref = `tel:${phoneNumber.replace(/\s+/g, "")}`;
 
   return (

@@ -1,32 +1,21 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import WhatsAppButton from "@/components/layout/WhatsAppButton";
-import { supabaseServer } from "@/lib/supabaseServer";
-import type { AboutPage } from "@/types/about";
+import AlternatingSection from "@/components/ui/AlternatingSection";
+import { getAboutPage } from "@/lib/about";
 
 export const metadata: Metadata = {
   title: "Nosotros",
   description: "Conocé al equipo de Integral Surf: instructores apasionados por el surf, el yoga y la naturaleza.",
 };
 
-async function getAboutData(): Promise<AboutPage | null> {
-  const { data: aboutData, error: aboutError } = await supabaseServer
-    .from("about_page")
-    .select("*")
-    .single();
-
-  if (aboutError || !aboutData) return null;
-
-  const { data: instructorsData } = await supabaseServer
-    .from("about_instructors")
-    .select("*")
-    .order("order_number", { ascending: true });
-
-  return { ...aboutData, instructors: instructorsData || [] };
-}
+// Static (ISR). Admin edits call revalidatePath("/about") (see
+// src/lib/revalidate.ts) and show up immediately; this is just the fallback
+// ceiling on staleness if that somehow doesn't fire.
+export const revalidate = 3600;
 
 export default async function AboutPage() {
-  const aboutData = await getAboutData();
+  const aboutData = await getAboutPage();
 
   if (!aboutData) {
     return (
@@ -66,69 +55,23 @@ export default async function AboutPage() {
           }`}
         >
           <div className="container mx-auto px-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-              {index % 2 === 0 ? (
-                <>
-                  <div className="space-y-6">
-                    <h2 className="text-3xl md:text-4xl font-[Eckmannpsych] text-primary">
-                      {instructor.name}
-                    </h2>
-                    <p className="text-lg text-textPrimary leading-relaxed">
-                      {instructor.description
-                        .split("\\n\\n")
-                        .map((paragraph, index) => (
-                          <span key={index}>
-                            {paragraph}
-                            {index <
-                              instructor.description.split("\\n\\n").length -
-                                1 && <br />}
-                          </span>
-                        ))}
-                    </p>
-                  </div>
-                  <div className="relative h-[500px] rounded-lg overflow-hidden">
-                    <Image
-                      src={instructor.image_url}
-                      alt={instructor.name}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                      className="object-cover"
-                      priority={index === 0}
-                    />
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="relative h-[500px] rounded-lg overflow-hidden order-2 md:order-1">
-                    <Image
-                      src={instructor.image_url}
-                      alt={instructor.name}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                      className="object-cover"
-                      priority={index === 0}
-                    />
-                  </div>
-                  <div className="space-y-6 order-1 md:order-2">
-                    <h2 className="text-3xl md:text-4xl font-[Eckmannpsych] text-primary">
-                      {instructor.name}
-                    </h2>
-                    <p className="text-lg text-textPrimary leading-relaxed">
-                      {instructor.description
-                        .split("\\n\\n")
-                        .map((paragraph, index) => (
-                          <span key={index}>
-                            {paragraph}
-                            {index <
-                              instructor.description.split("\\n\\n").length -
-                                1 && <br />}
-                          </span>
-                        ))}
-                    </p>
-                  </div>
-                </>
-              )}
-            </div>
+            <AlternatingSection
+              title={instructor.name}
+              description={instructor.description}
+              reverse={index % 2 !== 0}
+              media={
+                <div className="relative h-[500px] rounded-lg overflow-hidden">
+                  <Image
+                    src={instructor.image_url}
+                    alt={instructor.name}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover"
+                    priority={index === 0}
+                  />
+                </div>
+              }
+            />
           </div>
         </section>
       ))}
