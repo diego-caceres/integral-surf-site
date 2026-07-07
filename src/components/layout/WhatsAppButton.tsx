@@ -3,18 +3,26 @@ import Link from "next/link";
 import { FaWhatsapp } from "react-icons/fa";
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { DEFAULT_WHATSAPP_PHONE } from "@/lib/site";
+import { trackWhatsAppClick } from "@/lib/analytics";
 
 type WhatsAppButtonProps = {
   onlyBubble?: boolean;
   phoneNumber?: string;
+  /** Trip context, when rendered on a trip detail page — included on the
+   * whatsapp_click analytics event so conversions can be attributed per trip. */
+  tripSlug?: string;
+  tripDestiny?: string;
 };
 
 const WhatsAppButton: React.FC<WhatsAppButtonProps> = ({
   onlyBubble = false,
   phoneNumber: initialPhoneNumber,
+  tripSlug,
+  tripDestiny,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [phoneNumber, setPhoneNumber] = useState(initialPhoneNumber ?? "+59899748323");
+  const [phoneNumber, setPhoneNumber] = useState(initialPhoneNumber ?? DEFAULT_WHATSAPP_PHONE);
   const message = "¡Hola! Estoy interesado en saber más sobre tus servicios.";
 
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
@@ -79,6 +87,9 @@ const WhatsAppButton: React.FC<WhatsAppButtonProps> = ({
           href={whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={() =>
+            trackWhatsAppClick({ location: "trip_inline_cta", tripSlug, tripDestiny })
+          }
           className="flex items-center justify-center bg-whatsapp text-white font-semibold py-3 px-6 rounded-full shadow-md hover:bg-whatsapp-dark focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 transition-all duration-300"
         >
           <svg viewBox="0 0 32 32" className="whatsapp-ico">
@@ -110,6 +121,9 @@ const WhatsAppButton: React.FC<WhatsAppButtonProps> = ({
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Contactar por WhatsApp"
+              onClick={() =>
+                trackWhatsAppClick({ location: "floating_bubble", tripSlug, tripDestiny })
+              }
               className="bg-whatsapp text-white p-4 md:p-5 rounded-full shadow-lg shadow-whatsapp-dark/50 hover:bg-whatsapp-dark transition-transform transform hover:scale-110 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
             >
               <FaWhatsapp className="w-6 h-6 md:w-8 md:h-8" />

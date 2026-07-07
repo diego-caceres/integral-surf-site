@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { libreFranklinFont } from "@/styles/fonts";
 import Link from "next/link";
+import { DEFAULT_WHATSAPP_PHONE } from "@/lib/site";
+import { trackWhatsAppClick } from "@/lib/analytics";
 
 interface PriceProps {
   promotionalPrice: number;
@@ -10,6 +12,8 @@ interface PriceProps {
   promoEndMessage?: string;
   finalPriceMessage?: string;
   phoneNumber?: string;
+  tripSlug?: string;
+  tripDestiny?: string;
 }
 
 const message = "¡Hola! Estoy interesado en saber más sobre tus servicios.";
@@ -20,8 +24,10 @@ const PriceComponent: React.FC<PriceProps> = ({
   promoEndMessage,
   finalPriceMessage,
   phoneNumber: initialPhoneNumber,
+  tripSlug,
+  tripDestiny,
 }) => {
-  const [phoneNumber, setPhoneNumber] = useState(initialPhoneNumber ?? "+59899748323");
+  const [phoneNumber, setPhoneNumber] = useState(initialPhoneNumber ?? DEFAULT_WHATSAPP_PHONE);
 
   useEffect(() => {
     if (initialPhoneNumber) return;
@@ -45,7 +51,19 @@ const PriceComponent: React.FC<PriceProps> = ({
         className={`${libreFranklinFont.className} flex flex-col sm:flex-row justify-center gap-8 sm:items-center justify-center text-center`}
       >
         {/* Precio Promocional */}
-        <Link href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+        <Link
+          href={whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() =>
+            trackWhatsAppClick({
+              location: "price_promo",
+              tripSlug,
+              tripDestiny,
+              price: promotionalPrice,
+            })
+          }
+        >
           <div className="border rounded-3xl p-5 bg-redColor text-white flex flex-col">
             <span className="uppercase font-bold text-xl ">Promo</span>
             <span className="uppercase font-bold text-xl">Reserva con 50%</span>
@@ -55,7 +73,19 @@ const PriceComponent: React.FC<PriceProps> = ({
             <div className=" ">{promoEndMessage}</div>
           </div>
         </Link>
-        <Link href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+        <Link
+          href={whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() =>
+            trackWhatsAppClick({
+              location: "price_final",
+              tripSlug,
+              tripDestiny,
+              price: finalPrice,
+            })
+          }
+        >
           <div className="border rounded-3xl p-5 bg-redColor text-white flex flex-col">
             <span className=" uppercase font-bold text-xl">Precio Final</span>
             <span className=" uppercase font-bold text-xl">
