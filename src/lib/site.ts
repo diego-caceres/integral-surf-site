@@ -23,6 +23,15 @@ export const DEFAULT_OG_IMAGE =
 /** Public-facing contact + social profiles, used in Organization JSON-LD. */
 export const CONTACT_EMAIL = "integralsurfuy@gmail.com";
 
+/**
+ * Fallback WhatsApp number used before the `whatsapp_phone_number` config
+ * value (admin-editable, see /admin/configurations) has loaded or if it's
+ * unset. Previously hardcoded separately in four places (WhatsAppButton,
+ * PriceComponent, the trip detail page, and the Footer) — a single source
+ * means updating it once actually updates every fallback.
+ */
+export const DEFAULT_WHATSAPP_PHONE = "+59899748323";
+
 export const SOCIAL_PROFILES = [
   "https://www.instagram.com/integralsurf/",
   "https://www.youtube.com/@integralsurf",
