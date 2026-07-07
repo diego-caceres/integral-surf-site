@@ -3,9 +3,7 @@ import type { Metadata } from "next";
 import TripDetail from "@/components/trips/TripDetail";
 import { getTripBySlug, getConfigValue } from "@/lib/trips";
 import { supabaseServer } from "@/lib/supabaseServer";
-import { SITE_NAME, SITE_URL, absoluteUrl } from "@/lib/site";
-
-const DEFAULT_PHONE = "+59899748323";
+import { SITE_NAME, SITE_URL, absoluteUrl, DEFAULT_WHATSAPP_PHONE } from "@/lib/site";
 
 // Render trip pages as ISR: statically generated, served from the edge cache,
 // and revalidated hourly — instead of querying Supabase on every request.
@@ -120,7 +118,7 @@ export default async function TripPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
       />
-      <TripDetail trip={trip} phoneNumber={phoneNumber ?? DEFAULT_PHONE} />
+      <TripDetail trip={trip} phoneNumber={phoneNumber ?? DEFAULT_WHATSAPP_PHONE} />
     </>
   );
 }
