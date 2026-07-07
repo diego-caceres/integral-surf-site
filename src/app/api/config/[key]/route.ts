@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseServer } from "../../../../lib/supabaseServer"; // Using Supabase client
 import { apiError } from "@/lib/apiError";
+import { revalidateConfigKey } from "@/lib/revalidate";
+import { READ_CACHE } from "@/lib/httpCache";
 
 export async function GET(
   request: NextRequest,
@@ -42,12 +44,7 @@ export async function GET(
 
     return NextResponse.json(
       { value: data.config_value },
-      {
-        headers: {
-          // Edge-cache config reads; they change rarely and feed shared chrome.
-          "Cache-Control": "public, s-maxage=300, stale-while-revalidate=600",
-        },
-      }
+      { headers: { "Cache-Control": READ_CACHE } }
     );
   } catch (error) {
     return apiError("GET /api/config/[key] (unexpected):", error);
@@ -94,7 +91,6 @@ export async function PUT(
       .single();
 
     if (dbError) {
-      console.error("Supabase error updating configuration:", dbError);
       if (dbError.code === "PGRST116") {
         // No row found to update
         return NextResponse.json(
@@ -102,10 +98,7 @@ export async function PUT(
           { status: 404 }
         );
       }
-      return NextResponse.json(
-        { error: "Failed to update configuration", details: dbError.message },
-        { status: 500 }
-      );
+      return apiError("PUT /api/config/[key]:", dbError);
     }
 
     if (!data) {
@@ -116,15 +109,10 @@ export async function PUT(
       );
     }
 
+    revalidateConfigKey(key);
     return NextResponse.json(data);
   } catch (error) {
-    console.error("Unexpected error updating configuration:", error);
-    const errorMessage =
-      error instanceof Error ? error.message : "An unknown error occurred";
-    return NextResponse.json(
-      { error: "Internal Server Error", details: errorMessage },
-      { status: 500 }
-    );
+    return apiError("PUT /api/config/[key] (unexpected):", error);
   }
 }
 
@@ -151,14 +139,7 @@ export async function DELETE(
 
     if (fetchError && fetchError.code !== "PGRST116") {
       // PGRST116 is not an error if item doesn't exist for maybeSingle
-      console.error("Supabase error fetching before delete:", fetchError);
-      return NextResponse.json(
-        {
-          error: "Failed to verify configuration before deletion",
-          details: fetchError.message,
-        },
-        { status: 500 }
-      );
+      return apiError("DELETE /api/config/[key] (verify):", fetchError);
     }
 
     if (!existingData && !fetchError) {
@@ -175,21 +156,12 @@ export async function DELETE(
       .eq("config_key", key);
 
     if (dbError) {
-      console.error("Supabase error deleting configuration:", dbError);
-      return NextResponse.json(
-        { error: "Failed to delete configuration", details: dbError.message },
-        { status: 500 }
-      );
+      return apiError("DELETE /api/config/[key]:", dbError);
     }
 
+    revalidateConfigKey(key);
     return NextResponse.json({ message: "Configuration deleted successfully" });
   } catch (error) {
-    console.error("Unexpected error deleting configuration:", error);
-    const errorMessage =
-      error instanceof Error ? error.message : "An unknown error occurred";
-    return NextResponse.json(
-      { error: "Internal Server Error", details: errorMessage },
-      { status: 500 }
-    );
+    return apiError("DELETE /api/config/[key] (unexpected):", error);
   }
 }
