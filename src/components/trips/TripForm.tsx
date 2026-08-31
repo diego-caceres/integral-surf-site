@@ -218,6 +218,18 @@ export default function TripForm({
             value={form.price_final_message}
             onChange={handleChange}
           />
+          <TextField
+            label="Texto de Reserva (Promocional)"
+            name="price_promo_deposit_message"
+            value={form.price_promo_deposit_message}
+            onChange={handleChange}
+          />
+          <TextField
+            label="Texto de Reserva (Final)"
+            name="price_final_deposit_message"
+            value={form.price_final_deposit_message}
+            onChange={handleChange}
+          />
         </div>
       </div>
 

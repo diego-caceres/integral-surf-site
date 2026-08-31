@@ -37,6 +37,8 @@ export type Trip = {
   price_final: number;
   price_promo_message: string;
   price_final_message: string;
+  price_promo_deposit_message: string;
+  price_final_deposit_message: string;
   section_1_title: string;
   section_1_description: string;
   section_1_subdescription: string;

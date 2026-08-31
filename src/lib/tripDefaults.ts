@@ -20,6 +20,8 @@ export const EMPTY_TRIP: Trip = {
   price_final: 0,
   price_promo_message: "",
   price_final_message: "",
+  price_promo_deposit_message: "Reserva con 50%",
+  price_final_deposit_message: "Reserva con 50%",
   section_1_title: "",
   section_1_description: "",
   section_1_subdescription: "",
