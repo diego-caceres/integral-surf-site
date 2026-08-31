@@ -193,6 +193,18 @@ export default function TripForm({
         <h2 className="text-xl font-semibold mb-4">Precios</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <TextField
+            label="Título (Promocional)"
+            name="price_promo_title"
+            value={form.price_promo_title}
+            onChange={handleChange}
+          />
+          <TextField
+            label="Título (Precio Final)"
+            name="price_final_title"
+            value={form.price_final_title}
+            onChange={handleChange}
+          />
+          <TextField
             label="Precio Promocional"
             name="price_promo"
             type="number"

@@ -13,6 +13,8 @@ interface PriceProps {
   finalPriceMessage?: string;
   promoDepositMessage?: string;
   finalDepositMessage?: string;
+  promoTitle?: string;
+  finalTitle?: string;
   phoneNumber?: string;
   tripSlug?: string;
   tripDestiny?: string;
@@ -27,6 +29,8 @@ const PriceComponent: React.FC<PriceProps> = ({
   finalPriceMessage,
   promoDepositMessage,
   finalDepositMessage,
+  promoTitle,
+  finalTitle,
   phoneNumber: initialPhoneNumber,
   tripSlug,
   tripDestiny,
@@ -69,7 +73,7 @@ const PriceComponent: React.FC<PriceProps> = ({
           }
         >
           <div className="border rounded-3xl p-5 bg-redColor text-white flex flex-col">
-            <span className="uppercase font-bold text-xl ">Promo</span>
+            <span className="uppercase font-bold text-xl ">{promoTitle}</span>
             <span className="uppercase font-bold text-xl">{promoDepositMessage}</span>
             <div className="font-bold p-2 rounded mt-2 text-5xl ">
               USD {promotionalPrice}
@@ -91,7 +95,7 @@ const PriceComponent: React.FC<PriceProps> = ({
           }
         >
           <div className="border rounded-3xl p-5 bg-redColor text-white flex flex-col">
-            <span className=" uppercase font-bold text-xl">Precio Final</span>
+            <span className=" uppercase font-bold text-xl">{finalTitle}</span>
             <span className=" uppercase font-bold text-xl">
               {finalDepositMessage}
             </span>
