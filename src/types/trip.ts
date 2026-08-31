@@ -37,6 +37,8 @@ export type Trip = {
   price_final: number;
   price_promo_message: string;
   price_final_message: string;
+  price_promo_deposit_message: string;
+  price_final_deposit_message: string;
   section_1_title: string;
   section_1_description: string;
   section_1_subdescription: string;
@@ -55,3 +57,29 @@ export type Trip = {
   created_at: string;
   updated_at: string;
 };
+
+/**
+ * The slim column set the public `GET /api/trips` returns — everything the
+ * trip menu (Navbar) and calendar cards (SectionCalendar, TripCard) need,
+ * and nothing else. The full `Trip` shape (every section's HTML body, prices,
+ * etc.) is only needed on a single trip's own detail page, fetched via
+ * `getTripBySlug` — shipping it to every visitor just to render a calendar
+ * of links wastes bandwidth and leaks unpublished section copy.
+ */
+export type TripSummary = Pick<
+  Trip,
+  | "id"
+  | "slug"
+  | "title"
+  | "title_2"
+  | "destiny"
+  | "coaching_subtitle"
+  | "date_month"
+  | "date_days"
+  | "date_month_2"
+  | "date_days_2"
+  | "order"
+>;
+
+/** Admin trip listing additionally needs is_deleted for the "show deleted" toggle. */
+export type AdminTripSummary = TripSummary & { is_deleted?: boolean };

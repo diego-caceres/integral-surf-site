@@ -1,5 +1,7 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { supabaseServer } from "../../../lib/supabaseServer";
+import { isAuthenticatedRequest } from "@/lib/auth";
+import { apiError } from "@/lib/apiError";
 
 export interface ConfigurationItem {
   id: number;
@@ -9,7 +11,19 @@ export interface ConfigurationItem {
   updated_at: string;
 }
 
-export async function GET() {
+// Enforced centrally in middleware.ts (ALWAYS_PROTECTED); checked again here
+// as defense in depth. This endpoint lists/creates every config key and is
+// only ever called from the admin configurations page — it must never be
+// reachable anonymously (a prior middleware matcher gap left it open).
+async function isAdmin(request: NextRequest): Promise<boolean> {
+  return isAuthenticatedRequest(request);
+}
+
+export async function GET(request: NextRequest) {
+  if (!(await isAdmin(request))) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     const { data, error } = await supabaseServer
       .from("general_configurations")
@@ -17,26 +31,20 @@ export async function GET() {
       .order("config_key", { ascending: true });
 
     if (error) {
-      console.error("Supabase error fetching configurations:", error);
-      return NextResponse.json(
-        { error: "Failed to fetch configurations", details: error.message },
-        { status: 500 }
-      );
+      return apiError("GET /api/configurations:", error);
     }
 
     return NextResponse.json(data as ConfigurationItem[]);
   } catch (error) {
-    console.error("Unexpected error fetching configurations:", error);
-    const errorMessage =
-      error instanceof Error ? error.message : "An unknown error occurred";
-    return NextResponse.json(
-      { error: "Internal Server Error", details: errorMessage },
-      { status: 500 }
-    );
+    return apiError("GET /api/configurations (unexpected):", error);
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
+  if (!(await isAdmin(request))) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   let body;
   try {
     body = await request.json();
@@ -74,17 +82,7 @@ export async function POST(request: Request) {
       .maybeSingle();
 
     if (fetchError) {
-      console.error(
-        "Supabase error checking for existing config_key:",
-        fetchError
-      );
-      return NextResponse.json(
-        {
-          error: "Failed to verify config_key uniqueness",
-          details: fetchError.message,
-        },
-        { status: 500 }
-      );
+      return apiError("POST /api/configurations (uniqueness check):", fetchError);
     }
 
     if (existing) {
@@ -108,21 +106,11 @@ export async function POST(request: Request) {
       .single(); // Assuming you want the created record back
 
     if (dbError) {
-      console.error("Supabase error creating configuration:", dbError);
-      return NextResponse.json(
-        { error: "Failed to create configuration", details: dbError.message },
-        { status: 500 }
-      );
+      return apiError("POST /api/configurations (insert):", dbError);
     }
 
     return NextResponse.json(data, { status: 201 }); // 201 Created
   } catch (error) {
-    console.error("Unexpected error creating configuration:", error);
-    const errorMessage =
-      error instanceof Error ? error.message : "An unknown error occurred";
-    return NextResponse.json(
-      { error: "Internal Server Error", details: errorMessage },
-      { status: 500 }
-    );
+    return apiError("POST /api/configurations (unexpected):", error);
   }
 }

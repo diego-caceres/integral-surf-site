@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { Trip } from "@/types/trip";
+import { TripSummary } from "@/types/trip";
 import { bebasNeuelFont } from "@/styles/fonts";
 
-const TripCard = ({ trip }: { trip: Trip }) => {
+const TripCard = ({ trip }: { trip: TripSummary }) => {
   return (
     <Link href={`/viajes/${trip.slug}`} passHref className="block h-full">
       <div className="bg-redColor p-3 h-full uppercase text-white transition-all duration-300 hover:scale-105 cursor-pointer hover:shadow-lg will-change-transform">

@@ -181,7 +181,11 @@ const TripDetail = ({ trip, phoneNumber }: { trip: Trip; phoneNumber?: string })
         finalPrice={trip.price_final}
         promoEndMessage={trip.price_promo_message}
         finalPriceMessage={trip.price_final_message}
+        promoDepositMessage={trip.price_promo_deposit_message}
+        finalDepositMessage={trip.price_final_deposit_message}
         phoneNumber={phoneNumber}
+        tripSlug={trip.slug}
+        tripDestiny={trip.destiny}
       />
 
       <FinalImagesSection final_img_1={final_img_1} final_img_2={final_img_2} title={title} />
@@ -189,7 +193,11 @@ const TripDetail = ({ trip, phoneNumber }: { trip: Trip; phoneNumber?: string })
       <div className="p-6 sm:p-8 max-w-7xl mx-auto">
         {/* Contact Button */}
         <div className="m-auto max-w-[400px] mt-10">
-          <WhatsAppButton phoneNumber={phoneNumber} />
+          <WhatsAppButton
+            phoneNumber={phoneNumber}
+            tripSlug={trip.slug}
+            tripDestiny={trip.destiny}
+          />
         </div>
       </div>
     </div>

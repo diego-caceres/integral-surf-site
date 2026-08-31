@@ -10,20 +10,9 @@ import {
   FaUndo,
   FaExternalLinkAlt,
 } from "react-icons/fa";
+import type { AdminTripSummary } from "@/types/trip";
 
-type Trip = {
-  id: string;
-  slug: string;
-  title: string;
-  title_2?: string;
-  destiny: string;
-  date_month: string;
-  date_days: string;
-  date_month_2?: string;
-  date_days_2?: string;
-  order: number;
-  is_deleted?: boolean;
-};
+type Trip = AdminTripSummary;
 
 export default function TripsManagement() {
   const [trips, setTrips] = useState<Trip[]>([]);
@@ -35,7 +24,9 @@ export default function TripsManagement() {
     const fetchTrips = async () => {
       try {
         setIsLoading(true);
-        const res = await fetch("/api/trips");
+        // Admin-only endpoint: includes soft-deleted trips (needed for the
+        // "Mostrar Eliminados" toggle below), unlike the public /api/trips.
+        const res = await fetch("/api/admin/trips");
 
         if (!res.ok) {
           throw new Error("Failed to fetch trips");

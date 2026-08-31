@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabaseServer";
 import { revalidateTripPages } from "@/lib/revalidate";
-import { v4 as uuidv4 } from "uuid";
+import { normalizeTripContents } from "@/lib/trips";
+import { apiError } from "@/lib/apiError";
 
 export async function POST(
   request: NextRequest,
@@ -10,44 +11,33 @@ export async function POST(
   try {
     const { id: sourceId } = await params;
 
-    // 1. Fetch the source trip
-    const { data: sourceTrip, error: sourceTripError } = await supabaseServer
-      .from("trips")
-      .select("*")
-      .eq("id", sourceId)
-      .single();
+    // 1 & 2. Fetch the source trip, its contents, and each content's images
+    // in a single round-trip (previously 1 query for the trip + 1 for its
+    // contents + 1 per content for images — the same N+1 pattern fixed
+    // elsewhere in src/lib/trips.ts#getTripBySlug).
+    const { data: sourceTripData, error: sourceTripError } =
+      await supabaseServer
+        .from("trips")
+        .select("*, trip_contents(*, trip_content_images(*))")
+        .eq("id", sourceId)
+        .single();
 
     if (sourceTripError) {
-      return NextResponse.json(
-        { error: sourceTripError.message },
-        { status: 500 }
-      );
+      return apiError("POST /api/trips/[id]/clone (fetch source):", sourceTripError);
     }
 
-    if (!sourceTrip) {
+    if (!sourceTripData) {
       return NextResponse.json(
         { error: "Source trip not found" },
         { status: 404 }
       );
     }
 
-    // 2. Fetch the trip contents
-    const { data: sourceContents, error: sourceContentsError } =
-      await supabaseServer
-        .from("trip_contents")
-        .select("*")
-        .eq("trip_id", sourceId)
-        .order("order", { ascending: true });
-
-    if (sourceContentsError) {
-      return NextResponse.json(
-        { error: sourceContentsError.message },
-        { status: 500 }
-      );
-    }
+    const { trip_contents, ...sourceTrip } = sourceTripData;
+    const sourceContents = normalizeTripContents(trip_contents);
 
     // 3. Create a new ID for the cloned trip
-    const newTripId = uuidv4();
+    const newTripId = crypto.randomUUID();
 
     // 4. Prepare the cloned trip data (modify as needed)
     const clonedTrip = {
@@ -66,16 +56,17 @@ export async function POST(
       .single();
 
     if (newTripError) {
-      return NextResponse.json(
-        { error: newTripError.message },
-        { status: 500 }
-      );
+      return apiError("POST /api/trips/[id]/clone (insert new trip):", newTripError);
     }
 
-    // 6. If there are contents, clone them too (one at a time to capture new IDs for image cloning)
+    // 6. If there are contents, clone them too (one at a time to capture new
+    // IDs for image cloning). Each content's images were already fetched in
+    // the single nested-select query above, so this loop no longer re-queries
+    // trip_content_images per content.
     if (sourceContents && sourceContents.length > 0) {
       for (const content of sourceContents) {
-        const { id: sourceContentId, ...restContent } = content;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { id: sourceContentId, images: sourceImages, ...restContent } = content;
 
         const { data: newContent, error: contentError } = await supabaseServer
           .from("trip_contents")
@@ -88,15 +79,9 @@ export async function POST(
           continue;
         }
 
-        // Clone images for this content
-        const { data: sourceImages } = await supabaseServer
-          .from("trip_content_images")
-          .select("*")
-          .eq("trip_content_id", sourceContentId);
-
         if (sourceImages && sourceImages.length > 0) {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const imagesToInsert = sourceImages.map(({ id, trip_content_id, ...rest }) => ({
+          const imagesToInsert = sourceImages.map(({ id, ...rest }) => ({
             ...rest,
             trip_content_id: newContent.id,
           }));
@@ -112,10 +97,6 @@ export async function POST(
       trip: newTrip,
     });
   } catch (error) {
-    console.error("Error cloning trip:", error);
-    return NextResponse.json(
-      { error: "Error processing request", details: String(error) },
-      { status: 500 }
-    );
+    return apiError("POST /api/trips/[id]/clone (unexpected):", error);
   }
 }

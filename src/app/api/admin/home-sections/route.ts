@@ -1,38 +1,16 @@
 import { NextResponse, NextRequest } from "next/server";
 import { supabaseServer } from "@/lib/supabaseServer";
 import type { HomeSection } from "@/types/homeSections";
+import { revalidateHome } from "@/lib/revalidate";
+import { getHomeSectionsList } from "@/lib/homeSections";
+import { apiError } from "@/lib/apiError";
 
 export async function GET() {
   try {
-    const { data, error } = await supabaseServer
-      .from("home_sections")
-      .select("*")
-      .order("section_key");
-
-    if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
-
-    const sections = data || [];
-
-    // Enrich sections with their slideshow images
-    const enriched = await Promise.all(
-      sections.map(async (section) => {
-        const { data: images } = await supabaseServer
-          .from("home_section_images")
-          .select("*")
-          .eq("section_key", section.section_key)
-          .order("order_number", { ascending: true });
-        return { ...section, images: images || [] };
-      })
-    );
-
-    return NextResponse.json(enriched);
+    const sections = await getHomeSectionsList();
+    return NextResponse.json(sections);
   } catch (error) {
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Unknown error" },
-      { status: 500 }
-    );
+    return apiError("GET /api/admin/home-sections (unexpected):", error);
   }
 }
 
@@ -68,7 +46,7 @@ export async function PUT(request: NextRequest) {
         );
 
       if (error) {
-        return NextResponse.json({ error: error.message }, { status: 500 });
+        return apiError("PUT /api/admin/home-sections (upsert):", error);
       }
 
       // Save slideshow images (delete-then-reinsert)
@@ -93,14 +71,12 @@ export async function PUT(request: NextRequest) {
       }
     }
 
+    revalidateHome();
     return NextResponse.json({
       success: true,
       message: "Home sections updated successfully",
     });
   } catch (error) {
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Unknown error" },
-      { status: 500 }
-    );
+    return apiError("PUT /api/admin/home-sections (unexpected):", error);
   }
 }

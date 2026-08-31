@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "../styles/globals.css";
-import Navbar from "@/components/layout/Navbar";
+import NavbarData from "@/components/layout/NavbarData";
 import Footer from "@/components/layout/Footer";
 import ErrorBoundary from "@/components/ui/ErrorBoundary";
 import ClientGTM from "@/components/layout/ClientGTM";
@@ -77,7 +77,7 @@ export default function RootLayout({
           }}
         />
         <ErrorBoundary name="Navbar">
-          <Navbar />
+          <NavbarData />
         </ErrorBoundary>
         <ToastProvider>
           <main>{children}</main>
@@ -85,8 +85,8 @@ export default function RootLayout({
         <ErrorBoundary name="Footer">
           <Footer />
         </ErrorBoundary>
+        <ClientGTM />
       </body>
-      <ClientGTM />
     </html>
   );
 }

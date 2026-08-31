@@ -2,6 +2,8 @@ import { NextResponse, NextRequest } from "next/server";
 import { supabaseServer } from "../../../../lib/supabaseServer";
 import { InstagramPost } from "../../../../types/instagramPost";
 import { isAuthenticatedRequest } from "@/lib/auth";
+import { revalidateHome } from "@/lib/revalidate";
+import { apiError } from "@/lib/apiError";
 
 // Enforced centrally in middleware.ts; checked again here as defense in depth.
 async function isAdmin(request: NextRequest): Promise<boolean> {
@@ -20,15 +22,12 @@ export async function GET(request: NextRequest) {
       .order("order_number", { ascending: true });
 
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      return apiError("GET /api/admin/instagram-posts:", error);
     }
 
     return NextResponse.json(data);
   } catch (error) {
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Unknown error" },
-      { status: 500 }
-    );
+    return apiError("GET /api/admin/instagram-posts (unexpected):", error);
   }
 }
 
@@ -61,15 +60,13 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      return apiError("POST /api/admin/instagram-posts:", error);
     }
 
+    revalidateHome();
     return NextResponse.json(data, { status: 201 });
   } catch (error) {
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Unknown error" },
-      { status: 500 }
-    );
+    return apiError("POST /api/admin/instagram-posts (unexpected):", error);
   }
 }
 
@@ -100,15 +97,13 @@ export async function PUT(request: NextRequest) {
       .single();
 
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      return apiError("PUT /api/admin/instagram-posts:", error);
     }
 
+    revalidateHome();
     return NextResponse.json(data);
   } catch (error) {
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Unknown error" },
-      { status: 500 }
-    );
+    return apiError("PUT /api/admin/instagram-posts (unexpected):", error);
   }
 }
 
@@ -134,14 +129,12 @@ export async function DELETE(request: NextRequest) {
       .eq("id", id);
 
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      return apiError("DELETE /api/admin/instagram-posts:", error);
     }
 
+    revalidateHome();
     return NextResponse.json({ message: "Post deleted successfully" });
   } catch (error) {
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Unknown error" },
-      { status: 500 }
-    );
+    return apiError("DELETE /api/admin/instagram-posts (unexpected):", error);
   }
 }

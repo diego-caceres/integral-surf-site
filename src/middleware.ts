@@ -8,36 +8,56 @@ import { ADMIN_AUTH_COOKIE_NAME, verifySessionToken } from "@/lib/auth";
  * standing between an anonymous request and full write access to the database
  * is this check. Every mutating/admin endpoint is guarded here.
  *
- * - `/api/admin/*` and `/api/cloudinary/*`  -> always require a valid session
- *   (login/logout are explicitly exempt).
+ * - `/api/admin/*`, `/api/cloudinary/*`, and `/api/configurations`
+ *   (the admin-only listing of every config key) -> always require a valid
+ *   session (login/logout are explicitly exempt).
  * - `/api/trips/*` and `/api/config/*`      -> public GET/HEAD, auth for writes.
  * - protected pages (e.g. `/nuevo-viaje`)   -> redirect to /admin login.
  */
 
-const ALWAYS_PROTECTED = ["/api/admin", "/api/cloudinary"];
+const ALWAYS_PROTECTED = ["/api/admin", "/api/cloudinary", "/api/configurations"];
 const WRITE_PROTECTED = ["/api/trips", "/api/config"];
 const PROTECTED_PAGES = ["/nuevo-viaje"];
 const PUBLIC_API = ["/api/admin/login", "/api/admin/logout"];
 
 const READ_METHODS = new Set(["GET", "HEAD", "OPTIONS"]);
 
-export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+export type PathClassification =
+  | { kind: "public" }
+  | { kind: "protectedPage" }
+  | { kind: "protectedApi" };
 
-  // Login/logout must stay reachable without an existing session.
+/**
+ * Pure classification of a request path/method against the protection lists
+ * above. Kept side-effect-free (no cookies, no auth check) so the routing
+ * rules themselves — e.g. "does /api/configurations require a session" — can
+ * be unit-tested without spinning up a NextRequest.
+ */
+export function classifyPath(pathname: string, method: string): PathClassification {
   if (PUBLIC_API.some((p) => pathname === p || pathname.startsWith(`${p}/`))) {
-    return NextResponse.next();
+    return { kind: "public" };
   }
 
   const isProtectedPage = PROTECTED_PAGES.some(
     (p) => pathname === p || pathname.startsWith(`${p}/`)
   );
+  if (isProtectedPage) return { kind: "protectedPage" };
+
   const isAlwaysProtected = ALWAYS_PROTECTED.some((p) => pathname.startsWith(p));
   const isWriteProtected =
     WRITE_PROTECTED.some((p) => pathname.startsWith(p)) &&
-    !READ_METHODS.has(request.method);
+    !READ_METHODS.has(method);
 
-  if (!isProtectedPage && !isAlwaysProtected && !isWriteProtected) {
+  if (isAlwaysProtected || isWriteProtected) return { kind: "protectedApi" };
+
+  return { kind: "public" };
+}
+
+export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+  const classification = classifyPath(pathname, request.method);
+
+  if (classification.kind === "public") {
     return NextResponse.next();
   }
 
@@ -47,7 +67,7 @@ export async function middleware(request: NextRequest) {
 
   if (!authorized) {
     // Pages get redirected to the login UI; APIs get a 401.
-    if (isProtectedPage) {
+    if (classification.kind === "protectedPage") {
       const loginUrl = request.nextUrl.clone();
       loginUrl.pathname = "/admin";
       loginUrl.search = "";
@@ -65,6 +85,7 @@ export const config = {
     "/api/cloudinary/:path*",
     "/api/trips/:path*",
     "/api/config/:path*",
+    "/api/configurations/:path*",
     "/nuevo-viaje/:path*",
   ],
 };

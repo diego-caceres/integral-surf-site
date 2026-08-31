@@ -2,6 +2,9 @@ import { NextResponse, NextRequest } from "next/server";
 import { supabaseServer } from "../../../../lib/supabaseServer";
 import type { FundamentosPage } from "@/types/fundamentos";
 import { isAuthenticatedRequest } from "@/lib/auth";
+import { revalidateFundamentos } from "@/lib/revalidate";
+import { getFundamentosSections } from "@/lib/fundamentos";
+import { apiError } from "@/lib/apiError";
 
 // Enforced centrally in middleware.ts; checked again here as defense in depth.
 async function isAdmin(request: NextRequest): Promise<boolean> {
@@ -14,91 +17,26 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    // Create a default fundamentos page structure since we don't have a hero section
-    const fundamentosData = {
-      id: "default",
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    };
+    const sections = await getFundamentosSections();
 
-    // Fetch the sections with their team members
-    const { data: sectionsData, error: sectionsError } = await supabaseServer
-      .from("fundamentos_sections")
-      .select("*")
-      .order("order_number", { ascending: true });
-
-    if (sectionsError) {
-      console.error("Error fetching sections:", sectionsError);
+    if (sections === null) {
       return NextResponse.json(
-        {
-          error: "Failed to fetch sections",
-          details: sectionsError.message,
-        },
+        { error: "Failed to fetch sections" },
         { status: 500 }
       );
     }
 
-    // For each section, fetch its images and team members
-    const sectionsWithTeam = await Promise.all(
-      (sectionsData || []).map(async (section) => {
-        // Fetch section images
-        const { data: sectionImages, error: imagesError } = await supabaseServer
-          .from("fundamentos_section_images")
-          .select("*")
-          .eq("section_id", section.id)
-          .order("order_number", { ascending: true });
-
-        if (imagesError) {
-          console.error(
-            "Error fetching images for section:",
-            section.id,
-            imagesError
-          );
-        }
-
-        // Fetch team members
-        const { data: teamMembers, error: teamError } = await supabaseServer
-          .from("fundamentos_team_members")
-          .select("*")
-          .eq("section_id", section.id)
-          .order("order_number", { ascending: true });
-
-        if (teamError) {
-          console.error(
-            "Error fetching team members for section:",
-            section.id,
-            teamError
-          );
-          return {
-            ...section,
-            images: sectionImages || [],
-            team_members: [],
-          };
-        }
-
-        return {
-          ...section,
-          images: sectionImages || [],
-          team_members: teamMembers || [],
-        };
-      })
-    );
-
-    // Combine the data
+    // Create a default fundamentos page structure since we don't have a hero section
     const fullFundamentosPage: FundamentosPage = {
-      ...fundamentosData,
-      sections: sectionsWithTeam,
+      id: "default",
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      sections,
     };
 
     return NextResponse.json(fullFundamentosPage);
   } catch (error) {
-    console.error("Unexpected error in GET /api/admin/fundamentos:", error);
-    const errorMessage =
-      error instanceof Error ? error.message : "An unexpected error occurred";
-    return NextResponse.json(
-      { error: "Internal Server Error", details: errorMessage },
-      { status: 500 }
-    );
+    return apiError("GET /api/admin/fundamentos (unexpected):", error);
   }
 }
 
@@ -120,14 +58,7 @@ export async function PUT(request: NextRequest) {
         .neq("id", "00000000-0000-0000-0000-000000000000"); // Delete all trick
 
       if (deleteSectionsError) {
-        console.error("Error deleting sections:", deleteSectionsError);
-        return NextResponse.json(
-          {
-            error: "Failed to delete sections",
-            details: deleteSectionsError.message,
-          },
-          { status: 500 }
-        );
+        return apiError("PUT /api/admin/fundamentos (delete sections):", deleteSectionsError);
       }
 
       // Delete existing section images
@@ -137,14 +68,7 @@ export async function PUT(request: NextRequest) {
         .neq("id", "00000000-0000-0000-0000-000000000000"); // Delete all trick
 
       if (deleteImagesError) {
-        console.error("Error deleting section images:", deleteImagesError);
-        return NextResponse.json(
-          {
-            error: "Failed to delete section images",
-            details: deleteImagesError.message,
-          },
-          { status: 500 }
-        );
+        return apiError("PUT /api/admin/fundamentos (delete section images):", deleteImagesError);
       }
 
       // Delete existing team members
@@ -154,14 +78,7 @@ export async function PUT(request: NextRequest) {
         .neq("id", "00000000-0000-0000-0000-000000000000"); // Delete all trick
 
       if (deleteTeamError) {
-        console.error("Error deleting team members:", deleteTeamError);
-        return NextResponse.json(
-          {
-            error: "Failed to delete team members",
-            details: deleteTeamError.message,
-          },
-          { status: 500 }
-        );
+        return apiError("PUT /api/admin/fundamentos (delete team members):", deleteTeamError);
       }
 
       // Insert new sections and their images and team members
@@ -179,14 +96,7 @@ export async function PUT(request: NextRequest) {
               .single();
 
           if (insertSectionError) {
-            console.error("Error inserting section:", insertSectionError);
-            return NextResponse.json(
-              {
-                error: "Failed to insert section",
-                details: insertSectionError.message,
-              },
-              { status: 500 }
-            );
+            return apiError("PUT /api/admin/fundamentos (insert section):", insertSectionError);
           }
 
           // Insert images for this section
@@ -209,16 +119,9 @@ export async function PUT(request: NextRequest) {
               .insert(imagesToInsert);
 
             if (insertImagesError) {
-              console.error(
-                "Error inserting section images:",
+              return apiError(
+                "PUT /api/admin/fundamentos (insert section images):",
                 insertImagesError
-              );
-              return NextResponse.json(
-                {
-                  error: "Failed to insert section images",
-                  details: insertImagesError.message,
-                },
-                { status: 500 }
               );
             }
           }
@@ -245,31 +148,19 @@ export async function PUT(request: NextRequest) {
               .insert(teamMembersToInsert);
 
             if (insertTeamError) {
-              console.error("Error inserting team members:", insertTeamError);
-              return NextResponse.json(
-                {
-                  error: "Failed to insert team members",
-                  details: insertTeamError.message,
-                },
-                { status: 500 }
-              );
+              return apiError("PUT /api/admin/fundamentos (insert team members):", insertTeamError);
             }
           }
         }
       }
     }
 
+    revalidateFundamentos();
     return NextResponse.json({
       success: true,
       message: "Fundamentos page updated successfully",
     });
   } catch (error) {
-    console.error("Unexpected error in PUT /api/admin/fundamentos:", error);
-    const errorMessage =
-      error instanceof Error ? error.message : "An unexpected error occurred";
-    return NextResponse.json(
-      { error: "Internal Server Error", details: errorMessage },
-      { status: 500 }
-    );
+    return apiError("PUT /api/admin/fundamentos (unexpected):", error);
   }
 }

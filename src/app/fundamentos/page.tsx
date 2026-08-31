@@ -2,50 +2,31 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import WhatsAppButton from "@/components/layout/WhatsAppButton";
 import FundamentosImageSlider from "@/components/fundamentos/FundamentosImageSlider";
+import AlternatingSection from "@/components/ui/AlternatingSection";
 import HashScroller from "./HashScroller";
-import { supabaseServer } from "@/lib/supabaseServer";
+import { getFundamentosSections } from "@/lib/fundamentos";
 
 export const metadata: Metadata = {
   title: "Fundamentos",
   description: "Explorá los pilares de Integral Surf: surfing, yoga, naturaleza y arte. Los fundamentos de una experiencia integral.",
 };
+
+// Static (ISR). Admin edits call revalidatePath("/fundamentos") (see
+// src/lib/revalidate.ts) and show up immediately; this is just the fallback
+// ceiling on staleness if that somehow doesn't fire.
+export const revalidate = 3600;
+
 import type { FundamentosPage } from "@/types/fundamentos";
 
 async function getFundamentosData(): Promise<FundamentosPage | null> {
-  const { data: sectionsData, error: sectionsError } = await supabaseServer
-    .from("fundamentos_sections")
-    .select("*")
-    .order("order_number", { ascending: true });
-
-  if (sectionsError) return null;
-
-  const sectionsWithTeam = await Promise.all(
-    (sectionsData || []).map(async (section) => {
-      const { data: sectionImages } = await supabaseServer
-        .from("fundamentos_section_images")
-        .select("*")
-        .eq("section_id", section.id)
-        .order("order_number", { ascending: true });
-
-      const { data: teamMembers } = await supabaseServer
-        .from("fundamentos_team_members")
-        .select("*")
-        .eq("section_id", section.id)
-        .order("order_number", { ascending: true });
-
-      return {
-        ...section,
-        images: sectionImages || [],
-        team_members: teamMembers || [],
-      };
-    })
-  );
+  const sections = await getFundamentosSections();
+  if (!sections) return null;
 
   return {
     id: "default",
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
-    sections: sectionsWithTeam,
+    sections,
   };
 }
 
@@ -75,61 +56,18 @@ export default async function FundamentosPage() {
           }`}
         >
           <div className="container mx-auto px-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-              {index % 2 === 0 ? (
-                <>
-                  <div className="space-y-6">
-                    <h2 className="text-3xl md:text-4xl font-[Eckmannpsych] text-primary">
-                      {section.title}
-                    </h2>
-                    <p className="text-lg text-textPrimary leading-relaxed">
-                      {section.description
-                        .split("\\n\\n")
-                        .map((paragraph, index) => (
-                          <span key={index}>
-                            {paragraph}
-                            {index <
-                              section.description.split("\\n\\n").length -
-                                1 && <br />}
-                          </span>
-                        ))}
-                    </p>
-                  </div>
-                  <FundamentosImageSlider
-                    images={section.images}
-                    alt={section.title}
-                    priority={index === 0}
-                  />
-                </>
-              ) : (
-                <>
-                  <div className="order-2 md:order-1">
-                    <FundamentosImageSlider
-                      images={section.images}
-                      alt={section.title}
-                      priority={index === 0}
-                    />
-                  </div>
-                  <div className="space-y-6 order-1 md:order-2">
-                    <h2 className="text-3xl md:text-4xl font-[Eckmannpsych] text-primary">
-                      {section.title}
-                    </h2>
-                    <p className="text-lg text-textPrimary leading-relaxed">
-                      {section.description
-                        .split("\\n\\n")
-                        .map((paragraph, index) => (
-                          <span key={index}>
-                            {paragraph}
-                            {index <
-                              section.description.split("\\n\\n").length -
-                                1 && <br />}
-                          </span>
-                        ))}
-                    </p>
-                  </div>
-                </>
-              )}
-            </div>
+            <AlternatingSection
+              title={section.title}
+              description={section.description}
+              reverse={index % 2 !== 0}
+              media={
+                <FundamentosImageSlider
+                  images={section.images}
+                  alt={section.title}
+                  priority={index === 0}
+                />
+              }
+            />
 
             {/* Team Section */}
             {section.team_members && section.team_members.length > 0 && (

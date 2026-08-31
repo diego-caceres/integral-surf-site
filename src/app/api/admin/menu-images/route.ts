@@ -1,15 +1,9 @@
 import { NextResponse, NextRequest } from "next/server";
 import { supabaseServer } from "../../../../lib/supabaseServer"; // Adjusted path
 import { isAuthenticatedRequest } from "@/lib/auth";
-
-interface MenuItemImage {
-  url: string;
-  alt: string;
-}
-
-interface MenuImagesData {
-  [key: string]: MenuItemImage[];
-}
+import { revalidateLayout } from "@/lib/revalidate";
+import type { MenuImagesData } from "@/lib/menuImages";
+import { apiError } from "@/lib/apiError";
 
 // Enforced centrally in middleware.ts; checked again here as defense in depth.
 async function isAdmin(request: NextRequest): Promise<boolean> {
@@ -38,30 +32,13 @@ export async function PUT(request: NextRequest) {
     );
 
     if (transactionError) {
-      console.error(
-        "Error in transaction updating menu items:",
-        transactionError
-      );
-      return NextResponse.json(
-        {
-          error: "Failed to update menu items",
-          details: transactionError.message,
-        },
-        { status: 500 }
-      );
+      return apiError("PUT /api/admin/menu-images:", transactionError);
     }
 
+    revalidateLayout();
     return NextResponse.json({ message: "Menu images updated successfully" });
   } catch (error) {
-    console.error("Error processing PUT request:", error);
-    let errorMessage = "An unknown error occurred";
-    if (error instanceof Error) {
-      errorMessage = error.message;
-    }
-    return NextResponse.json(
-      { error: "Failed to process request", details: errorMessage },
-      { status: 500 }
-    );
+    return apiError("PUT /api/admin/menu-images (unexpected):", error);
   }
 }
 

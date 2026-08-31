@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabaseServer";
 import { revalidateTripPages } from "@/lib/revalidate";
+import { apiError } from "@/lib/apiError";
 
 export async function POST(
   request: NextRequest, // Added request parameter, even if not used, to match convention
@@ -17,7 +18,7 @@ export async function POST(
       .single();
 
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      return apiError("POST /api/trips/[id]/restore:", error);
     }
 
     if (!restoredTrip) {
@@ -34,10 +35,6 @@ export async function POST(
       trip: restoredTrip,
     });
   } catch (error) {
-    console.error("Error restoring trip:", error);
-    return NextResponse.json(
-      { error: "Error processing request", details: String(error) },
-      { status: 500 }
-    );
+    return apiError("POST /api/trips/[id]/restore (unexpected):", error);
   }
 }

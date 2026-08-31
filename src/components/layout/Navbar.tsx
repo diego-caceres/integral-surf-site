@@ -2,27 +2,12 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  fetchTripsOnce,
-  fetchDestinosTitleOnce,
-  getTripsFromCache,
-  getDestinosTitleFromCache,
-} from "@/lib/tripsCache";
 import { Bars3Icon, XMarkIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import Image from "next/image";
 import MegaMenuItem from "./MegaMenuItem";
-
-// Define the expected structure for image objects
-interface MenuItemImage {
-  url: string;
-  alt: string;
-}
-
-// Define the structure for the fetched data: an object where keys are menu titles
-interface MenuImagesData {
-  [key: string]: MenuItemImage[];
-}
+import type { TripSummary } from "@/types/trip";
+import type { MenuImagesData } from "@/lib/menuImages";
 
 // Define the structure for trip menu items
 interface MenuTripItem {
@@ -31,12 +16,11 @@ interface MenuTripItem {
   url: string;
 }
 
-// Define the structure for trips from API
-interface TripData {
-  slug: string;
-  title: string;
-  title_2?: string;
-  is_deleted?: boolean;
+export interface NavbarProps {
+  /** Server-fetched active trips, converted to menu items below. */
+  initialTrips: TripSummary[];
+  initialDestinosTitle: string;
+  initialMenuImages: MenuImagesData;
 }
 
 interface DesktopNavContentProps {
@@ -129,15 +113,33 @@ function DesktopNavContent({
   );
 }
 
-export default function NavBar() {
+// GET /api/trips now only ever returns active trips, so no client-side
+// is_deleted filter is needed here.
+function tripsToMenuItems(trips: TripSummary[]): MenuTripItem[] {
+  return trips.map((trip) => ({
+    name: trip.title + (trip.title_2 ? ", " + trip.title_2 : ""),
+    id: trip.slug,
+    url: `/viajes/${trip.slug}`,
+  }));
+}
+
+export default function NavBar({
+  initialTrips,
+  initialDestinosTitle,
+  initialMenuImages,
+}: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [viajesOpen, setViajesOpen] = useState(true);
-  const [menuItemImages, setMenuItemImages] = useState<MenuImagesData>({});
-  const [menuTripItems, setMenuTripItems] = useState<MenuTripItem[]>([]);
-  const [destinosTitle, setDestinosTitle] = useState("DESTINOS 2026");
   const [showStickyNav, setShowStickyNav] = useState(false);
   const hamburgerRef = useRef<HTMLButtonElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
+
+  // Server-rendered by NavbarData.tsx; ISR + revalidatePath (see
+  // src/lib/revalidate.ts) keeps these fresh, so no client-side re-fetch is
+  // needed — these are plain derived values, not state.
+  const menuItemImages = initialMenuImages;
+  const menuTripItems = tripsToMenuItems(initialTrips);
+  const destinosTitle = initialDestinosTitle;
 
   const toggleMenu = () => setIsOpen((prev) => !prev);
 
@@ -185,16 +187,6 @@ export default function NavBar() {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, closeMenu]);
 
-  function tripsToMenuItems(trips: TripData[]): MenuTripItem[] {
-    return trips
-      .filter((trip) => !trip.is_deleted)
-      .map((trip) => ({
-        name: trip.title + (trip.title_2 ? ", " + trip.title_2 : ""),
-        id: trip.slug,
-        url: `/viajes/${trip.slug}`,
-      }));
-  }
-
   useEffect(() => {
     let lastY = window.scrollY;
     let ticking = false;
@@ -219,45 +211,6 @@ export default function NavBar() {
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  useEffect(() => {
-    // Populate from cache immediately after mount, then refresh in background
-    const cachedTrips = getTripsFromCache();
-    if (cachedTrips) setMenuTripItems(tripsToMenuItems(cachedTrips));
-    const cachedTitle = getDestinosTitleFromCache();
-    if (cachedTitle) setDestinosTitle(cachedTitle);
-
-    const fetchMenuItems = async () => {
-      try {
-        const response = await fetch("/api/menu-images");
-        if (!response.ok) throw new Error("Failed to fetch menu images");
-        const data: MenuImagesData = await response.json();
-        setMenuItemImages(data);
-      } catch (error) {
-        if (process.env.NODE_ENV !== "production") {
-          console.error("Error fetching menu images:", error);
-        }
-      }
-    };
-
-    fetchMenuItems();
-
-    fetchTripsOnce()
-      .then((trips) => setMenuTripItems(tripsToMenuItems(trips)))
-      .catch((err) => {
-        if (process.env.NODE_ENV !== "production") {
-          console.error("Error fetching trips:", err);
-        }
-      });
-
-    fetchDestinosTitleOnce()
-      .then((title) => setDestinosTitle(title))
-      .catch((err) => {
-        if (process.env.NODE_ENV !== "production") {
-          console.error("Error fetching destinos title:", err);
-        }
-      });
   }, []);
 
   return (

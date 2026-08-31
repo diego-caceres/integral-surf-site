@@ -1,93 +1,29 @@
 import { NextResponse } from "next/server";
-import { supabaseServer } from "@/lib/supabaseServer";
 import { FundamentosPage } from "@/types/fundamentos";
+import { READ_CACHE } from "@/lib/httpCache";
+import { getFundamentosSections } from "@/lib/fundamentos";
+import { apiError } from "@/lib/apiError";
 
 export async function GET() {
   try {
+    const sections = await getFundamentosSections();
+
+    if (sections === null) {
+      return apiError("GET /api/fundamentos:", new Error("Failed to fetch sections"));
+    }
+
     // Create a default fundamentos page structure since we don't have a hero section
-    const fundamentosData = {
+    const fullFundamentosPage: FundamentosPage = {
       id: "default",
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
+      sections,
     };
 
-    // Fetch the sections with their team members
-    const { data: sectionsData, error: sectionsError } = await supabaseServer
-      .from("fundamentos_sections")
-      .select("*")
-      .order("order_number", { ascending: true });
-
-    if (sectionsError) {
-      console.error("Error fetching sections:", sectionsError);
-      return NextResponse.json(
-        {
-          error: "Failed to fetch sections",
-          details: sectionsError.message,
-        },
-        { status: 500 }
-      );
-    }
-
-    // For each section, fetch its images and team members
-    const sectionsWithTeam = await Promise.all(
-      (sectionsData || []).map(async (section) => {
-        // Fetch section images
-        const { data: sectionImages, error: imagesError } = await supabaseServer
-          .from("fundamentos_section_images")
-          .select("*")
-          .eq("section_id", section.id)
-          .order("order_number", { ascending: true });
-
-        if (imagesError) {
-          console.error(
-            "Error fetching images for section:",
-            section.id,
-            imagesError
-          );
-        }
-
-        // Fetch team members
-        const { data: teamMembers, error: teamError } = await supabaseServer
-          .from("fundamentos_team_members")
-          .select("*")
-          .eq("section_id", section.id)
-          .order("order_number", { ascending: true });
-
-        if (teamError) {
-          console.error(
-            "Error fetching team members for section:",
-            section.id,
-            teamError
-          );
-          return {
-            ...section,
-            images: sectionImages || [],
-            team_members: [],
-          };
-        }
-
-        return {
-          ...section,
-          images: sectionImages || [],
-          team_members: teamMembers || [],
-        };
-      })
-    );
-
-    // Combine the data
-    const fullFundamentosPage: FundamentosPage = {
-      ...fundamentosData,
-      sections: sectionsWithTeam,
-    };
-
-    return NextResponse.json(fullFundamentosPage);
+    return NextResponse.json(fullFundamentosPage, {
+      headers: { "Cache-Control": READ_CACHE },
+    });
   } catch (error) {
-    console.error("Unexpected error in GET /api/fundamentos:", error);
-    const errorMessage =
-      error instanceof Error ? error.message : "An unexpected error occurred";
-    return NextResponse.json(
-      { error: "Internal Server Error", details: errorMessage },
-      { status: 500 }
-    );
+    return apiError("GET /api/fundamentos (unexpected):", error);
   }
 }

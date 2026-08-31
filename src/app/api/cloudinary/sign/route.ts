@@ -12,6 +12,27 @@ cloudinary.config({
 // overwrite arbitrary assets elsewhere in the Cloudinary account.
 const ALLOWED_FOLDER_PREFIX = "integral-surf";
 
+// `paramsToSign` is forwarded verbatim by next-cloudinary's
+// generateSignatureCallback (@cloudinary-util/url-loader) from Cloudinary's
+// hosted upload widget — our code never constructs it. For the widget config
+// used across this app (CloudinaryUploadButton: folder only, single file, no
+// eager/tags/context transformations), Cloudinary's documented signing
+// contract sends `timestamp` plus the configured options below. Deliberately
+// excludes `overwrite` and `invalidate`, which could target/replace assets
+// outside the folder check — if a legitimate upload ever fails here with a
+// "Params not permitted" error, add the exact key it names, not a blanket fix.
+const ALLOWED_SIGN_KEYS = new Set([
+  "timestamp",
+  "source",
+  "folder",
+  "public_id",
+  "upload_preset",
+  "tags",
+  "context",
+  "use_filename",
+  "unique_filename",
+]);
+
 export async function POST(request: NextRequest) {
   // Authentication is enforced in middleware.ts; this is the second gate so a
   // valid signature can never be minted for an attacker-controlled destination.
@@ -22,6 +43,16 @@ export async function POST(request: NextRequest) {
     if (!paramsToSign || typeof paramsToSign !== "object") {
       return NextResponse.json(
         { error: "Missing or invalid paramsToSign" },
+        { status: 400 }
+      );
+    }
+
+    const unknownKeys = Object.keys(paramsToSign).filter(
+      (k) => !ALLOWED_SIGN_KEYS.has(k)
+    );
+    if (unknownKeys.length > 0) {
+      return NextResponse.json(
+        { error: `Params not permitted: ${unknownKeys.join(", ")}` },
         { status: 400 }
       );
     }

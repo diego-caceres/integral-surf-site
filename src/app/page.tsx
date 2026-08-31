@@ -7,70 +7,52 @@ import SectionInstagram from "@/components/home/SectionInstagram";
 import WhatsAppButton from "@/components/layout/WhatsAppButton";
 import SectionHeader from "@/components/home/SectionHeader";
 import ErrorBoundary from "@/components/ui/ErrorBoundary";
-import { supabaseServer } from "@/lib/supabaseServer";
-import type { HomeSection, HomeSectionImage } from "@/types/homeSections";
+import { getCachedConfigValue, getActiveTripSummaries } from "@/lib/trips";
+import { getHomeSectionsList } from "@/lib/homeSections";
+import { getSectionHeaderImages } from "@/lib/sectionHeaderImages";
+import type { HomeSection } from "@/types/homeSections";
 
-interface SectionHeaderImage {
-  image_url: string;
-  alt_text: string | null;
-  device_type: string;
-}
+// Static (ISR): this page previously inherited a 1h revalidate implicitly
+// from the Footer's `unstable_cache` (getCachedConfigValue) being present in
+// the tree. Making it explicit here means the behavior survives a Footer
+// refactor. Admin edits to homepage content bypass this via revalidatePath
+// (see src/lib/revalidate.ts) and show up immediately regardless.
+export const revalidate = 3600;
 
 async function getHeaderData() {
-  const [imagesResult, titleResult] = await Promise.all([
-    supabaseServer
-      .from("section_header_images")
-      .select("image_url, alt_text, device_type")
-      .order("device_type", { ascending: true })
-      .order("display_order", { ascending: true }),
-    supabaseServer
-      .from("configurations")
-      .select("value")
-      .eq("key", "section_header_main_title")
-      .maybeSingle(),
+  // The header title lives in `general_configurations` (config_key/config_value),
+  // the same table the admin config UI and every /api/config/[key] read use.
+  // A previous version of this query read from a `configurations` table
+  // (key/value columns) that no longer exists in the schema — that query
+  // errored on every request and silently fell back to the hardcoded
+  // default below, so admin edits to the title never reached the homepage.
+  const [images, title] = await Promise.all([
+    getSectionHeaderImages(),
+    getCachedConfigValue("section_header_main_title"),
   ]);
 
-  const images = (imagesResult.data || []) as SectionHeaderImage[];
   return {
-    web: images
-      .filter((img) => img.device_type === "web")
-      .map(({ image_url, alt_text }) => ({ image_url, alt_text })),
-    mobile: images
-      .filter((img) => img.device_type === "mobile")
-      .map(({ image_url, alt_text }) => ({ image_url, alt_text })),
-    title: titleResult.data?.value || "Viajes al Mar",
+    web: images.web,
+    mobile: images.mobile,
+    title: title || "Viajes al Mar",
   };
 }
 
 async function getHomeSections(): Promise<Record<string, HomeSection>> {
-  const [sectionsResult, imagesResult] = await Promise.all([
-    supabaseServer.from("home_sections").select("*"),
-    supabaseServer
-      .from("home_section_images")
-      .select("id, image_url, alt_text, order_number, section_key")
-      .order("order_number", { ascending: true }),
-  ]);
-
-  if (sectionsResult.error || !sectionsResult.data) return {};
-
-  const imageMap: Record<string, HomeSectionImage[]> = {};
-  for (const img of (imagesResult.data || []) as (HomeSectionImage & { section_key: string })[]) {
-    const key = img.section_key;
-    if (!imageMap[key]) imageMap[key] = [];
-    imageMap[key].push({ id: img.id, image_url: img.image_url, alt_text: img.alt_text, order_number: img.order_number });
-  }
-
+  const sections = await getHomeSectionsList();
   const map: Record<string, HomeSection> = {};
-  for (const s of sectionsResult.data) {
-    map[s.section_key] = { ...s, images: imageMap[s.section_key] || [] };
+  for (const s of sections) {
+    map[s.section_key] = s;
   }
   return map;
 }
 
 export default async function HomePage() {
-  const [homeSections, headerData] = await Promise.all([
+  const [homeSections, headerData, trips, destinosTitle] = await Promise.all([
     getHomeSections(),
     getHeaderData(),
+    getActiveTripSummaries(),
+    getCachedConfigValue("menu_destinos_title"),
   ]);
 
   const ourPurpose = homeSections["our_purpose"];
@@ -100,7 +82,7 @@ export default async function HomePage() {
         />
       </ErrorBoundary>
       <ErrorBoundary name="SectionCalendar">
-        <SectionCalendar />
+        <SectionCalendar trips={trips} title={destinosTitle || "DESTINOS 2026"} />
       </ErrorBoundary>
       <ErrorBoundary name="SectionTheRoad">
         <SectionTheRoad
